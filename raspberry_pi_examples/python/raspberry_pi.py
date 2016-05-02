@@ -1,3 +1,4 @@
+#!/usr/bin/python
 ######################################################################
 # Copyright (c) 2012, 2016 Cirrus Link Solutions
 #
@@ -9,8 +10,6 @@
 # Contributors:
 #   Cirrus Link Solutions
 ######################################################################
-
-#!/usr/bin/python
 
 import paho.mqtt.client as mqtt
 import pibrella
