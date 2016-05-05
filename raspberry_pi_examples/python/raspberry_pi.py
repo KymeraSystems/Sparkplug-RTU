@@ -190,8 +190,72 @@ def on_message(client, userdata, msg):
 
 	    byteArray = bytearray(outboundPayload.SerializeToString())
 	    client.publish("spv1.0/" + myGroupId + "/DDATA/" + myNodeName + "/" + mySubNodeName, byteArray, 0, False)
+    elif tokens[0] == "spv1.0" and tokens[1] == myGroupId and tokens[2] == "NCMD" and tokens[3] == myNodeName:
+	publishBirth()
 
     print "done publishing"
+######################################################################
+
+######################################################################
+# The callback for when a PUBLISH message is received from the server.
+######################################################################
+def publishBirth():
+    # Create the node birth payload with a position
+    payload = kurapayload_pb2.KuraPayload()
+    position = payload.position
+    position.altitude = 319
+    position.heading = 0
+    position.latitude = 38.83667239
+    position.longitude = -94.67176706
+    position.precision = 2.0
+    position.satellites = 8
+    position.speed = 0
+    position.status = 3
+    position.timestamp = int(round(time.time() * 1000))
+
+    # Add a timestamp and sequence numbers to the payload
+    payload.timestamp = int(round(time.time() * 1000))
+    addMetric(payload, "bdSeq", "INT32", bdSeq)
+    addMetric(payload, "seq", "INT32", getSeqNum())
+
+    # Publish the node birth certificate
+    byteArray = bytearray(payload.SerializeToString())
+    client.publish("spv1.0/" + myGroupId + "/NBIRTH/" + myNodeName, byteArray, 0, False)
+
+    # Set up the input metrics
+    pvPayload = kurapayload_pb2.KuraPayload()
+    addMetric(pvPayload, "input_a", "BOOL", pibrella.input.a.read())
+    addMetric(pvPayload, "input_b", "BOOL", pibrella.input.b.read())
+    addMetric(pvPayload, "input_c", "BOOL", pibrella.input.c.read())
+    addMetric(pvPayload, "input_d", "BOOL", pibrella.input.d.read())
+
+    # Set up the output states on first run so Ignition and MQTT Engine are aware of them
+    addMetric(pvPayload, "output_e", "BOOL", pibrella.output.e.read())
+    addMetric(pvPayload, "output_f", "BOOL", pibrella.output.f.read())
+    addMetric(pvPayload, "output_g", "BOOL", pibrella.output.g.read())
+    addMetric(pvPayload, "output_h", "BOOL", pibrella.output.h.read())
+    addMetric(pvPayload, "led_green", "BOOL", pibrella.light.green.read())
+    addMetric(pvPayload, "led_red", "BOOL", pibrella.light.red.read())
+    addMetric(pvPayload, "led_yellow", "BOOL", pibrella.light.yellow.read())
+    addMetric(pvPayload, "button", "BOOL", pibrella.button.read())
+    addMetric(pvPayload, "buzzer_fail", "BOOL", 0)
+    addMetric(pvPayload, "buzzer_success", "BOOL", 0)
+
+    # Set up the propertites payload
+    parameterPayload = kurapayload_pb2.KuraPayload()
+    addMetric(parameterPayload, "device_hw_version", "STRING", "PFC_1.1")
+    addMetric(parameterPayload, "firmware_version", "STRING", "1.4.2")
+
+    # Publish the initial data with the Device BIRTH certificate
+    pvMapByteArray = pvPayload.SerializeToString()
+    parameterByteArray = parameterPayload.SerializeToString()
+    totalPayload = kurapayload_pb2.KuraPayload()
+    totalPayload.timestamp = int(round(time.time() * 1000))
+    addMetric(totalPayload, "seq", "INT32", getSeqNum())
+    addMetric(totalPayload, "pv_map", "BYTES", pvMapByteArray)
+    addMetric(totalPayload, "device_parameters", "BYTES", parameterByteArray)
+    totalByteArray = bytearray(totalPayload.SerializeToString())
+    client.publish("spv1.0/" + myGroupId + "/DBIRTH/" + myNodeName + "/" + mySubNodeName, totalByteArray, 0, False)
 ######################################################################
 
 # Create the DEATH payload
@@ -208,27 +272,7 @@ client.username_pw_set(myUsername, myPassword)
 client.will_set("spv1.0/" + myGroupId + "/NDEATH/" + myNodeName, deathByteArray, 0, False)
 client.connect(serverUrl, 1883, 60)
 
-# Create the node birth payload with a position
-payload = kurapayload_pb2.KuraPayload()
-position = payload.position
-position.altitude = 319
-position.heading = 0
-position.latitude = 38.83667239
-position.longitude = -94.67176706
-position.precision = 2.0
-position.satellites = 8
-position.speed = 0
-position.status = 3
-position.timestamp = int(round(time.time() * 1000))
-
-# Add a timestamp and sequence numbers to the payload
-payload.timestamp = int(round(time.time() * 1000))
-addMetric(payload, "bdSeq", "INT32", bdSeq)
-addMetric(payload, "seq", "INT32", getSeqNum())
-
-# Publish the node birth certificate
-byteArray = bytearray(payload.SerializeToString())
-client.publish("spv1.0/" + myGroupId + "/NBIRTH/" + myNodeName, byteArray, 0, False)
+publishBirth()
 
 # Set up the button press event handler
 pibrella.button.changed(button_changed)
@@ -237,42 +281,8 @@ pibrella.input.b.changed(input_b_changed)
 pibrella.input.c.changed(input_c_changed)
 pibrella.input.d.changed(input_d_changed)
 
-# Set up the input metrics
-pvPayload = kurapayload_pb2.KuraPayload()
-addMetric(pvPayload, "input_a", "BOOL", pibrella.input.a.read())
-addMetric(pvPayload, "input_b", "BOOL", pibrella.input.b.read())
-addMetric(pvPayload, "input_c", "BOOL", pibrella.input.c.read())
-addMetric(pvPayload, "input_d", "BOOL", pibrella.input.d.read())
-
-# Set up the output states on first run so Ignition and MQTT Engine are aware of them
-addMetric(pvPayload, "output_e", "BOOL", pibrella.output.e.read())
-addMetric(pvPayload, "output_f", "BOOL", pibrella.output.f.read())
-addMetric(pvPayload, "output_g", "BOOL", pibrella.output.g.read())
-addMetric(pvPayload, "output_h", "BOOL", pibrella.output.h.read())
-addMetric(pvPayload, "led_green", "BOOL", pibrella.light.green.read())
-addMetric(pvPayload, "led_red", "BOOL", pibrella.light.red.read())
-addMetric(pvPayload, "led_yellow", "BOOL", pibrella.light.yellow.read())
-addMetric(pvPayload, "button", "BOOL", pibrella.button.read())
-addMetric(pvPayload, "buzzer_fail", "BOOL", 0)
-addMetric(pvPayload, "buzzer_success", "BOOL", 0)
-
-# Set up the propertites payload
-parameterPayload = kurapayload_pb2.KuraPayload()
-addMetric(parameterPayload, "device_hw_version", "STRING", "PFC_1.1")
-addMetric(parameterPayload, "firmware_version", "STRING", "1.4.2")
-
-# Publish the initial data with the Device BIRTH certificate
-pvMapByteArray = pvPayload.SerializeToString()
-parameterByteArray = parameterPayload.SerializeToString()
-totalPayload = kurapayload_pb2.KuraPayload()
-totalPayload.timestamp = int(round(time.time() * 1000))
-addMetric(totalPayload, "seq", "INT32", getSeqNum())
-addMetric(totalPayload, "pv_map", "BYTES", pvMapByteArray)
-addMetric(totalPayload, "device_parameters", "BYTES", parameterByteArray)
-totalByteArray = bytearray(totalPayload.SerializeToString())
-client.publish("spv1.0/" + myGroupId + "/DBIRTH/" + myNodeName + "/" + mySubNodeName, totalByteArray, 0, False)
-
 # Sit and wait for inbound or outbound events
 while True:
     time.sleep(.1)
     client.loop()
+
