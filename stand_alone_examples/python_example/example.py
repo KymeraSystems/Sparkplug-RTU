@@ -1,74 +1,29 @@
-#!/usr/bin/python
-######################################################################
-# Copyright (c) 2012, 2016 Cirrus Link Solutions
-#
-#  All rights reserved. This program and the accompanying materials
-#  are made available under the terms of the Eclipse Public License v1.0
-#  which accompanies this distribution, and is available at
-#  http://www.eclipse.org/legal/epl-v10.html
-#
-# Contributors:
-#   Cirrus Link Solutions
-######################################################################
+#!/usr/local/bin/python
 
 import paho.mqtt.client as mqtt
-import pibrella
 import kurapayload_pb2
 import time
 import random
 
-serverUrl = "192.168.1.1"
+serverUrl = "localhost"
 myGroupId = "Sparkplug Devices"
-myNodeName = "Python Raspberry Pi"
-mySubNodeName = "Pibrella"
+myNodeName = "Python Edge Node"
+mySubNodeName = "Emulated Device"
+publishPeriod = 5000
 myUsername = "admin"
 myPassword = "changeme"
-seq = 0
+seqNum = 0
 bdSeq = 0
-
-######################################################################
-# Button press event handler
-######################################################################
-def button_changed(pin):
-    outboundPayload = kurapayload_pb2.KuraPayload()
-    if pin.read() == 1:
-	print("You pressed the button!")
-    else:
-	print("You released the button!")
-    outboundPayload.timestamp = int(round(time.time() * 1000))
-    addMetric(outboundPayload, "seq", "INT32", getSeqNum())
-    addMetric(outboundPayload, "button", "BOOL", pin.read());
-    byteArray = bytearray(outboundPayload.SerializeToString())
-    client.publish("spv1.0/" + myGroupId + "/DDATA/" + myNodeName + "/" + mySubNodeName, byteArray, 0, False)
-
-######################################################################
-# Input change event handler
-######################################################################
-def input_a_changed(pin):
-    input_changed("input_a", pin)
-def input_b_changed(pin):
-    input_changed("input_b", pin)
-def input_c_changed(pin):
-    input_changed("input_c", pin)
-def input_d_changed(pin):
-    input_changed("input_d", pin)
-def input_changed(name, pin):
-    outboundPayload = kurapayload_pb2.KuraPayload()
-    outboundPayload.timestamp = int(round(time.time() * 1000))
-    addMetric(outboundPayload, "seq", "INT32", getSeqNum())
-    addMetric(outboundPayload, name, "BOOL", pin.read());
-    byteArray = bytearray(outboundPayload.SerializeToString())
-    client.publish("spv1.0/" + myGroupId + "/DDATA/" + myNodeName + "/" + mySubNodeName, byteArray, 0, False)
 
 ######################################################################
 # Helper method for getting the next sequence number
 ######################################################################
 def getSeqNum():
-    global seq
-    retVal = seq
-    seq += 1
-    if seq == 256:
-        seq = 0
+    global seqNum
+    retVal = seqNum
+    seqNum += 1
+    if seqNum == 256:
+	seqNum = 0
     return retVal
 ######################################################################
 
@@ -152,45 +107,21 @@ def on_message(client, userdata, msg):
 	inboundPayload = kurapayload_pb2.KuraPayload()
 	inboundPayload.ParseFromString(msg.payload)
 	outboundPayload = kurapayload_pb2.KuraPayload()
-	outboundPayload.timestamp = int(round(time.time() * 1000))
-	addMetric(outboundPayload, "seq", "INT32", getSeqNum())
-
+        outboundPayload.timestamp = int(round(time.time() * 1000))
+        addMetric(outboundPayload, "seq", "INT32", getSeqNum())
 	for metric in inboundPayload.metric:
-	    print "Tag Name: " + metric.name
-	    if metric.name == "output_e":
-		pibrella.output.e.write(metric.bool_value)
-		addMetric(outboundPayload, "output_e", "BOOL", pibrella.output.e.read())
-	    elif metric.name == "output_f":
-		pibrella.output.f.write(metric.bool_value)
-		addMetric(outboundPayload, "output_f", "BOOL", pibrella.output.f.read())
-	    elif metric.name == "output_g":
-		pibrella.output.g.write(metric.bool_value)
-		addMetric(outboundPayload, "output_g", "BOOL", pibrella.output.g.read())
-	    elif metric.name == "output_h":
-		pibrella.output.h.write(metric.bool_value)
-		addMetric(outboundPayload, "output_h", "BOOL", pibrella.output.h.read())
-	    elif metric.name == "led_green":
-		if metric.bool_value:
-		    pibrella.light.green.on()
-		else:
-		    pibrella.light.green.off()
-		addMetric(outboundPayload, "led_green", "BOOL", pibrella.light.green.read())
-	    elif metric.name == "led_red":
-		if metric.bool_value:
-		    pibrella.light.red.on()
-		else:
-		    pibrella.light.red.off()
-		addMetric(outboundPayload, "led_red", "BOOL", pibrella.light.red.read())
-	    elif metric.name == "led_yellow":
-		if metric.bool_value:
-		    pibrella.light.yellow.on()
-		else:
-		    pibrella.light.yellow.off()
-		addMetric(outboundPayload, "led_yellow", "BOOL", pibrella.light.yellow.read())
-	    elif metric.name == "buzzer_fail":
-		pibrella.buzzer.fail()
-	    elif metric.name == "buzzer_success":
-		pibrella.buzzer.success()
+	    if metric.name == "output0":
+		print "output0: " + str(metric.bool_value)
+		addMetric(outboundPayload, "input0", "BOOL", metric.bool_value)
+		addMetric(outboundPayload, "output0", "BOOL", metric.bool_value)
+	    elif metric.name == "output1":
+		print "output1: " + str(metric.int_value)
+		addMetric(outboundPayload, "input1", "INT32", metric.int_value)
+		addMetric(outboundPayload, "output1", "INT32", metric.int_value)
+	    elif metric.name == "output2":
+		print "output2: " + str(metric.float_value)
+		addMetric(outboundPayload, "input2", "FLOAT", metric.float_value)
+		addMetric(outboundPayload, "output2", "FLOAT", metric.float_value)
 
 	byteArray = bytearray(outboundPayload.SerializeToString())
 	client.publish("spv1.0/" + myGroupId + "/DDATA/" + myNodeName + "/" + mySubNodeName, byteArray, 0, False)
@@ -202,6 +133,7 @@ def on_message(client, userdata, msg):
                 publishBirth()
 
     print "done publishing"
+
 ######################################################################
 
 ######################################################################
@@ -230,24 +162,20 @@ def publishBirth():
     byteArray = bytearray(payload.SerializeToString())
     client.publish("spv1.0/" + myGroupId + "/NBIRTH/" + myNodeName, byteArray, 0, False)
 
-    # Set up the input metrics
+    # Setup the inputs
     pvPayload = kurapayload_pb2.KuraPayload()
-    addMetric(pvPayload, "input_a", "BOOL", pibrella.input.a.read())
-    addMetric(pvPayload, "input_b", "BOOL", pibrella.input.b.read())
-    addMetric(pvPayload, "input_c", "BOOL", pibrella.input.c.read())
-    addMetric(pvPayload, "input_d", "BOOL", pibrella.input.d.read())
+    addMetric(pvPayload, "my_boolean", "BOOL", random.choice([True, False]))
+    addMetric(pvPayload, "my_float", "FLOAT", random.random())
+    addMetric(pvPayload, "my_int", "INT32", random.randint(0,100))
+    addMetric(pvPayload, "my_long", "INT64", random.getrandbits(60))
+    addMetric(pvPayload, "input0", "BOOL", True)
+    addMetric(pvPayload, "input1", "INT32", 0)
+    addMetric(pvPayload, "input2", "FLOAT", 1.23)
 
     # Set up the output states on first run so Ignition and MQTT Engine are aware of them
-    addMetric(pvPayload, "output_e", "BOOL", pibrella.output.e.read())
-    addMetric(pvPayload, "output_f", "BOOL", pibrella.output.f.read())
-    addMetric(pvPayload, "output_g", "BOOL", pibrella.output.g.read())
-    addMetric(pvPayload, "output_h", "BOOL", pibrella.output.h.read())
-    addMetric(pvPayload, "led_green", "BOOL", pibrella.light.green.read())
-    addMetric(pvPayload, "led_red", "BOOL", pibrella.light.red.read())
-    addMetric(pvPayload, "led_yellow", "BOOL", pibrella.light.yellow.read())
-    addMetric(pvPayload, "button", "BOOL", pibrella.button.read())
-    addMetric(pvPayload, "buzzer_fail", "BOOL", 0)
-    addMetric(pvPayload, "buzzer_success", "BOOL", 0)
+    addMetric(pvPayload, "output0", "BOOL", True)
+    addMetric(pvPayload, "output1", "INT32", 0)
+    addMetric(pvPayload, "output2", "FLOAT", 1.23)
 
     # Set up the propertites payload
     parameterPayload = kurapayload_pb2.KuraPayload()
@@ -264,6 +192,7 @@ def publishBirth():
     addMetric(totalPayload, "device_parameters", "BYTES", parameterByteArray)
     totalByteArray = bytearray(totalPayload.SerializeToString())
     client.publish("spv1.0/" + myGroupId + "/DBIRTH/" + myNodeName + "/" + mySubNodeName, totalByteArray, 0, False)
+
 ######################################################################
 
 # Create the DEATH payload
@@ -282,15 +211,20 @@ client.connect(serverUrl, 1883, 60)
 
 publishBirth()
 
-# Set up the button press event handler
-pibrella.button.changed(button_changed)
-pibrella.input.a.changed(input_a_changed)
-pibrella.input.b.changed(input_b_changed)
-pibrella.input.c.changed(input_c_changed)
-pibrella.input.d.changed(input_d_changed)
-
-# Sit and wait for inbound or outbound events
 while True:
-    time.sleep(.1)
-    client.loop()
+    payload = kurapayload_pb2.KuraPayload()
+    payload.timestamp = int(round(time.time() * 1000))
+    addMetric(payload, "seq", "INT32", getSeqNum())
 
+    addMetric(payload, "my_boolean", "BOOL", random.choice([True, False]))
+    addMetric(payload, "my_float", "FLOAT", random.random())
+    addMetric(payload, "my_int", "INT32", random.randint(0,100))
+    addMetric(payload, "my_long", "INT64", random.getrandbits(60))
+
+    # Publish the data
+    byteArray = bytearray(payload.SerializeToString())
+    client.publish("spv1.0/" + myGroupId + "/DDATA/" + myNodeName + "/" + mySubNodeName, byteArray, 0, False)
+
+    for _ in range(50):
+	time.sleep(.1)
+	client.loop()
