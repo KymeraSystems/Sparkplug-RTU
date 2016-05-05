@@ -12,7 +12,6 @@
 package com.cirruslink.example;
 
 import java.util.Date;
-import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -49,7 +48,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 	private static final String SW_VERSION = "v1.0.0";
 
 	// Configuration
-	private String serverUrl = "tcp://192.168.1.84:1883";			// Change to point to your MQTT Server
+	private String serverUrl = "tcp://192.168.1.1:1883";			// Change to point to your MQTT Server
 	private String groupId = "Sparkplug Devices";
 	private String edgeNode = "Java Raspberry Pi";
 	private String deviceId = "Pibrella";
@@ -128,8 +127,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 			payload.addMetric("bdSeq", bdSeq);
 			payload = addSeqNum(payload);
 			payload.setPosition(position);
-			CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(payload);
-			client.publish("spv1.0/" + groupId + "/NBIRTH/" + edgeNode, encoder.getBytes(), 0, false);
+			executor.execute(new Publisher("spv1.0/" + groupId + "/NBIRTH/" + edgeNode, payload));
 			
 			// Create the Device BIRTH
 			payload = new KuraPayload();
@@ -156,7 +154,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 			KuraPayload parameterPayload = new KuraPayload();
 			parameterPayload.addMetric("hw_version", HW_VERSION);
 			parameterPayload.addMetric("sw_version", SW_VERSION);
-			encoder = new CloudPayloadProtoBufEncoderImpl(parameterPayload);
+			CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(parameterPayload);
 			totalPayload.addMetric("device_parameters", encoder.getBytes());
 			
 			// Add the initial I/O states
@@ -164,8 +162,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 			totalPayload.addMetric("pv_map", encoder.getBytes());
 			
 			// Publish the Device BIRTH
-			encoder = new CloudPayloadProtoBufEncoderImpl(totalPayload);
-			client.publish("spv1.0/" + groupId + "/DBIRTH/" + edgeNode + "/" + deviceId, encoder.getBytes(), 0, false);
+			executor.execute(new Publisher("spv1.0/" + groupId + "/DBIRTH/" + edgeNode + "/" + deviceId, payload));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -270,7 +267,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 			}
 			
 			// Publish the message in a new thread
-			executor.execute(new Publisher(outboundPayload));
+			executor.execute(new Publisher("spv1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, outboundPayload));
 		}
 	}
 
@@ -280,9 +277,11 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 	
 	private class Publisher implements Runnable {
 		
+		private String topic;
 		private KuraPayload outboundPayload;
 
-		public Publisher(KuraPayload outboundPayload) {
+		public Publisher(String topic, KuraPayload outboundPayload) {
+			this.topic = topic;
 			this.outboundPayload = outboundPayload;
 		}
 		
@@ -291,7 +290,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 				outboundPayload.setTimestamp(new Date());
 				outboundPayload = addSeqNum(outboundPayload);
 				CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(outboundPayload);
-				client.publish("spv1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, encoder.getBytes(), 0, false);
+				client.publish(topic, encoder.getBytes(), 0, false);
 			} catch (MqttPersistenceException e) {
 				e.printStackTrace();
 			} catch (MqttException e) {
