@@ -191,7 +191,11 @@ def on_message(client, userdata, msg):
 	    byteArray = bytearray(outboundPayload.SerializeToString())
 	    client.publish("spv1.0/" + myGroupId + "/DDATA/" + myNodeName + "/" + mySubNodeName, byteArray, 0, False)
     elif tokens[0] == "spv1.0" and tokens[1] == myGroupId and tokens[2] == "NCMD" and tokens[3] == myNodeName:
-	publishBirth()
+        inboundPayload = kurapayload_pb2.KuraPayload()
+        inboundPayload.ParseFromString(msg.payload)
+        for metric in inboundPayload.metric:
+            if metric.name == "Rebirth":
+                publishBirth()
 
     print "done publishing"
 ######################################################################

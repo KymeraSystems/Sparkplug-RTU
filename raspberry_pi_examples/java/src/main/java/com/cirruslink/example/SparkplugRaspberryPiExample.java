@@ -49,7 +49,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 	private static final String SW_VERSION = "v1.0.0";
 
 	// Configuration
-	private String serverUrl = "tcp://192.168.1.1:1883";			// Change to point to your MQTT Server
+	private String serverUrl = "tcp://192.168.1.84:1883";			// Change to point to your MQTT Server
 	private String groupId = "Sparkplug Devices";
 	private String edgeNode = "Java Raspberry Pi";
 	private String deviceId = "Pibrella";
@@ -72,12 +72,8 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 			// Create the Pibrella listeners
 			createPibrellaListeners();
 			
-			// Random generator and thread pool for outgoing published messages
-			Random random = new Random();
+			// Thread pool for outgoing published messages
 			executor = Executors.newFixedThreadPool(1);
-			
-			// Flag for first run to denote subnode state
-			boolean deviceOnline = false;
 			
 			// Build up DEATH payload - note DEATH payloads don't have a regular sequence number
 			KuraPayload deathPayload = new KuraPayload();
@@ -101,6 +97,19 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 			client.subscribe("spv1.0/" + groupId + "/NCMD/" + edgeNode + "/#", 0);
 			client.subscribe("spv1.0/" + groupId + "/DCMD/" + edgeNode + "/#", 0);
 			
+			publishBirth();
+			
+			// Wait for 'ctrl c' to exit
+			while(true) {
+				Thread.sleep(1000);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void publishBirth() {
+		try {
 			// Create the position for the Kura payload
 			KuraPosition position = new KuraPosition();
 			position.setAltitude(319);
@@ -157,12 +166,6 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 			// Publish the Device BIRTH
 			encoder = new CloudPayloadProtoBufEncoderImpl(totalPayload);
 			client.publish("spv1.0/" + groupId + "/DBIRTH/" + edgeNode + "/" + deviceId, encoder.getBytes(), 0, false);
-			
-			// Wait for 'ctrl c' to exit
-			while(true) {
-				Thread.sleep(1000);
-			}
-			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -201,6 +204,15 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 		
 		String[] splitTopic = topic.split("/");
 		if(splitTopic[0].equals("spv1.0") && 
+				splitTopic[1].equals(groupId) &&
+				splitTopic[2].equals("NCMD") && 
+				splitTopic[3].equals(edgeNode)) {
+			CloudPayloadProtoBufDecoderImpl decoder = new CloudPayloadProtoBufDecoderImpl(message.getPayload());
+			KuraPayload inboundPayload = decoder.buildFromByteArray();
+			if(inboundPayload.getMetric("Rebirth") != null && (Boolean)inboundPayload.getMetric("Rebirth") == true) {
+				publishBirth();
+			}
+		} else if(splitTopic[0].equals("spv1.0") && 
 				splitTopic[1].equals(groupId) &&
 				splitTopic[2].equals("DCMD") && 
 				splitTopic[3].equals(edgeNode)) {
