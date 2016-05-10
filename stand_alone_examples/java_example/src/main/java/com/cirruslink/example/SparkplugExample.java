@@ -65,6 +65,7 @@ public class SparkplugExample implements MqttCallback {
 			options.setPassword(password.toCharArray());
 			options.setWill("spv1.0/" + groupId + "/NDEATH/" + edgeNode, deathEncoder.getBytes(), 0, false);
 			client = new MqttClient(serverUrl, clientId);
+			client.setTimeToWait(2000);						// short timeout on failure to connect
 			client.connect(options);
 			client.setCallback(this);
 			
