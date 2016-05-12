@@ -6,3 +6,6 @@ dependency-reduced-pom.xml
 .classpath
 javaClientId-tcplocalhost*
 javaSimpleEdgeNode-tcplocalhost*
+*.o
+sparkplug_example
+

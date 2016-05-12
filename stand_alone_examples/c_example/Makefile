@@ -4,9 +4,9 @@ LDFLAGS=-lmosquitto -lprotobuf-c
 
 .PHONY: all clean
 
-all : chariot_example
+all : sparkplug_example
 
-chariot_example : kurapayload.pb-c.o example.o
+sparkplug_example : kurapayload.pb-c.o example.o
 	${CC} $^ -o $@ ${LDFLAGS}
 
 kurapayload.pb-c.o : kurapayload.pb-c.c
@@ -16,4 +16,4 @@ example.o : example.c
 	${CC} -c $^ -o $@ ${CFLAGS}
 
 clean : 
-	-rm -f *.o chariot_example
+	-rm -f *.o sparkplug_example
