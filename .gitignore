@@ -4,5 +4,5 @@ dependency-reduced-pom.xml
 .settings/
 .project
 .classpath
-javaClientId-tcplocalhost
-javaSimpleEdgeNode-tcplocalhost
+javaClientId-tcplocalhost*
+javaSimpleEdgeNode-tcplocalhost*
