@@ -83,6 +83,31 @@
                                         </execution>
                                 </executions>
                         </plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<id>add-third-party</id>
+						<phase>package</phase>
+						<goals>
+							<goal>add-third-party</goal>
+							<goal>download-licenses</goal>
+						</goals>
+						<configuration>
+							<useMissingFile>true</useMissingFile>
+							<excludedScopes>test</excludedScopes>
+							<excludedGroups>
+								(com.cirruslink*)
+							</excludedGroups>
+							<licenseMerges>
+								<licenseMerge>The Apache Software License, Version 2.0|Apache License, Version 2.0|Apache Public License 2.0|Apache License 2.0|Apache Software License - Version 2.0</licenseMerge>
+							</licenseMerges>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
                 </plugins>
         </build>
 
