@@ -60,6 +60,8 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 	
 	private int bdSeq = 0;
 	private int seq = 0;
+	
+	private Object lock = new Object();
 
 	public static void main(String[] args) {
 		SparkplugRaspberryPiExample example = new SparkplugRaspberryPiExample();
@@ -110,86 +112,90 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 	
 	public void publishBirth() {
 		try {
-			// Create the position for the Kura payload
-			KuraPosition position = new KuraPosition();
-			position.setAltitude(319);
-			position.setHeading(0);
-			position.setLatitude(38.83667239);
-			position.setLongitude(-94.67176706);
-			position.setPrecision(2.0);
-			position.setSatellites(8);
-			position.setSpeed(0);
-			position.setStatus(3);
-			position.setTimestamp(new Date());
-			
-			// Create the BIRTH payload and set the position and other metrics
-			KuraPayload payload = new KuraPayload();
-			payload.setTimestamp(new Date());
-			payload.addMetric("bdSeq", bdSeq);
-			payload = addSeqNum(payload);
-			payload.setPosition(position);
-			executor.execute(new Publisher("spv1.0/" + groupId + "/NBIRTH/" + edgeNode, payload));
-			
-			// Create the Device BIRTH
-			payload = new KuraPayload();
-			payload.addMetric("input_a", pibrella.getInputPin(PibrellaInput.A).isHigh());
-			payload.addMetric("input_b", pibrella.getInputPin(PibrellaInput.B).isHigh());
-			payload.addMetric("input_c", pibrella.getInputPin(PibrellaInput.C).isHigh());
-			payload.addMetric("input_d", pibrella.getInputPin(PibrellaInput.D).isHigh());
-			payload.addMetric("output_e", pibrella.getOutputPin(PibrellaOutput.E).isHigh());
-			payload.addMetric("output_f", pibrella.getOutputPin(PibrellaOutput.F).isHigh());
-			payload.addMetric("output_g", pibrella.getOutputPin(PibrellaOutput.G).isHigh());
-			payload.addMetric("output_h", pibrella.getOutputPin(PibrellaOutput.H).isHigh());
-			payload.addMetric("led_green", pibrella.getOutputPin(PibrellaOutput.LED_GREEN).isHigh());
-			payload.addMetric("led_red", pibrella.getOutputPin(PibrellaOutput.LED_RED).isHigh());
-			payload.addMetric("led_yellow", pibrella.getOutputPin(PibrellaOutput.LED_YELLOW).isHigh());
-			payload.addMetric("button", pibrella.getInputPin(PibrellaInput.Button).isHigh());
-			payload.addMetric("buzzer", false);
-			
-			// We need to publish the device's birth certificate with all known data and parameters
-			KuraPayload totalPayload = new KuraPayload();
-			totalPayload.setTimestamp(new Date());
-			totalPayload = addSeqNum(totalPayload);
-			totalPayload.setTimestamp(new Date());
-			
-			KuraPayload parameterPayload = new KuraPayload();
-			parameterPayload.addMetric("hw_version", HW_VERSION);
-			parameterPayload.addMetric("sw_version", SW_VERSION);
-			CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(parameterPayload);
-			totalPayload.addMetric("device_parameters", encoder.getBytes());
-			
-			// Add the initial I/O states
-			encoder = new CloudPayloadProtoBufEncoderImpl(payload);
-			totalPayload.addMetric("pv_map", encoder.getBytes());
-			
-			// Publish the Device BIRTH
-			executor.execute(new Publisher("spv1.0/" + groupId + "/DBIRTH/" + edgeNode + "/" + deviceId, payload));
+			synchronized(lock) {
+				// Create the position for the Kura payload
+				KuraPosition position = new KuraPosition();
+				position.setAltitude(319);
+				position.setHeading(0);
+				position.setLatitude(38.83667239);
+				position.setLongitude(-94.67176706);
+				position.setPrecision(2.0);
+				position.setSatellites(8);
+				position.setSpeed(0);
+				position.setStatus(3);
+				position.setTimestamp(new Date());
+
+				// Create the BIRTH payload and set the position and other metrics
+				KuraPayload payload = new KuraPayload();
+				payload.setTimestamp(new Date());
+				payload.addMetric("bdSeq", bdSeq);
+				seq = 0;									// Since this is a birth - reset the seq number
+				payload = addSeqNum(payload);
+				payload.setPosition(position);
+				executor.execute(new Publisher("spv1.0/" + groupId + "/NBIRTH/" + edgeNode, payload));
+
+				// Create the Device BIRTH
+				payload = new KuraPayload();
+				payload.addMetric("input_a", pibrella.getInputPin(PibrellaInput.A).isHigh());
+				payload.addMetric("input_b", pibrella.getInputPin(PibrellaInput.B).isHigh());
+				payload.addMetric("input_c", pibrella.getInputPin(PibrellaInput.C).isHigh());
+				payload.addMetric("input_d", pibrella.getInputPin(PibrellaInput.D).isHigh());
+				payload.addMetric("output_e", pibrella.getOutputPin(PibrellaOutput.E).isHigh());
+				payload.addMetric("output_f", pibrella.getOutputPin(PibrellaOutput.F).isHigh());
+				payload.addMetric("output_g", pibrella.getOutputPin(PibrellaOutput.G).isHigh());
+				payload.addMetric("output_h", pibrella.getOutputPin(PibrellaOutput.H).isHigh());
+				payload.addMetric("led_green", pibrella.getOutputPin(PibrellaOutput.LED_GREEN).isHigh());
+				payload.addMetric("led_red", pibrella.getOutputPin(PibrellaOutput.LED_RED).isHigh());
+				payload.addMetric("led_yellow", pibrella.getOutputPin(PibrellaOutput.LED_YELLOW).isHigh());
+				payload.addMetric("button", pibrella.getInputPin(PibrellaInput.Button).isHigh());
+				payload.addMetric("buzzer", false);
+
+				// We need to publish the device's birth certificate with all known data and parameters
+				KuraPayload totalPayload = new KuraPayload();
+				totalPayload.setTimestamp(new Date());
+				totalPayload = addSeqNum(totalPayload);
+
+				KuraPayload parameterPayload = new KuraPayload();
+				parameterPayload.addMetric("hw_version", HW_VERSION);
+				parameterPayload.addMetric("sw_version", SW_VERSION);
+				CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(parameterPayload);
+				totalPayload.addMetric("device_parameters", encoder.getBytes());
+
+				// Add the initial I/O states
+				encoder = new CloudPayloadProtoBufEncoderImpl(payload);
+				totalPayload.addMetric("pv_map", encoder.getBytes());
+
+				// Publish the Device BIRTH
+				executor.execute(new Publisher("spv1.0/" + groupId + "/DBIRTH/" + edgeNode + "/" + deviceId, totalPayload));
+			}
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	// Used to add the birth/death sequence number
-	public KuraPayload addBdSeqNum(KuraPayload payload) throws Exception {
+	private KuraPayload addBdSeqNum(KuraPayload payload) throws Exception {
 		if(payload == null) {
 			payload = new KuraPayload();
 		}
-		if(bdSeq == 255) {
+		if(bdSeq == 256) {
 			bdSeq = 0;
 		}
-		payload.addMetric("bdSeq", bdSeq++);
+		payload.addMetric("bdSeq", bdSeq);
+		bdSeq++;
 		return payload;
 	}
 	
 	// Used to add the sequence number
-	public KuraPayload addSeqNum(KuraPayload payload) throws Exception {
+	private KuraPayload addSeqNum(KuraPayload payload) throws Exception {
 		if(payload == null) {
 			payload = new KuraPayload();
 		}
-		if(seq == 255) {
+		if(seq == 256) {
 			seq = 0;
 		}
-		payload.addMetric("seq", seq++);
+		payload.addMetric("seq", seq);
+		seq++;
 		return payload;
 	}
 
@@ -214,61 +220,65 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 				splitTopic[1].equals(groupId) &&
 				splitTopic[2].equals("DCMD") && 
 				splitTopic[3].equals(edgeNode)) {
-			System.out.println("Command recevied for device " + splitTopic[4]);
-			
-			// Get the incoming metric key and value
-			CloudPayloadProtoBufDecoderImpl decoder = new CloudPayloadProtoBufDecoderImpl(message.getPayload());
-			KuraPayload inboundPayload = decoder.buildFromByteArray();
-	
-			// Initialize the outbound payload
-			KuraPayload outboundPayload = new KuraPayload();
-	
-			if(inboundPayload.getMetric("output_e") != null) {
-				pibrella.getOutputPin(PibrellaOutput.E).setState((Boolean)inboundPayload.getMetric("output_e"));
-				outboundPayload.addMetric("output_e", pibrella.getOutputPin(PibrellaOutput.E).isHigh());
-			}
-			if(inboundPayload.getMetric("output_f") != null) {
-				pibrella.getOutputPin(PibrellaOutput.F).setState((Boolean)inboundPayload.getMetric("output_f"));
-				outboundPayload.addMetric("output_f", pibrella.getOutputPin(PibrellaOutput.F).isHigh());
-			}
-			if(inboundPayload.getMetric("output_g") != null) {
-				pibrella.getOutputPin(PibrellaOutput.G).setState((Boolean)inboundPayload.getMetric("output_g"));
-				outboundPayload.addMetric("output_g", pibrella.getOutputPin(PibrellaOutput.G).isHigh());
-			}
-			if(inboundPayload.getMetric("output_h") != null) {
-				pibrella.getOutputPin(PibrellaOutput.H).setState((Boolean)inboundPayload.getMetric("output_h"));
-				outboundPayload.addMetric("output_h", pibrella.getOutputPin(PibrellaOutput.H).isHigh());
-			}
-			if(inboundPayload.getMetric("led_green") != null) {
-				if((Boolean)inboundPayload.getMetric("led_green") == true) {
-					pibrella.ledGreen().on();
-				} else {
-					pibrella.ledGreen().off();
+			synchronized(lock) {
+				System.out.println("Command recevied for device " + splitTopic[4]);
+
+				// Get the incoming metric key and value
+				CloudPayloadProtoBufDecoderImpl decoder = new CloudPayloadProtoBufDecoderImpl(message.getPayload());
+				KuraPayload inboundPayload = decoder.buildFromByteArray();
+
+				// Initialize the outbound payload
+				KuraPayload outboundPayload = new KuraPayload();
+				outboundPayload.setTimestamp(new Date());
+				outboundPayload = addSeqNum(outboundPayload);
+
+				if(inboundPayload.getMetric("output_e") != null) {
+					pibrella.getOutputPin(PibrellaOutput.E).setState((Boolean)inboundPayload.getMetric("output_e"));
+					outboundPayload.addMetric("output_e", pibrella.getOutputPin(PibrellaOutput.E).isHigh());
 				}
-				outboundPayload.addMetric("led_green", pibrella.ledGreen().isOn());
-			}
-			if(inboundPayload.getMetric("led_red") != null) {
-				if((Boolean)inboundPayload.getMetric("led_red") == true) {
-					pibrella.ledRed().on();
-				} else {
-					pibrella.ledRed().off();
+				if(inboundPayload.getMetric("output_f") != null) {
+					pibrella.getOutputPin(PibrellaOutput.F).setState((Boolean)inboundPayload.getMetric("output_f"));
+					outboundPayload.addMetric("output_f", pibrella.getOutputPin(PibrellaOutput.F).isHigh());
 				}
-				outboundPayload.addMetric("led_red", pibrella.ledRed().isOn());
-			}
-			if(inboundPayload.getMetric("led_yellow") != null) {
-				if((Boolean)inboundPayload.getMetric("led_yellow") == true) {
-					pibrella.ledYellow().on();
-				} else {
-					pibrella.ledYellow().off();
+				if(inboundPayload.getMetric("output_g") != null) {
+					pibrella.getOutputPin(PibrellaOutput.G).setState((Boolean)inboundPayload.getMetric("output_g"));
+					outboundPayload.addMetric("output_g", pibrella.getOutputPin(PibrellaOutput.G).isHigh());
 				}
-				outboundPayload.addMetric("led_yellow", pibrella.ledYellow().isOn());
+				if(inboundPayload.getMetric("output_h") != null) {
+					pibrella.getOutputPin(PibrellaOutput.H).setState((Boolean)inboundPayload.getMetric("output_h"));
+					outboundPayload.addMetric("output_h", pibrella.getOutputPin(PibrellaOutput.H).isHigh());
+				}
+				if(inboundPayload.getMetric("led_green") != null) {
+					if((Boolean)inboundPayload.getMetric("led_green") == true) {
+						pibrella.ledGreen().on();
+					} else {
+						pibrella.ledGreen().off();
+					}
+					outboundPayload.addMetric("led_green", pibrella.ledGreen().isOn());
+				}
+				if(inboundPayload.getMetric("led_red") != null) {
+					if((Boolean)inboundPayload.getMetric("led_red") == true) {
+						pibrella.ledRed().on();
+					} else {
+						pibrella.ledRed().off();
+					}
+					outboundPayload.addMetric("led_red", pibrella.ledRed().isOn());
+				}
+				if(inboundPayload.getMetric("led_yellow") != null) {
+					if((Boolean)inboundPayload.getMetric("led_yellow") == true) {
+						pibrella.ledYellow().on();
+					} else {
+						pibrella.ledYellow().off();
+					}
+					outboundPayload.addMetric("led_yellow", pibrella.ledYellow().isOn());
+				}
+				if(inboundPayload.getMetric("buzzer") != null) {
+					pibrella.getBuzzer().buzz(100, 2000);
+				}
+
+				// Publish the message in a new thread
+				executor.execute(new Publisher("spv1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, outboundPayload));
 			}
-			if(inboundPayload.getMetric("buzzer") != null) {
-				pibrella.getBuzzer().buzz(100, 2000);
-			}
-			
-			// Publish the message in a new thread
-			executor.execute(new Publisher("spv1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, outboundPayload));
 		}
 	}
 
@@ -288,8 +298,6 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 		
 		public void run() {
 			try {
-				outboundPayload.setTimestamp(new Date());
-				outboundPayload = addSeqNum(outboundPayload);
 				CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(outboundPayload);
 				client.publish(topic, encoder.getBytes(), 0, false);
 			} catch (MqttPersistenceException e) {
@@ -306,7 +314,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 		pibrella.button().addListener(new ButtonStateChangeListener() {
 			public void onStateChange(ButtonStateChangeEvent event) {
 				try {
-					synchronized(pibrella) {
+					synchronized(lock) {
 						KuraPayload outboundPayload = new KuraPayload();
 						outboundPayload.setTimestamp(new Date());
 						outboundPayload = addSeqNum(outboundPayload);
@@ -327,7 +335,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         pibrella.inputA().addListener(new GpioPinListenerDigital() {
 			public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
 				try {
-					synchronized(pibrella) {
+					synchronized(lock) {
 						KuraPayload outboundPayload = new KuraPayload();
 						outboundPayload.setTimestamp(new Date());
 						outboundPayload = addSeqNum(outboundPayload);
@@ -348,7 +356,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         pibrella.inputB().addListener(new GpioPinListenerDigital() {
 			public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
 				try {
-					synchronized(pibrella) {
+					synchronized(lock) {
 						KuraPayload outboundPayload = new KuraPayload();
 						outboundPayload.setTimestamp(new Date());
 						outboundPayload = addSeqNum(outboundPayload);
@@ -369,7 +377,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         pibrella.inputC().addListener(new GpioPinListenerDigital() {
 			public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
 				try {
-					synchronized(pibrella) {
+					synchronized(lock) {
 						KuraPayload outboundPayload = new KuraPayload();
 						outboundPayload.setTimestamp(new Date());
 						outboundPayload = addSeqNum(outboundPayload);
@@ -390,7 +398,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         pibrella.inputD().addListener(new GpioPinListenerDigital() {
 			public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
 				try {
-					synchronized(pibrella) {
+					synchronized(lock) {
 						KuraPayload outboundPayload = new KuraPayload();
 						outboundPayload.setTimestamp(new Date());
 						outboundPayload = addSeqNum(outboundPayload);

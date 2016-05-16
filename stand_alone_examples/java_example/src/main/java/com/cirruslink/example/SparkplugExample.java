@@ -50,6 +50,8 @@ public class SparkplugExample implements MqttCallback {
 	private int bdSeq = 0;
 	private int seq = 0;
 	
+	private Object seqLock = new Object();
+	
 	public static void main(String[] args) {
 		SparkplugExample example = new SparkplugExample();
 		example.run();
@@ -88,21 +90,23 @@ public class SparkplugExample implements MqttCallback {
 			publishBirth();			
 			
 			// Loop 100 times publishing data every PUBLISH_PERIOD
-			for(int i=0; i<100; i++) {
-				// Create the payload and add some metrics
-				KuraPayload payload = new KuraPayload();
-				payload.addMetric("my_boolean", random.nextBoolean());
-				payload.addMetric("my_double", random.nextDouble());
-				payload.addMetric("my_float", random.nextFloat());
-				payload.addMetric("my_int", random.nextInt(100));
-				payload.addMetric("my_long", random.nextLong());
-				
-				System.out.println("Publishing updated values");
-				payload = addSeqNum(payload);
-				CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(payload);
-				client.publish("spv1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, encoder.getBytes(), 0, false);
-				
+			for(int i=0; i<265; i++) {
 				Thread.sleep(PUBLISH_PERIOD);
+
+				synchronized(seqLock) {
+					// Create the payload and add some metrics
+					KuraPayload payload = new KuraPayload();
+					payload.addMetric("my_boolean", random.nextBoolean());
+					payload.addMetric("my_double", random.nextDouble());
+					payload.addMetric("my_float", random.nextFloat());
+					payload.addMetric("my_int", random.nextInt(100));
+					payload.addMetric("my_long", random.nextLong());
+					
+					System.out.println("Publishing updated values");
+					payload = addSeqNum(payload);
+					CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(payload);
+					client.publish("spv1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, encoder.getBytes(), 0, false);
+				}
 			}
 
 			// Close the connection
@@ -114,62 +118,66 @@ public class SparkplugExample implements MqttCallback {
 	
 	private void publishBirth() {
 		try {
-			Random random = new Random();
-			
-			// Create the position for the Kura payload
-			KuraPosition position = new KuraPosition();
-			position.setAltitude(319);
-			position.setHeading(0);
-			position.setLatitude(38.83667239);
-			position.setLongitude(-94.67176706);
-			position.setPrecision(2.0);
-			position.setSatellites(8);
-			position.setSpeed(0);
-			position.setStatus(3);
-			position.setTimestamp(new Date());
-			
-			// Create the BIRTH payload and set the position and other metrics
-			KuraPayload payload = new KuraPayload();
-			payload.setTimestamp(new Date());
-			payload.addMetric("bdSeq", bdSeq);
-			payload = addSeqNum(payload);
-			payload.setPosition(position);
-			System.out.println("Publishing Edge Node Birth");
-			executor.execute(new Publisher("spv1.0/" + groupId + "/NBIRTH/" + edgeNode, payload));
-
-			// Create the payload and add some metrics
-			payload = new KuraPayload();
-			payload.addMetric("my_boolean", random.nextBoolean());
-			payload.addMetric("my_double", random.nextDouble());
-			payload.addMetric("my_float", random.nextFloat());
-			payload.addMetric("my_int", random.nextInt(100));
-			payload.addMetric("my_long", random.nextLong());
-
-			// Only do this once to set up the inputs and outputs
-			payload.addMetric("input0", true);
-			payload.addMetric("input1", 0);
-			payload.addMetric("input2", 1.23);
-			payload.addMetric("output0", true);
-			payload.addMetric("output1", 0);
-			payload.addMetric("output2", 1.23);
-
-			// We need to publish the device's birth certificate with all known data and parameters
-			KuraPayload totalPayload = new KuraPayload();
-			totalPayload.setTimestamp(new Date());
-			totalPayload = addSeqNum(totalPayload);
-
-			KuraPayload parameterPayload = new KuraPayload();
-			parameterPayload.addMetric("hw_version", HW_VERSION);
-			parameterPayload.addMetric("sw_version", SW_VERSION);
-			CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(parameterPayload);
-			totalPayload.addMetric("device_parameters", encoder.getBytes());
-
-			// Add the initial I/O states
-			encoder = new CloudPayloadProtoBufEncoderImpl(payload);
-			totalPayload.addMetric("pv_map", encoder.getBytes());
-
-			System.out.println("Publishing Device Birth");
-			executor.execute(new Publisher("spv1.0/" + groupId + "/DBIRTH/" + edgeNode + "/" + deviceId, totalPayload));
+			synchronized(seqLock) {
+				Random random = new Random();
+				
+				// Create the position for the Kura payload
+				KuraPosition position = new KuraPosition();
+				position.setAltitude(319);
+				position.setHeading(0);
+				position.setLatitude(38.83667239);
+				position.setLongitude(-94.67176706);
+				position.setPrecision(2.0);
+				position.setSatellites(8);
+				position.setSpeed(0);
+				position.setStatus(3);
+				position.setTimestamp(new Date());
+				
+				// Create the BIRTH payload and set the position and other metrics
+				KuraPayload payload = new KuraPayload();
+				payload.setTimestamp(new Date());
+				payload.addMetric("bdSeq", bdSeq);
+				seq = 0;									// Since this is a birth - reset the seq number
+				payload = addSeqNum(payload);
+				payload.setPosition(position);
+				System.out.println("Publishing Edge Node Birth with " + payload.getMetric("seq"));
+				executor.execute(new Publisher("spv1.0/" + groupId + "/NBIRTH/" + edgeNode, payload));
+	
+				// Create the payload and add some metrics
+				payload = new KuraPayload();
+				payload.addMetric("my_boolean", random.nextBoolean());
+				payload.addMetric("my_double", random.nextDouble());
+				payload.addMetric("my_float", random.nextFloat());
+				payload.addMetric("my_int", random.nextInt(100));
+				payload.addMetric("my_long", random.nextLong());
+	
+				// Only do this once to set up the inputs and outputs
+				payload.addMetric("input0", true);
+				payload.addMetric("input1", 0);
+				payload.addMetric("input2", 1.23);
+				payload.addMetric("output0", true);
+				payload.addMetric("output1", 0);
+				payload.addMetric("output2", 1.23);
+	
+				// We need to publish the device's birth certificate with all known data and parameters
+				KuraPayload totalPayload = new KuraPayload();
+				totalPayload.setTimestamp(new Date());
+				totalPayload = addSeqNum(totalPayload);
+				System.out.println("Added Device BIRTH seq " + totalPayload.getMetric("seq"));
+	
+				KuraPayload parameterPayload = new KuraPayload();
+				parameterPayload.addMetric("hw_version", HW_VERSION);
+				parameterPayload.addMetric("sw_version", SW_VERSION);
+				CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(parameterPayload);
+				totalPayload.addMetric("device_parameters", encoder.getBytes());
+	
+				// Add the initial I/O states
+				encoder = new CloudPayloadProtoBufEncoderImpl(payload);
+				totalPayload.addMetric("pv_map", encoder.getBytes());
+	
+				System.out.println("Publishing Device Birth");
+				executor.execute(new Publisher("spv1.0/" + groupId + "/DBIRTH/" + edgeNode + "/" + deviceId, totalPayload));
+			}
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -180,10 +188,11 @@ public class SparkplugExample implements MqttCallback {
 		if(payload == null) {
 			payload = new KuraPayload();
 		}
-		if(bdSeq == 255) {
+		if(bdSeq == 256) {
 			bdSeq = 0;
 		}
-		payload.addMetric("bdSeq", bdSeq++);
+		payload.addMetric("bdSeq", bdSeq);
+		bdSeq++;
 		return payload;
 	}
 	
@@ -192,10 +201,11 @@ public class SparkplugExample implements MqttCallback {
 		if(payload == null) {
 			payload = new KuraPayload();
 		}
-		if(seq == 255) {
+		if(seq == 256) {
 			seq = 0;
 		}
-		payload.addMetric("seq", seq++);
+		payload.addMetric("seq", seq);
+		seq++;
 		return payload;
 	}
 
@@ -267,7 +277,6 @@ public class SparkplugExample implements MqttCallback {
 		public void run() {
 			try {
 				outboundPayload.setTimestamp(new Date());
-				outboundPayload = addSeqNum(outboundPayload);
 				CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(outboundPayload);
 				client.publish(topic, encoder.getBytes(), 0, false);
 			} catch (MqttPersistenceException e) {
