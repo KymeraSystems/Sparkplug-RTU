@@ -222,6 +222,7 @@ def publishBirth():
     position.timestamp = int(round(time.time() * 1000))
 
     # Add a timestamp and sequence numbers to the payload
+    seq = 0
     payload.timestamp = int(round(time.time() * 1000))
     addMetric(payload, "bdSeq", "INT32", bdSeq)
     addMetric(payload, "seq", "INT32", getSeqNum())
