@@ -229,19 +229,21 @@ Kuradatatypes__KuraPayload__KuraMetric *getBytesMetric(char *name, ProtobufCBina
 }
 
 Kuradatatypes__KuraPayload__KuraMetric *getNextSeqMetric() {
-	if(seqNum == 255) {
+	if(seqNum == 256) {
 		seqNum = 0;
 	}
-
-	return getIntMetric("seq", seqNum++);
+	int tmpNum = seqNum;
+	seqNum++;
+	return getIntMetric("seq", tmpNum);
 }
 
 Kuradatatypes__KuraPayload__KuraMetric *getNextBdSeqMetric() {
-	if(bdSeqNum == 255) {
+	if(bdSeqNum == 256) {
 		bdSeqNum = 0;
 	}
-
-	return getIntMetric("bdSeq", bdSeqNum++);
+	int tmpNum = bdSeqNum;
+	bdSeqNum++;
+	return getIntMetric("bdSeq", tmpNum);
 }
 
 Kuradatatypes__KuraPayload getNextPayload(bool birth) {
@@ -271,7 +273,6 @@ Kuradatatypes__KuraPayload getNextPayload(bool birth) {
 	        deviceParameterMetrics = malloc(sizeof(Kuradatatypes__KuraPayload__KuraMetric*) * 2);
 		deviceParameterMetrics[0] = getStringMetric("hw_version", "3.2.0");
 		deviceParameterMetrics[1] = getStringMetric("sw_version", "1.0.0");
-		
 
 		Kuradatatypes__KuraPayload totalPayload = KURADATATYPES__KURA_PAYLOAD__INIT;
 
@@ -378,6 +379,7 @@ void publishBirth(struct mosquitto *mosq) {
 	// Add the sequence metric to the payload and set the number of metrics
 	Kuradatatypes__KuraPayload__KuraMetric **metrics;
 	metrics = malloc(sizeof(Kuradatatypes__KuraPayload__KuraMetric*) * 1);
+	seqNum = 0;
 	metrics[0] = getNextSeqMetric();
 	printf("Seq Num (birth): %lld\n", metrics[0]->long_value);
 	birthPayload.metric = metrics;
