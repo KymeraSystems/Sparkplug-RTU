@@ -132,6 +132,8 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 				payload.addMetric("Position/Speed", 0);
 				payload.addMetric("Position/Status", 3);
 				
+				payload.addMetric("Node Control/Rebirth", false);
+				
 				executor.execute(new Publisher("spv1.0/" + groupId + "/NBIRTH/" + edgeNode, payload));
 
 				// Create the Device BIRTH
@@ -220,7 +222,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 				System.out.println("Metric: " + entry.getKey() + " :: " + entry.getValue());
 			}
 
-			if(inboundPayload.getMetric("Rebirth") != null && (Boolean)inboundPayload.getMetric("Rebirth") == true) {
+			if(inboundPayload.getMetric("Node Control/Rebirth") != null && (Boolean)inboundPayload.getMetric("Node Control/Rebirth") == true) {
 				publishBirth();
 			}
 		} else if(splitTopic[0].equals("spv1.0") && 
