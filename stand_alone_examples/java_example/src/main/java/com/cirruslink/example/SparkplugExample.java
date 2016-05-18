@@ -121,25 +121,25 @@ public class SparkplugExample implements MqttCallback {
 			synchronized(seqLock) {
 				Random random = new Random();
 				
-				// Create the position for the Kura payload
-				KuraPosition position = new KuraPosition();
-				position.setAltitude(319);
-				position.setHeading(0);
-				position.setLatitude(38.83667239);
-				position.setLongitude(-94.67176706);
-				position.setPrecision(2.0);
-				position.setSatellites(8);
-				position.setSpeed(0);
-				position.setStatus(3);
-				position.setTimestamp(new Date());
-				
 				// Create the BIRTH payload and set the position and other metrics
 				KuraPayload payload = new KuraPayload();
 				payload.setTimestamp(new Date());
 				payload.addMetric("bdSeq", bdSeq);
 				seq = 0;									// Since this is a birth - reset the seq number
 				payload = addSeqNum(payload);
-				payload.setPosition(position);
+				
+				// Create the position
+				payload.addMetric("Position/Altitude", 319);
+				payload.addMetric("Position/Heading", 0);
+				payload.addMetric("Position/Latitude", 38.83667239);
+				payload.addMetric("Position/Longitude", -94.67176706);
+				payload.addMetric("Position/Precision", 2.0);
+				payload.addMetric("Position/Satellites", 8);
+				payload.addMetric("Position/Speed", 0);
+				payload.addMetric("Position/Status", 3);
+				
+				payload.addMetric("Node Control/Rebirth", false);
+				
 				System.out.println("Publishing Edge Node Birth with " + payload.getMetric("seq"));
 				executor.execute(new Publisher("spv1.0/" + groupId + "/NBIRTH/" + edgeNode, payload));
 	
@@ -166,8 +166,8 @@ public class SparkplugExample implements MqttCallback {
 				System.out.println("Added Device BIRTH seq " + totalPayload.getMetric("seq"));
 	
 				KuraPayload parameterPayload = new KuraPayload();
-				parameterPayload.addMetric("hw_version", HW_VERSION);
-				parameterPayload.addMetric("sw_version", SW_VERSION);
+				parameterPayload.addMetric("Properties/hw_version", HW_VERSION);
+				parameterPayload.addMetric("Properties/sw_version", SW_VERSION);
 				CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(parameterPayload);
 				totalPayload.addMetric("device_parameters", encoder.getBytes());
 	
@@ -238,6 +238,8 @@ public class SparkplugExample implements MqttCallback {
 			
 			// Pretend output0 is tied to input0 and output1 is tied to input1 and output2 is tied to input2
 			KuraPayload outboundPayload = new KuraPayload();
+			outboundPayload.setTimestamp(new Date());
+			outboundPayload = addSeqNum(outboundPayload);
 			if(inboundPayload.getMetric("output0") != null) {
 				System.out.println("Output0: " + inboundPayload.getMetric("output0"));
 				outboundPayload.addMetric("input0", inboundPayload.getMetric("output0"));

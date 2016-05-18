@@ -142,13 +142,13 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 				payload.addMetric("input_b", pibrella.getInputPin(PibrellaInput.B).isHigh());
 				payload.addMetric("input_c", pibrella.getInputPin(PibrellaInput.C).isHigh());
 				payload.addMetric("input_d", pibrella.getInputPin(PibrellaInput.D).isHigh());
-				payload.addMetric("outputs/e", pibrella.getOutputPin(PibrellaOutput.E).isHigh());
-				payload.addMetric("outputs/f", pibrella.getOutputPin(PibrellaOutput.F).isHigh());
-				payload.addMetric("outputs/g", pibrella.getOutputPin(PibrellaOutput.G).isHigh());
-				payload.addMetric("outputs/h", pibrella.getOutputPin(PibrellaOutput.H).isHigh());
-				payload.addMetric("outputs/leds/green", pibrella.getOutputPin(PibrellaOutput.LED_GREEN).isHigh());
-				payload.addMetric("outputs/leds/red", pibrella.getOutputPin(PibrellaOutput.LED_RED).isHigh());
-				payload.addMetric("outputs/leds/yellow", pibrella.getOutputPin(PibrellaOutput.LED_YELLOW).isHigh());
+				payload.addMetric("Outputs/e", pibrella.getOutputPin(PibrellaOutput.E).isHigh());
+				payload.addMetric("Outputs/f", pibrella.getOutputPin(PibrellaOutput.F).isHigh());
+				payload.addMetric("Outputs/g", pibrella.getOutputPin(PibrellaOutput.G).isHigh());
+				payload.addMetric("Outputs/h", pibrella.getOutputPin(PibrellaOutput.H).isHigh());
+				payload.addMetric("Outputs/leds/green", pibrella.getOutputPin(PibrellaOutput.LED_GREEN).isHigh());
+				payload.addMetric("Outputs/leds/red", pibrella.getOutputPin(PibrellaOutput.LED_RED).isHigh());
+				payload.addMetric("Outputs/leds/yellow", pibrella.getOutputPin(PibrellaOutput.LED_YELLOW).isHigh());
 				payload.addMetric("button", pibrella.getInputPin(PibrellaInput.Button).isHigh());
 				payload.addMetric("buzzer", false);
 
@@ -247,45 +247,45 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 				outboundPayload.setTimestamp(new Date());
 				outboundPayload = addSeqNum(outboundPayload);
 
-				if(inboundPayload.getMetric("outputs/e") != null) {
-					pibrella.getOutputPin(PibrellaOutput.E).setState((Boolean)inboundPayload.getMetric("outputs/e"));
-					outboundPayload.addMetric("outputs/e", pibrella.getOutputPin(PibrellaOutput.E).isHigh());
+				if(inboundPayload.getMetric("Outputs/e") != null) {
+					pibrella.getOutputPin(PibrellaOutput.E).setState((Boolean)inboundPayload.getMetric("Outputs/e"));
+					outboundPayload.addMetric("Outputs/e", pibrella.getOutputPin(PibrellaOutput.E).isHigh());
 				}
-				if(inboundPayload.getMetric("outputs/f") != null) {
-					pibrella.getOutputPin(PibrellaOutput.F).setState((Boolean)inboundPayload.getMetric("outputs/f"));
-					outboundPayload.addMetric("outputs/f", pibrella.getOutputPin(PibrellaOutput.F).isHigh());
+				if(inboundPayload.getMetric("Outputs/f") != null) {
+					pibrella.getOutputPin(PibrellaOutput.F).setState((Boolean)inboundPayload.getMetric("Outputs/f"));
+					outboundPayload.addMetric("Outputs/f", pibrella.getOutputPin(PibrellaOutput.F).isHigh());
 				}
-				if(inboundPayload.getMetric("outputs/g") != null) {
-					pibrella.getOutputPin(PibrellaOutput.G).setState((Boolean)inboundPayload.getMetric("outputs/g"));
-					outboundPayload.addMetric("outputs/g", pibrella.getOutputPin(PibrellaOutput.G).isHigh());
+				if(inboundPayload.getMetric("Outputs/g") != null) {
+					pibrella.getOutputPin(PibrellaOutput.G).setState((Boolean)inboundPayload.getMetric("Outputs/g"));
+					outboundPayload.addMetric("Outputs/g", pibrella.getOutputPin(PibrellaOutput.G).isHigh());
 				}
-				if(inboundPayload.getMetric("outputs/h") != null) {
-					pibrella.getOutputPin(PibrellaOutput.H).setState((Boolean)inboundPayload.getMetric("outputs/h"));
-					outboundPayload.addMetric("outputs/h", pibrella.getOutputPin(PibrellaOutput.H).isHigh());
+				if(inboundPayload.getMetric("Outputs/h") != null) {
+					pibrella.getOutputPin(PibrellaOutput.H).setState((Boolean)inboundPayload.getMetric("Outputs/h"));
+					outboundPayload.addMetric("Outputs/h", pibrella.getOutputPin(PibrellaOutput.H).isHigh());
 				}
-				if(inboundPayload.getMetric("outputs/leds/green") != null) {
-					if((Boolean)inboundPayload.getMetric("outputs/leds/green") == true) {
+				if(inboundPayload.getMetric("Outputs/leds/green") != null) {
+					if((Boolean)inboundPayload.getMetric("Outputs/leds/green") == true) {
 						pibrella.ledGreen().on();
 					} else {
 						pibrella.ledGreen().off();
 					}
-					outboundPayload.addMetric("outputs/leds/green", pibrella.ledGreen().isOn());
+					outboundPayload.addMetric("Outputs/leds/green", pibrella.ledGreen().isOn());
 				}
-				if(inboundPayload.getMetric("outputs/leds/red") != null) {
-					if((Boolean)inboundPayload.getMetric("outputs/leds/red") == true) {
+				if(inboundPayload.getMetric("Outputs/leds/red") != null) {
+					if((Boolean)inboundPayload.getMetric("Outputs/leds/red") == true) {
 						pibrella.ledRed().on();
 					} else {
 						pibrella.ledRed().off();
 					}
-					outboundPayload.addMetric("outputs/leds/red", pibrella.ledRed().isOn());
+					outboundPayload.addMetric("Outputs/leds/red", pibrella.ledRed().isOn());
 				}
-				if(inboundPayload.getMetric("outputs/leds/yellow") != null) {
-					if((Boolean)inboundPayload.getMetric("outputs/leds/yellow") == true) {
+				if(inboundPayload.getMetric("Outputs/leds/yellow") != null) {
+					if((Boolean)inboundPayload.getMetric("Outputs/leds/yellow") == true) {
 						pibrella.ledYellow().on();
 					} else {
 						pibrella.ledYellow().off();
 					}
-					outboundPayload.addMetric("outputs/leds/yellow", pibrella.ledYellow().isOn());
+					outboundPayload.addMetric("Outputs/leds/yellow", pibrella.ledYellow().isOn());
 				}
 				if(inboundPayload.getMetric("buzzer") != null) {
 					pibrella.getBuzzer().buzz(100, 2000);
