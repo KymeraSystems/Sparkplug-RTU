@@ -121,18 +121,18 @@ def on_message(client, userdata, msg):
         outboundPayload.timestamp = int(round(time.time() * 1000))
         addMetric(outboundPayload, "seq", "INT32", getSeqNum())
 	for metric in inboundPayload.metric:
-	    if metric.name == "output0":
-		print "output0: " + str(metric.bool_value)
-		addMetric(outboundPayload, "input0", "BOOL", metric.bool_value)
-		addMetric(outboundPayload, "output0", "BOOL", metric.bool_value)
-	    elif metric.name == "output1":
-		print "output1: " + str(metric.int_value)
-		addMetric(outboundPayload, "input1", "INT32", metric.int_value)
-		addMetric(outboundPayload, "output1", "INT32", metric.int_value)
-	    elif metric.name == "output2":
-		print "output2: " + str(metric.float_value)
-		addMetric(outboundPayload, "input2", "FLOAT", metric.float_value)
-		addMetric(outboundPayload, "output2", "FLOAT", metric.float_value)
+	    if metric.name == "Outputs/0":
+		print "Outputs/0: " + str(metric.bool_value)
+		addMetric(outboundPayload, "Inputs/0", "BOOL", metric.bool_value)
+		addMetric(outboundPayload, "Outputs/0", "BOOL", metric.bool_value)
+	    elif metric.name == "Outputs/1":
+		print "Outputs/1: " + str(metric.int_value)
+		addMetric(outboundPayload, "Inputs/1", "INT32", metric.int_value)
+		addMetric(outboundPayload, "Outputs/1", "INT32", metric.int_value)
+	    elif metric.name == "Outputs/2":
+		print "Outputs/2: " + str(metric.float_value)
+		addMetric(outboundPayload, "Inputs/2", "FLOAT", metric.float_value)
+		addMetric(outboundPayload, "Outputs/2", "FLOAT", metric.float_value)
 
 	byteArray = bytearray(outboundPayload.SerializeToString())
 	client.publish("spv1.0/" + myGroupId + "/DDATA/" + myNodeName + "/" + mySubNodeName, byteArray, 0, False)
@@ -175,34 +175,29 @@ def publishBirth():
     client.publish("spv1.0/" + myGroupId + "/NBIRTH/" + myNodeName, byteArray, 0, False)
 
     # Setup the inputs
-    pvPayload = kurapayload_pb2.KuraPayload()
-    addMetric(pvPayload, "my_boolean", "BOOL", random.choice([True, False]))
-    addMetric(pvPayload, "my_float", "FLOAT", random.random())
-    addMetric(pvPayload, "my_int", "INT32", random.randint(0,100))
-    addMetric(pvPayload, "my_long", "INT64", random.getrandbits(60))
-    addMetric(pvPayload, "input0", "BOOL", True)
-    addMetric(pvPayload, "input1", "INT32", 0)
-    addMetric(pvPayload, "input2", "FLOAT", 1.23)
+    payload = kurapayload_pb2.KuraPayload()
+    payload.timestamp = int(round(time.time() * 1000))
+    addMetric(payload, "seq", "INT32", getSeqNum())
+
+    addMetric(payload, "my_boolean", "BOOL", random.choice([True, False]))
+    addMetric(payload, "my_float", "FLOAT", random.random())
+    addMetric(payload, "my_int", "INT32", random.randint(0,100))
+    addMetric(payload, "my_long", "INT64", random.getrandbits(60))
+    addMetric(payload, "Inputs/0", "BOOL", True)
+    addMetric(payload, "Inputs/1", "INT32", 0)
+    addMetric(payload, "Inputs/2", "FLOAT", 1.23)
 
     # Set up the output states on first run so Ignition and MQTT Engine are aware of them
-    addMetric(pvPayload, "output0", "BOOL", True)
-    addMetric(pvPayload, "output1", "INT32", 0)
-    addMetric(pvPayload, "output2", "FLOAT", 1.23)
+    addMetric(payload, "Outputs/0", "BOOL", True)
+    addMetric(payload, "Outputs/1", "INT32", 0)
+    addMetric(payload, "Outputs/2", "FLOAT", 1.23)
 
-    # Set up the propertites payload
-    parameterPayload = kurapayload_pb2.KuraPayload()
-    addMetric(parameterPayload, "device_hw_version", "STRING", "PFC_1.1")
-    addMetric(parameterPayload, "firmware_version", "STRING", "1.4.2")
+    # Set up the propertites
+    addMetric(payload, "Properties/Hardware Version", "STRING", "PFC_1.1")
+    addMetric(payload, "Properties/Firmware Version", "STRING", "1.4.2")
 
     # Publish the initial data with the Device BIRTH certificate
-    pvMapByteArray = pvPayload.SerializeToString()
-    parameterByteArray = parameterPayload.SerializeToString()
-    totalPayload = kurapayload_pb2.KuraPayload()
-    totalPayload.timestamp = int(round(time.time() * 1000))
-    addMetric(totalPayload, "seq", "INT32", getSeqNum())
-    addMetric(totalPayload, "pv_map", "BYTES", pvMapByteArray)
-    addMetric(totalPayload, "device_parameters", "BYTES", parameterByteArray)
-    totalByteArray = bytearray(totalPayload.SerializeToString())
+    totalByteArray = bytearray(payload.SerializeToString())
     client.publish("spv1.0/" + myGroupId + "/DBIRTH/" + myNodeName + "/" + mySubNodeName, totalByteArray, 0, False)
 
 ######################################################################

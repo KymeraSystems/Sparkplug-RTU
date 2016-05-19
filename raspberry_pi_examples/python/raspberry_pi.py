@@ -45,13 +45,13 @@ def button_changed(pin):
 # Input change event handler
 ######################################################################
 def input_a_changed(pin):
-    input_changed("input_a", pin)
+    input_changed("Inputs/a", pin)
 def input_b_changed(pin):
-    input_changed("input_b", pin)
+    input_changed("Inputs/b", pin)
 def input_c_changed(pin):
-    input_changed("input_c", pin)
+    input_changed("Inputs/c", pin)
 def input_d_changed(pin):
-    input_changed("input_d", pin)
+    input_changed("Inputs/d", pin)
 def input_changed(name, pin):
     outboundPayload = kurapayload_pb2.KuraPayload()
     outboundPayload.timestamp = int(round(time.time() * 1000))
@@ -157,36 +157,36 @@ def on_message(client, userdata, msg):
 
 	for metric in inboundPayload.metric:
 	    print "Tag Name: " + metric.name
-	    if metric.name == "output_e":
+	    if metric.name == "Outputs/e":
 		pibrella.output.e.write(metric.bool_value)
-		addMetric(outboundPayload, "output_e", "BOOL", pibrella.output.e.read())
-	    elif metric.name == "output_f":
+		addMetric(outboundPayload, "Outputs/e", "BOOL", pibrella.output.e.read())
+	    elif metric.name == "Outputs/f":
 		pibrella.output.f.write(metric.bool_value)
-		addMetric(outboundPayload, "output_f", "BOOL", pibrella.output.f.read())
-	    elif metric.name == "output_g":
+		addMetric(outboundPayload, "Outputs/f", "BOOL", pibrella.output.f.read())
+	    elif metric.name == "Outputs/g":
 		pibrella.output.g.write(metric.bool_value)
-		addMetric(outboundPayload, "output_g", "BOOL", pibrella.output.g.read())
-	    elif metric.name == "output_h":
+		addMetric(outboundPayload, "Outputs/g", "BOOL", pibrella.output.g.read())
+	    elif metric.name == "Outputs/h":
 		pibrella.output.h.write(metric.bool_value)
-		addMetric(outboundPayload, "output_h", "BOOL", pibrella.output.h.read())
-	    elif metric.name == "led_green":
+		addMetric(outboundPayload, "Outputs/h", "BOOL", pibrella.output.h.read())
+	    elif metric.name == "Outputs/LEDs/green":
 		if metric.bool_value:
 		    pibrella.light.green.on()
 		else:
 		    pibrella.light.green.off()
-		addMetric(outboundPayload, "led_green", "BOOL", pibrella.light.green.read())
-	    elif metric.name == "led_red":
+		addMetric(outboundPayload, "Outputs/LEDs/green", "BOOL", pibrella.light.green.read())
+	    elif metric.name == "Outputs/LEDs/red":
 		if metric.bool_value:
 		    pibrella.light.red.on()
 		else:
 		    pibrella.light.red.off()
-		addMetric(outboundPayload, "led_red", "BOOL", pibrella.light.red.read())
-	    elif metric.name == "led_yellow":
+		addMetric(outboundPayload, "Outputs/LEDs/red", "BOOL", pibrella.light.red.read())
+	    elif metric.name == "Outputs/LEDs/yellow":
 		if metric.bool_value:
 		    pibrella.light.yellow.on()
 		else:
 		    pibrella.light.yellow.off()
-		addMetric(outboundPayload, "led_yellow", "BOOL", pibrella.light.yellow.read())
+		addMetric(outboundPayload, "Outputs/LEDs/yellow", "BOOL", pibrella.light.yellow.read())
 	    elif metric.name == "buzzer_fail":
 		pibrella.buzzer.fail()
 	    elif metric.name == "buzzer_success":
@@ -232,38 +232,33 @@ def publishBirth():
     client.publish("spv1.0/" + myGroupId + "/NBIRTH/" + myNodeName, byteArray, 0, False)
 
     # Set up the input metrics
-    pvPayload = kurapayload_pb2.KuraPayload()
-    addMetric(pvPayload, "input_a", "BOOL", pibrella.input.a.read())
-    addMetric(pvPayload, "input_b", "BOOL", pibrella.input.b.read())
-    addMetric(pvPayload, "input_c", "BOOL", pibrella.input.c.read())
-    addMetric(pvPayload, "input_d", "BOOL", pibrella.input.d.read())
+    payload = kurapayload_pb2.KuraPayload()
+    payload.timestamp = int(round(time.time() * 1000))
+    addMetric(payload, "seq", "INT32", getSeqNum())
+
+    addMetric(payload, "Inputs/a", "BOOL", pibrella.input.a.read())
+    addMetric(payload, "Inputs/b", "BOOL", pibrella.input.b.read())
+    addMetric(payload, "Inputs/c", "BOOL", pibrella.input.c.read())
+    addMetric(payload, "Inputs/d", "BOOL", pibrella.input.d.read())
 
     # Set up the output states on first run so Ignition and MQTT Engine are aware of them
-    addMetric(pvPayload, "output_e", "BOOL", pibrella.output.e.read())
-    addMetric(pvPayload, "output_f", "BOOL", pibrella.output.f.read())
-    addMetric(pvPayload, "output_g", "BOOL", pibrella.output.g.read())
-    addMetric(pvPayload, "output_h", "BOOL", pibrella.output.h.read())
-    addMetric(pvPayload, "led_green", "BOOL", pibrella.light.green.read())
-    addMetric(pvPayload, "led_red", "BOOL", pibrella.light.red.read())
-    addMetric(pvPayload, "led_yellow", "BOOL", pibrella.light.yellow.read())
-    addMetric(pvPayload, "button", "BOOL", pibrella.button.read())
-    addMetric(pvPayload, "buzzer_fail", "BOOL", 0)
-    addMetric(pvPayload, "buzzer_success", "BOOL", 0)
+    addMetric(payload, "Outputs/e", "BOOL", pibrella.output.e.read())
+    addMetric(payload, "Outputs/f", "BOOL", pibrella.output.f.read())
+    addMetric(payload, "Outputs/g", "BOOL", pibrella.output.g.read())
+    addMetric(payload, "Outputs/h", "BOOL", pibrella.output.h.read())
+    addMetric(payload, "Outputs/LEDs/green", "BOOL", pibrella.light.green.read())
+    addMetric(payload, "Outputs/LEDs/red", "BOOL", pibrella.light.red.read())
+    addMetric(payload, "Outputs/LEDs/yellow", "BOOL", pibrella.light.yellow.read())
+    addMetric(payload, "button", "BOOL", pibrella.button.read())
+    addMetric(payload, "buzzer_fail", "BOOL", 0)
+    addMetric(payload, "buzzer_success", "BOOL", 0)
 
     # Set up the propertites payload
-    parameterPayload = kurapayload_pb2.KuraPayload()
-    addMetric(parameterPayload, "device_hw_version", "STRING", "PFC_1.1")
-    addMetric(parameterPayload, "firmware_version", "STRING", "1.4.2")
+    addMetric(payload, "Parameters/device_hw_version", "STRING", "PFC_1.1")
+    addMetric(payload, "Parameters/firmware_version", "STRING", "1.4.2")
 
     # Publish the initial data with the Device BIRTH certificate
-    pvMapByteArray = pvPayload.SerializeToString()
-    parameterByteArray = parameterPayload.SerializeToString()
-    totalPayload = kurapayload_pb2.KuraPayload()
-    totalPayload.timestamp = int(round(time.time() * 1000))
-    addMetric(totalPayload, "seq", "INT32", getSeqNum())
-    addMetric(totalPayload, "pv_map", "BYTES", pvMapByteArray)
-    addMetric(totalPayload, "device_parameters", "BYTES", parameterByteArray)
-    totalByteArray = bytearray(totalPayload.SerializeToString())
+    totalByteArray = bytearray(payload.SerializeToString())
     client.publish("spv1.0/" + myGroupId + "/DBIRTH/" + myNodeName + "/" + mySubNodeName, totalByteArray, 0, False)
 ######################################################################
 

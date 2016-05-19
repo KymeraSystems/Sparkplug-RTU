@@ -151,9 +151,9 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 				payload.addMetric("Outputs/f", pibrella.getOutputPin(PibrellaOutput.F).isHigh());
 				payload.addMetric("Outputs/g", pibrella.getOutputPin(PibrellaOutput.G).isHigh());
 				payload.addMetric("Outputs/h", pibrella.getOutputPin(PibrellaOutput.H).isHigh());
-				payload.addMetric("Outputs/leds/green", pibrella.getOutputPin(PibrellaOutput.LED_GREEN).isHigh());
-				payload.addMetric("Outputs/leds/red", pibrella.getOutputPin(PibrellaOutput.LED_RED).isHigh());
-				payload.addMetric("Outputs/leds/yellow", pibrella.getOutputPin(PibrellaOutput.LED_YELLOW).isHigh());
+				payload.addMetric("Outputs/LEDs/green", pibrella.getOutputPin(PibrellaOutput.LED_GREEN).isHigh());
+				payload.addMetric("Outputs/LEDs/red", pibrella.getOutputPin(PibrellaOutput.LED_RED).isHigh());
+				payload.addMetric("Outputs/LEDs/yellow", pibrella.getOutputPin(PibrellaOutput.LED_YELLOW).isHigh());
 				payload.addMetric("button", pibrella.getInputPin(PibrellaInput.Button).isHigh());
 				payload.addMetric("buzzer", false);
 
@@ -257,29 +257,29 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 					pibrella.getOutputPin(PibrellaOutput.H).setState((Boolean)inboundPayload.getMetric("Outputs/h"));
 					outboundPayload.addMetric("Outputs/h", pibrella.getOutputPin(PibrellaOutput.H).isHigh());
 				}
-				if(inboundPayload.getMetric("Outputs/leds/green") != null) {
-					if((Boolean)inboundPayload.getMetric("Outputs/leds/green") == true) {
+				if(inboundPayload.getMetric("Outputs/LEDs/green") != null) {
+					if((Boolean)inboundPayload.getMetric("Outputs/LEDs/green") == true) {
 						pibrella.ledGreen().on();
 					} else {
 						pibrella.ledGreen().off();
 					}
-					outboundPayload.addMetric("Outputs/leds/green", pibrella.ledGreen().isOn());
+					outboundPayload.addMetric("Outputs/LEDs/green", pibrella.ledGreen().isOn());
 				}
-				if(inboundPayload.getMetric("Outputs/leds/red") != null) {
-					if((Boolean)inboundPayload.getMetric("Outputs/leds/red") == true) {
+				if(inboundPayload.getMetric("Outputs/LEDs/red") != null) {
+					if((Boolean)inboundPayload.getMetric("Outputs/LEDs/red") == true) {
 						pibrella.ledRed().on();
 					} else {
 						pibrella.ledRed().off();
 					}
-					outboundPayload.addMetric("Outputs/leds/red", pibrella.ledRed().isOn());
+					outboundPayload.addMetric("Outputs/LEDs/red", pibrella.ledRed().isOn());
 				}
-				if(inboundPayload.getMetric("Outputs/leds/yellow") != null) {
-					if((Boolean)inboundPayload.getMetric("Outputs/leds/yellow") == true) {
+				if(inboundPayload.getMetric("Outputs/LEDs/yellow") != null) {
+					if((Boolean)inboundPayload.getMetric("Outputs/LEDs/yellow") == true) {
 						pibrella.ledYellow().on();
 					} else {
 						pibrella.ledYellow().off();
 					}
-					outboundPayload.addMetric("Outputs/leds/yellow", pibrella.ledYellow().isOn());
+					outboundPayload.addMetric("Outputs/LEDs/yellow", pibrella.ledYellow().isOn());
 				}
 				if(inboundPayload.getMetric("buzzer") != null) {
 					pibrella.getBuzzer().buzz(100, 2000);
