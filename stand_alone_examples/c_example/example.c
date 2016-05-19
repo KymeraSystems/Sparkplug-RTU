@@ -89,28 +89,28 @@ void my_message_callback(struct mosquitto *mosq, void *userdata, const struct mo
 		outboundPayload.timestamp = get_current_timestamp();
 
 		printf("Metric: %s\n", inboundPayload->metric[0]->name);
-		if(strcmp(inboundPayload->metric[0]->name, "output0") == 0) {
+		if(strcmp(inboundPayload->metric[0]->name, "Outputs/0") == 0) {
 			Kuradatatypes__KuraPayload__KuraMetric **metrics;
 			metrics = malloc(sizeof(Kuradatatypes__KuraPayload__KuraMetric*) * 3);
 		        metrics[0] = getNextSeqMetric();
-			metrics[1] = getBooleanMetric("input0", inboundPayload->metric[0]->bool_value);
-			metrics[2] = getBooleanMetric("output0", inboundPayload->metric[0]->bool_value);
+			metrics[1] = getBooleanMetric("Inputs/0", inboundPayload->metric[0]->bool_value);
+			metrics[2] = getBooleanMetric("Outputs/0", inboundPayload->metric[0]->bool_value);
 			outboundPayload.n_metric = 3;
 		        outboundPayload.metric = metrics;
-		} else if(strcmp(inboundPayload->metric[0]->name, "output1") == 0) {
+		} else if(strcmp(inboundPayload->metric[0]->name, "Outputs/1") == 0) {
 			Kuradatatypes__KuraPayload__KuraMetric **metrics;
 			metrics = malloc(sizeof(Kuradatatypes__KuraPayload__KuraMetric*) * 3);
 		        metrics[0] = getNextSeqMetric();
-			metrics[1] = getIntMetric("input1", inboundPayload->metric[0]->int_value);
-			metrics[2] = getIntMetric("output1", inboundPayload->metric[0]->int_value);
+			metrics[1] = getIntMetric("Inputs/1", inboundPayload->metric[0]->int_value);
+			metrics[2] = getIntMetric("Outputs/1", inboundPayload->metric[0]->int_value);
 			outboundPayload.n_metric = 3;
 		        outboundPayload.metric = metrics;
-		} else if(strcmp(inboundPayload->metric[0]->name, "output2") == 0) {
+		} else if(strcmp(inboundPayload->metric[0]->name, "Outputs/2") == 0) {
 			Kuradatatypes__KuraPayload__KuraMetric **metrics;
 			metrics = malloc(sizeof(Kuradatatypes__KuraPayload__KuraMetric*) * 3);
 		        metrics[0] = getNextSeqMetric();
-			metrics[1] = getFloatMetric("input2", inboundPayload->metric[0]->float_value);
-			metrics[2] = getFloatMetric("output2", inboundPayload->metric[0]->float_value);
+			metrics[1] = getFloatMetric("Inputs/2", inboundPayload->metric[0]->float_value);
+			metrics[2] = getFloatMetric("Outputs/2", inboundPayload->metric[0]->float_value);
 			outboundPayload.n_metric = 3;
 		        outboundPayload.metric = metrics;
 		} else {
@@ -252,63 +252,29 @@ Kuradatatypes__KuraPayload getNextPayload(bool birth) {
 		Kuradatatypes__KuraPayload payload = KURADATATYPES__KURA_PAYLOAD__INIT;
 	        Kuradatatypes__KuraPayload__KuraMetric **metrics;
 
-	        metrics = malloc(sizeof(Kuradatatypes__KuraPayload__KuraMetric*) * 11);
-		metrics[0] = getBooleanMetric("my_bool", rand()%2);
-		metrics[1] = getDoubleMetric("my_double", ((double)rand()/(double)100));
-		metrics[2] = getFloatMetric("my_float", ((float)rand()/(float)100));
-		metrics[3] = getIntMetric("my_int", rand());
-		metrics[4] = getLongMetric("my_long", (long)rand());
-		metrics[5] = getBooleanMetric("input0", true);
-		metrics[6] = getIntMetric("input1", 0);
-		metrics[7] = getFloatMetric("input2", 1.23);
-		metrics[8] = getBooleanMetric("output0", true);
-		metrics[9] = getIntMetric("output1", 0);
-		metrics[10] = getFloatMetric("output2", 1.23);
-	        payload.n_metric = 11;
+		// Set the timestamp
+		payload.has_timestamp = true;
+		payload.timestamp = get_current_timestamp();
+
+	        metrics = malloc(sizeof(Kuradatatypes__KuraPayload__KuraMetric*) * 14);
+	        metrics[0] = getNextSeqMetric();
+		metrics[1] = getBooleanMetric("my_bool", rand()%2);
+		metrics[2] = getDoubleMetric("my_double", ((double)rand()/(double)100));
+		metrics[3] = getFloatMetric("my_float", ((float)rand()/(float)100));
+		metrics[4] = getIntMetric("my_int", rand());
+		metrics[5] = getLongMetric("my_long", (long)rand());
+		metrics[6] = getBooleanMetric("Inputs/0", true);
+		metrics[7] = getIntMetric("Inputs/1", 0);
+		metrics[8] = getFloatMetric("Inputs/2", 1.23);
+		metrics[9] = getBooleanMetric("Outputs/0", true);
+		metrics[10] = getIntMetric("Outputs/1", 0);
+		metrics[11] = getFloatMetric("Outputs/2", 1.23);
+		metrics[12] = getStringMetric("Parameters/HW version", "3.2.0");
+		metrics[13] = getStringMetric("Parameters/SW version", "1.0.0");
+	        payload.n_metric = 14;
 	        payload.metric = metrics;
 
-		// device parameters
-		Kuradatatypes__KuraPayload deviceParameterPayload = KURADATATYPES__KURA_PAYLOAD__INIT;
-	        Kuradatatypes__KuraPayload__KuraMetric **deviceParameterMetrics;
-	        deviceParameterMetrics = malloc(sizeof(Kuradatatypes__KuraPayload__KuraMetric*) * 2);
-		deviceParameterMetrics[0] = getStringMetric("hw_version", "3.2.0");
-		deviceParameterMetrics[1] = getStringMetric("sw_version", "1.0.0");
-
-		Kuradatatypes__KuraPayload totalPayload = KURADATATYPES__KURA_PAYLOAD__INIT;
-
-		// Set the timestamp
-		totalPayload.has_timestamp = true;
-		totalPayload.timestamp = get_current_timestamp();
-
-	        Kuradatatypes__KuraPayload__KuraMetric **totalMetrics;
-	        totalMetrics = malloc(sizeof(Kuradatatypes__KuraPayload__KuraMetric*) * 3);
-	        totalMetrics[0] = getNextSeqMetric();
-
-		// Get the pv_map bytes
-		void *buf;
-		unsigned len;
-		len = kuradatatypes__kura_payload__get_packed_size(&payload);
-		buf = malloc(len);
-		kuradatatypes__kura_payload__pack(&payload, buf);
-		struct ProtobufCBinaryData data;
-		data.len = len;
-		data.data = buf;
-		totalMetrics[1] = getBytesMetric("pv_map", data);
-
-		// Get the device_parameter bytes
-		void *deviceParameterBuf;
-		unsigned deviceParameterLen;
-		deviceParameterLen = kuradatatypes__kura_payload__get_packed_size(&deviceParameterPayload);
-		deviceParameterBuf = malloc(deviceParameterLen);
-		kuradatatypes__kura_payload__pack(&deviceParameterPayload, deviceParameterBuf);
-		struct ProtobufCBinaryData deviceParameterData;
-		deviceParameterData.len = deviceParameterLen;
-		deviceParameterData.data = deviceParameterBuf;
-		totalMetrics[2] = getBytesMetric("device_parameters", deviceParameterData);
-
-		totalPayload.n_metric = 3;
-		totalPayload.metric = totalMetrics;
-		return totalPayload;
+		return payload;
 
 		/* // TODO - need to handle cleanup
 		free(buf);
