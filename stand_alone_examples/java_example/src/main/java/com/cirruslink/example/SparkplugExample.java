@@ -12,6 +12,8 @@
 package com.cirruslink.example;
 
 import java.util.Date;
+import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -90,7 +92,7 @@ public class SparkplugExample implements MqttCallback {
 			publishBirth();			
 			
 			// Loop 100 times publishing data every PUBLISH_PERIOD
-			for(int i=0; i<265; i++) {
+			for(int i=0; i<100; i++) {
 				Thread.sleep(PUBLISH_PERIOD);
 
 				synchronized(seqLock) {
@@ -128,15 +130,18 @@ public class SparkplugExample implements MqttCallback {
 				seq = 0;									// Since this is a birth - reset the seq number
 				payload = addSeqNum(payload);
 				
-				// Create the position
-				payload.addMetric("Position/Altitude", 319);
-				payload.addMetric("Position/Heading", 0);
-				payload.addMetric("Position/Latitude", 38.83667239);
-				payload.addMetric("Position/Longitude", -94.67176706);
-				payload.addMetric("Position/Precision", 2.0);
-				payload.addMetric("Position/Satellites", 8);
-				payload.addMetric("Position/Speed", 0);
-				payload.addMetric("Position/Status", 3);
+				// Create the position for the Kura payload
+				KuraPosition position = new KuraPosition();
+				position.setAltitude(319);
+				position.setHeading(0);
+				position.setLatitude(38.83667239);
+				position.setLongitude(-94.67176706);
+				position.setPrecision(2.0);
+				position.setSatellites(8);
+				position.setSpeed(0);
+				position.setStatus(3);
+				position.setTimestamp(new Date());
+				payload.setPosition(position);
 				
 				payload.addMetric("Node Control/Rebirth", false);
 				
@@ -145,6 +150,8 @@ public class SparkplugExample implements MqttCallback {
 	
 				// Create the payload and add some metrics
 				payload = new KuraPayload();
+				payload.setTimestamp(new Date());
+				payload = addSeqNum(payload);
 				payload.addMetric("my_boolean", random.nextBoolean());
 				payload.addMetric("my_double", random.nextDouble());
 				payload.addMetric("my_float", random.nextFloat());
@@ -152,31 +159,19 @@ public class SparkplugExample implements MqttCallback {
 				payload.addMetric("my_long", random.nextLong());
 	
 				// Only do this once to set up the inputs and outputs
-				payload.addMetric("input0", true);
-				payload.addMetric("input1", 0);
-				payload.addMetric("input2", 1.23);
-				payload.addMetric("output0", true);
-				payload.addMetric("output1", 0);
-				payload.addMetric("output2", 1.23);
+				payload.addMetric("Inputs/0", true);
+				payload.addMetric("Inputs/1", 0);
+				payload.addMetric("Inputs/2", 1.23);
+				payload.addMetric("Outputs/0", true);
+				payload.addMetric("Outputs/1", 0);
+				payload.addMetric("Outputs/2", 1.23);
 	
-				// We need to publish the device's birth certificate with all known data and parameters
-				KuraPayload totalPayload = new KuraPayload();
-				totalPayload.setTimestamp(new Date());
-				totalPayload = addSeqNum(totalPayload);
-				System.out.println("Added Device BIRTH seq " + totalPayload.getMetric("seq"));
-	
-				KuraPayload parameterPayload = new KuraPayload();
-				parameterPayload.addMetric("Properties/hw_version", HW_VERSION);
-				parameterPayload.addMetric("Properties/sw_version", SW_VERSION);
-				CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(parameterPayload);
-				totalPayload.addMetric("device_parameters", encoder.getBytes());
-	
-				// Add the initial I/O states
-				encoder = new CloudPayloadProtoBufEncoderImpl(payload);
-				totalPayload.addMetric("pv_map", encoder.getBytes());
+				// Add some properties
+				payload.addMetric("Properties/hw_version", HW_VERSION);
+				payload.addMetric("Properties/sw_version", SW_VERSION);
 	
 				System.out.println("Publishing Device Birth");
-				executor.execute(new Publisher("spv1.0/" + groupId + "/DBIRTH/" + edgeNode + "/" + deviceId, totalPayload));
+				executor.execute(new Publisher("spv1.0/" + groupId + "/DBIRTH/" + edgeNode + "/" + deviceId, payload));
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -216,13 +211,21 @@ public class SparkplugExample implements MqttCallback {
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		System.out.println("Message Arrived on topic " + topic);
 		
+		CloudPayloadProtoBufDecoderImpl decoder = new CloudPayloadProtoBufDecoderImpl(message.getPayload());
+		KuraPayload inboundPayload = decoder.buildFromByteArray();
+		
+		// Debug
+		Iterator<Entry<String, Object>> it = inboundPayload.metrics().entrySet().iterator();
+		while(it.hasNext()) {
+			Entry<String, Object> entry = it.next();
+			System.out.println("Metric " + entry.getKey() + "=" + entry.getValue());
+		}
+		
 		String[] splitTopic = topic.split("/");
 		if(splitTopic[0].equals("spv1.0") && 
 				splitTopic[1].equals(groupId) &&
 				splitTopic[2].equals("NCMD") && 
 				splitTopic[3].equals(edgeNode)) {
-			CloudPayloadProtoBufDecoderImpl decoder = new CloudPayloadProtoBufDecoderImpl(message.getPayload());
-			KuraPayload inboundPayload = decoder.buildFromByteArray();
 			if(inboundPayload.getMetric("Rebirth") != null && (Boolean)inboundPayload.getMetric("Rebirth") == true) {
 				publishBirth();
 			}
@@ -233,28 +236,25 @@ public class SparkplugExample implements MqttCallback {
 			System.out.println("Command recevied for device " + splitTopic[4]);
 			
 			// Get the incoming metric key and value
-			CloudPayloadProtoBufDecoderImpl decoder = new CloudPayloadProtoBufDecoderImpl(message.getPayload());
-			KuraPayload inboundPayload = decoder.buildFromByteArray();
-			
-			// Pretend output0 is tied to input0 and output1 is tied to input1 and output2 is tied to input2
+			// Pretend Outputs/0 is tied to Inputs/0 and Outputs/2 is tied to Inputs/1 and Outputs/2 is tied to Inputs/2
 			KuraPayload outboundPayload = new KuraPayload();
 			outboundPayload.setTimestamp(new Date());
 			outboundPayload = addSeqNum(outboundPayload);
-			if(inboundPayload.getMetric("output0") != null) {
-				System.out.println("Output0: " + inboundPayload.getMetric("output0"));
-				outboundPayload.addMetric("input0", inboundPayload.getMetric("output0"));
-				outboundPayload.addMetric("output0", inboundPayload.getMetric("output0"));
-				System.out.println("Publishing updated value for input0 " + inboundPayload.getMetric("output0"));
-			} else if(inboundPayload.getMetric("output1") != null) {
-				System.out.println("Output1: " + inboundPayload.getMetric("output1"));
-				outboundPayload.addMetric("input1", inboundPayload.getMetric("output1"));
-				outboundPayload.addMetric("output1", inboundPayload.getMetric("output1"));
-				System.out.println("Publishing updated value for input1 " + inboundPayload.getMetric("output1"));
-			} else if(inboundPayload.getMetric("output2") != null) {
-				System.out.println("Output2: " + inboundPayload.getMetric("output2"));
-				outboundPayload.addMetric("input2", inboundPayload.getMetric("output2"));
-				outboundPayload.addMetric("output2", inboundPayload.getMetric("output2"));
-				System.out.println("Publishing updated value for input2 " + inboundPayload.getMetric("output2"));
+			if(inboundPayload.getMetric("Outputs/0") != null) {
+				System.out.println("Outputs/0: " + inboundPayload.getMetric("Outputs/0"));
+				outboundPayload.addMetric("Inputs/0", inboundPayload.getMetric("Outputs/0"));
+				outboundPayload.addMetric("Outputs/0", inboundPayload.getMetric("Outputs/0"));
+				System.out.println("Publishing updated value for Inputs/0 " + inboundPayload.getMetric("Outputs/0"));
+			} else if(inboundPayload.getMetric("Outputs/1") != null) {
+				System.out.println("Output1: " + inboundPayload.getMetric("Outputs/1"));
+				outboundPayload.addMetric("Inputs/1", inboundPayload.getMetric("Outputs/1"));
+				outboundPayload.addMetric("Outputs/1", inboundPayload.getMetric("Outputs/1"));
+				System.out.println("Publishing updated value for Inputs/1 " + inboundPayload.getMetric("Outputs/1"));
+			} else if(inboundPayload.getMetric("Outputs/2") != null) {
+				System.out.println("Output2: " + inboundPayload.getMetric("Outputs/2"));
+				outboundPayload.addMetric("Inputs/2", inboundPayload.getMetric("Outputs/2"));
+				outboundPayload.addMetric("Outputs/2", inboundPayload.getMetric("Outputs/2"));
+				System.out.println("Publishing updated value for Inputs/2 " + inboundPayload.getMetric("Outputs/2"));
 			}
 
 			// Publish the message in a new thread

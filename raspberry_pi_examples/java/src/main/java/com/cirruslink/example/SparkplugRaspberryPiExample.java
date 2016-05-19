@@ -50,7 +50,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 	private static final String SW_VERSION = "v1.0.0";
 
 	// Configuration
-	private String serverUrl = "tcp://192.168.1.84:1883";			// Change to point to your MQTT Server
+	private String serverUrl = "tcp://192.168.1.1:1883";			// Change to point to your MQTT Server
 	private String groupId = "Sparkplug Devices";
 	private String edgeNode = "Java Raspberry Pi";
 	private String deviceId = "Pibrella";
@@ -122,15 +122,18 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 				seq = 0;									// Since this is a birth - reset the seq number
 				payload = addSeqNum(payload);
 				
-				// Create the position
-				payload.addMetric("Position/Altitude", 319);
-				payload.addMetric("Position/Heading", 0);
-				payload.addMetric("Position/Latitude", 38.83667239);
-				payload.addMetric("Position/Longitude", -94.67176706);
-				payload.addMetric("Position/Precision", 2.0);
-				payload.addMetric("Position/Satellites", 8);
-				payload.addMetric("Position/Speed", 0);
-				payload.addMetric("Position/Status", 3);
+				// Create the position for the Kura payload
+				KuraPosition position = new KuraPosition();
+				position.setAltitude(319);
+				position.setHeading(0);
+				position.setLatitude(38.83667239);
+				position.setLongitude(-94.67176706);
+				position.setPrecision(2.0);
+				position.setSatellites(8);
+				position.setSpeed(0);
+				position.setStatus(3);
+				position.setTimestamp(new Date());
+				payload.setPosition(position);
 				
 				payload.addMetric("Node Control/Rebirth", false);
 				
@@ -138,10 +141,12 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 
 				// Create the Device BIRTH
 				payload = new KuraPayload();
-				payload.addMetric("input_a", pibrella.getInputPin(PibrellaInput.A).isHigh());
-				payload.addMetric("input_b", pibrella.getInputPin(PibrellaInput.B).isHigh());
-				payload.addMetric("input_c", pibrella.getInputPin(PibrellaInput.C).isHigh());
-				payload.addMetric("input_d", pibrella.getInputPin(PibrellaInput.D).isHigh());
+				payload.setTimestamp(new Date());
+				payload = addSeqNum(payload);
+				payload.addMetric("Inputs/a", pibrella.getInputPin(PibrellaInput.A).isHigh());
+				payload.addMetric("Inputs/b", pibrella.getInputPin(PibrellaInput.B).isHigh());
+				payload.addMetric("Inputs/c", pibrella.getInputPin(PibrellaInput.C).isHigh());
+				payload.addMetric("Inputs/d", pibrella.getInputPin(PibrellaInput.D).isHigh());
 				payload.addMetric("Outputs/e", pibrella.getOutputPin(PibrellaOutput.E).isHigh());
 				payload.addMetric("Outputs/f", pibrella.getOutputPin(PibrellaOutput.F).isHigh());
 				payload.addMetric("Outputs/g", pibrella.getOutputPin(PibrellaOutput.G).isHigh());
@@ -152,23 +157,12 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 				payload.addMetric("button", pibrella.getInputPin(PibrellaInput.Button).isHigh());
 				payload.addMetric("buzzer", false);
 
-				// We need to publish the device's birth certificate with all known data and parameters
-				KuraPayload totalPayload = new KuraPayload();
-				totalPayload.setTimestamp(new Date());
-				totalPayload = addSeqNum(totalPayload);
-
-				KuraPayload parameterPayload = new KuraPayload();
-				parameterPayload.addMetric("Properties/hw_version", HW_VERSION);
-				parameterPayload.addMetric("Properties/sw_version", SW_VERSION);
-				CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(parameterPayload);
-				totalPayload.addMetric("device_parameters", encoder.getBytes());
-
-				// Add the initial I/O states
-				encoder = new CloudPayloadProtoBufEncoderImpl(payload);
-				totalPayload.addMetric("pv_map", encoder.getBytes());
+				// Add some properties
+				payload.addMetric("Properties/hw_version", HW_VERSION);
+				payload.addMetric("Properties/sw_version", SW_VERSION);
 
 				// Publish the Device BIRTH
-				executor.execute(new Publisher("spv1.0/" + groupId + "/DBIRTH/" + edgeNode + "/" + deviceId, totalPayload));
+				executor.execute(new Publisher("spv1.0/" + groupId + "/DBIRTH/" + edgeNode + "/" + deviceId, payload));
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -355,9 +349,9 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 						outboundPayload.setTimestamp(new Date());
 						outboundPayload = addSeqNum(outboundPayload);
 						if(event.getState() == PinState.HIGH) {
-							outboundPayload.addMetric("input_a", true);
+							outboundPayload.addMetric("Inputs/a", true);
 						} else {
-							outboundPayload.addMetric("input_a", false);
+							outboundPayload.addMetric("Inputs/a", false);
 						}
 						CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(outboundPayload);
 						client.publish("spv1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, encoder.getBytes(), 0, false);
@@ -376,9 +370,9 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 						outboundPayload.setTimestamp(new Date());
 						outboundPayload = addSeqNum(outboundPayload);
 						if(event.getState() == PinState.HIGH) {
-							outboundPayload.addMetric("input_b", true);
+							outboundPayload.addMetric("Inputs/b", true);
 						} else {
-							outboundPayload.addMetric("input_b", false);
+							outboundPayload.addMetric("Inputs/b", false);
 						}
 						CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(outboundPayload);
 						client.publish("spv1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, encoder.getBytes(), 0, false);
@@ -397,9 +391,9 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 						outboundPayload.setTimestamp(new Date());
 						outboundPayload = addSeqNum(outboundPayload);
 						if(event.getState() == PinState.HIGH) {
-							outboundPayload.addMetric("input_c", true);
+							outboundPayload.addMetric("Inputs/c", true);
 						} else {
-							outboundPayload.addMetric("input_c", false);
+							outboundPayload.addMetric("Inputs/c", false);
 						}
 						CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(outboundPayload);
 						client.publish("spv1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, encoder.getBytes(), 0, false);
@@ -418,9 +412,9 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 						outboundPayload.setTimestamp(new Date());
 						outboundPayload = addSeqNum(outboundPayload);
 						if(event.getState() == PinState.HIGH) {
-							outboundPayload.addMetric("input_d", true);
+							outboundPayload.addMetric("Inputs/d", true);
 						} else {
-							outboundPayload.addMetric("input_d", false);
+							outboundPayload.addMetric("Inputs/d", false);
 						}
 						CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(outboundPayload);
 						client.publish("spv1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, encoder.getBytes(), 0, false);
