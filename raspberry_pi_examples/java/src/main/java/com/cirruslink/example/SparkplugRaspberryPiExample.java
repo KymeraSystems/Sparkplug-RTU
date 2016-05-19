@@ -91,15 +91,15 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 			options.setKeepAliveInterval(30);
 			options.setUserName(username);
 			options.setPassword(password.toCharArray());
-			options.setWill("spav1.0/" + groupId + "/NDEATH/" + edgeNode, deathEncoder.getBytes(), 0, false);
+			options.setWill("spAv1.0/" + groupId + "/NDEATH/" + edgeNode, deathEncoder.getBytes(), 0, false);
 			client = new MqttClient(serverUrl, clientId);
 			client.setTimeToWait(2000);						// short timeout on failure to connect
 			client.connect(options);
 			client.setCallback(this);
 			
 			// Subscribe to control/command messages for both the edge of network node and the attached devices
-			client.subscribe("spav1.0/" + groupId + "/NCMD/" + edgeNode + "/#", 0);
-			client.subscribe("spav1.0/" + groupId + "/DCMD/" + edgeNode + "/#", 0);
+			client.subscribe("spAv1.0/" + groupId + "/NCMD/" + edgeNode + "/#", 0);
+			client.subscribe("spAv1.0/" + groupId + "/DCMD/" + edgeNode + "/#", 0);
 			
 			publishBirth();
 			
@@ -137,7 +137,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 				
 				payload.addMetric("Node Control/Rebirth", false);
 				
-				executor.execute(new Publisher("spav1.0/" + groupId + "/NBIRTH/" + edgeNode, payload));
+				executor.execute(new Publisher("spAv1.0/" + groupId + "/NBIRTH/" + edgeNode, payload));
 
 				// Create the Device BIRTH
 				payload = new KuraPayload();
@@ -162,7 +162,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 				payload.addMetric("Properties/sw_version", SW_VERSION);
 
 				// Publish the Device BIRTH
-				executor.execute(new Publisher("spav1.0/" + groupId + "/DBIRTH/" + edgeNode + "/" + deviceId, payload));
+				executor.execute(new Publisher("spAv1.0/" + groupId + "/DBIRTH/" + edgeNode + "/" + deviceId, payload));
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -203,7 +203,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 		System.out.println("Message Arrived on topic " + topic);
 		
 		String[] splitTopic = topic.split("/");
-		if(splitTopic[0].equals("spav1.0") && 
+		if(splitTopic[0].equals("spAv1.0") && 
 				splitTopic[1].equals(groupId) &&
 				splitTopic[2].equals("NCMD") && 
 				splitTopic[3].equals(edgeNode)) {
@@ -219,7 +219,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 			if(inboundPayload.getMetric("Node Control/Rebirth") != null && (Boolean)inboundPayload.getMetric("Node Control/Rebirth") == true) {
 				publishBirth();
 			}
-		} else if(splitTopic[0].equals("spav1.0") && 
+		} else if(splitTopic[0].equals("spAv1.0") && 
 				splitTopic[1].equals(groupId) &&
 				splitTopic[2].equals("DCMD") && 
 				splitTopic[3].equals(edgeNode)) {
@@ -286,7 +286,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 				}
 
 				// Publish the message in a new thread
-				executor.execute(new Publisher("spav1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, outboundPayload));
+				executor.execute(new Publisher("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, outboundPayload));
 			}
 		}
 	}
@@ -333,7 +333,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 							outboundPayload.addMetric("button", false);
 						}
 						CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(outboundPayload);
-						client.publish("spav1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, encoder.getBytes(), 0, false);
+						client.publish("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, encoder.getBytes(), 0, false);
 					}
 				} catch(Exception e) {
 					e.printStackTrace();
@@ -354,7 +354,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 							outboundPayload.addMetric("Inputs/a", false);
 						}
 						CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(outboundPayload);
-						client.publish("spav1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, encoder.getBytes(), 0, false);
+						client.publish("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, encoder.getBytes(), 0, false);
 					}
 				} catch(Exception e) {
 					e.printStackTrace();
@@ -375,7 +375,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 							outboundPayload.addMetric("Inputs/b", false);
 						}
 						CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(outboundPayload);
-						client.publish("spav1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, encoder.getBytes(), 0, false);
+						client.publish("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, encoder.getBytes(), 0, false);
 					}
 				} catch(Exception e) {
 					e.printStackTrace();
@@ -396,7 +396,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 							outboundPayload.addMetric("Inputs/c", false);
 						}
 						CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(outboundPayload);
-						client.publish("spav1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, encoder.getBytes(), 0, false);
+						client.publish("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, encoder.getBytes(), 0, false);
 					}
 				} catch(Exception e) {
 					e.printStackTrace();
@@ -417,7 +417,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 							outboundPayload.addMetric("Inputs/d", false);
 						}
 						CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(outboundPayload);
-						client.publish("spav1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, encoder.getBytes(), 0, false);
+						client.publish("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, encoder.getBytes(), 0, false);
 					}
 				} catch(Exception e) {
 					e.printStackTrace();

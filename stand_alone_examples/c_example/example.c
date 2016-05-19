@@ -120,7 +120,7 @@ void my_message_callback(struct mosquitto *mosq, void *userdata, const struct mo
 
 		//printf("Device input size %zu\n", kuradatatypes__kura_payload__get_packed_size(&outboundPayload));
 		printf("Seq Num (command): %lld\n", outboundPayload.metric[0]->long_value);
-		publisher(mosq, "spav1.0/Sparkplug Devices/DDATA/C Edge Node/Emulated Device", outboundPayload);
+		publisher(mosq, "spAv1.0/Sparkplug Devices/DDATA/C Edge Node/Emulated Device", outboundPayload);
 	} else {
 		printf("%s (null)\n", message->topic);
 	}
@@ -130,8 +130,8 @@ void my_message_callback(struct mosquitto *mosq, void *userdata, const struct mo
 void my_connect_callback(struct mosquitto *mosq, void *userdata, int result) {
 	if(!result) {
 		// Subscribe to commands
-		mosquitto_subscribe(mosq, NULL, "spav1.0/Sparkplug Devices/NCMD/C Edge Node/#", 0);
-		mosquitto_subscribe(mosq, NULL, "spav1.0/Sparkplug Devices/DCMD/C Edge Node/#", 0);
+		mosquitto_subscribe(mosq, NULL, "spAv1.0/Sparkplug Devices/NCMD/C Edge Node/#", 0);
+		mosquitto_subscribe(mosq, NULL, "spAv1.0/Sparkplug Devices/DCMD/C Edge Node/#", 0);
 	} else {
 		fprintf(stderr, "Connect failed\n");
 	}
@@ -352,14 +352,14 @@ void publishBirth(struct mosquitto *mosq) {
 	birthPayload.n_metric = 1;
 
 	//printf("birth size %zu\n", kuradatatypes__kura_payload__get_packed_size(&birthPayload));
-	publisher(mosq, "spav1.0/Sparkplug Devices/NBIRTH/C Edge Node", birthPayload);
+	publisher(mosq, "spAv1.0/Sparkplug Devices/NBIRTH/C Edge Node", birthPayload);
 
 	// The first payload includes all inputs and outputs that will be driven asynchronously after the first message
 	Kuradatatypes__KuraPayload deviceBirthPayload;
 	deviceBirthPayload = getNextPayload(true);
 
 	//printf("Device birth size %zu\n", kuradatatypes__kura_payload__get_packed_size(&deviceBirthPayload));
-	publisher(mosq, "spav1.0/Sparkplug Devices/DBIRTH/C Edge Node/Emulated Device", deviceBirthPayload);
+	publisher(mosq, "spAv1.0/Sparkplug Devices/DBIRTH/C Edge Node/Emulated Device", deviceBirthPayload);
 }
 
 int main(int argc, char *argv[])
@@ -383,7 +383,7 @@ int main(int argc, char *argv[])
 	mosquitto_message_callback_set(mosq, my_message_callback);
 	mosquitto_subscribe_callback_set(mosq, my_subscribe_callback);
 	mosquitto_username_pw_set(mosq,"admin","changeme");
-	mosquitto_will_set(mosq, "spav1.0/Sparkplug Devices/NDEATH/C Edge Node", 0, NULL, 0, false);
+	mosquitto_will_set(mosq, "spAv1.0/Sparkplug Devices/NDEATH/C Edge Node", 0, NULL, 0, false);
 
 	if(mosquitto_connect(mosq, host, port, keepalive)){
 		fprintf(stderr, "Unable to connect.\n");
@@ -399,7 +399,7 @@ int main(int argc, char *argv[])
 
 		//printf("data size %zu\n", kuradatatypes__kura_payload__get_packed_size(&payload));
 		printf("Seq Num (data): %lld\n", payload.metric[0]->long_value);
-		publisher(mosq, "spav1.0/Sparkplug Devices/DDATA/C Edge Node/Emulated Device", payload);
+		publisher(mosq, "spAv1.0/Sparkplug Devices/DDATA/C Edge Node/Emulated Device", payload);
 
 		for(int j=0; j<50; j++) {
 			usleep(100000);

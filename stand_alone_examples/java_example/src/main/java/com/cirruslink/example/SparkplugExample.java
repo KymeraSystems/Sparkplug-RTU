@@ -78,15 +78,15 @@ public class SparkplugExample implements MqttCallback {
 			options.setKeepAliveInterval(30);
 			options.setUserName(username);
 			options.setPassword(password.toCharArray());
-			options.setWill("spav1.0/" + groupId + "/NDEATH/" + edgeNode, deathEncoder.getBytes(), 0, false);
+			options.setWill("spAv1.0/" + groupId + "/NDEATH/" + edgeNode, deathEncoder.getBytes(), 0, false);
 			client = new MqttClient(serverUrl, clientId);
 			client.setTimeToWait(2000);						// short timeout on failure to connect
 			client.connect(options);
 			client.setCallback(this);
 			
 			// Subscribe to control/command messages for both the edge of network node and the attached devices
-			client.subscribe("spav1.0/" + groupId + "/NCMD/" + edgeNode + "/#", 0);
-			client.subscribe("spav1.0/" + groupId + "/DCMD/" + edgeNode + "/#", 0);
+			client.subscribe("spAv1.0/" + groupId + "/NCMD/" + edgeNode + "/#", 0);
+			client.subscribe("spAv1.0/" + groupId + "/DCMD/" + edgeNode + "/#", 0);
 			
 			// Publish the Birth certificate
 			publishBirth();			
@@ -107,7 +107,7 @@ public class SparkplugExample implements MqttCallback {
 					System.out.println("Publishing updated values");
 					payload = addSeqNum(payload);
 					CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(payload);
-					client.publish("spav1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, encoder.getBytes(), 0, false);
+					client.publish("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, encoder.getBytes(), 0, false);
 				}
 			}
 
@@ -146,7 +146,7 @@ public class SparkplugExample implements MqttCallback {
 				payload.addMetric("Node Control/Rebirth", false);
 				
 				System.out.println("Publishing Edge Node Birth with " + payload.getMetric("seq"));
-				executor.execute(new Publisher("spav1.0/" + groupId + "/NBIRTH/" + edgeNode, payload));
+				executor.execute(new Publisher("spAv1.0/" + groupId + "/NBIRTH/" + edgeNode, payload));
 	
 				// Create the payload and add some metrics
 				payload = new KuraPayload();
@@ -171,7 +171,7 @@ public class SparkplugExample implements MqttCallback {
 				payload.addMetric("Properties/sw_version", SW_VERSION);
 	
 				System.out.println("Publishing Device Birth");
-				executor.execute(new Publisher("spav1.0/" + groupId + "/DBIRTH/" + edgeNode + "/" + deviceId, payload));
+				executor.execute(new Publisher("spAv1.0/" + groupId + "/DBIRTH/" + edgeNode + "/" + deviceId, payload));
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -222,14 +222,14 @@ public class SparkplugExample implements MqttCallback {
 		}
 		
 		String[] splitTopic = topic.split("/");
-		if(splitTopic[0].equals("spav1.0") && 
+		if(splitTopic[0].equals("spAv1.0") && 
 				splitTopic[1].equals(groupId) &&
 				splitTopic[2].equals("NCMD") && 
 				splitTopic[3].equals(edgeNode)) {
 			if(inboundPayload.getMetric("Rebirth") != null && (Boolean)inboundPayload.getMetric("Rebirth") == true) {
 				publishBirth();
 			}
-		} else if(splitTopic[0].equals("spav1.0") && 
+		} else if(splitTopic[0].equals("spAv1.0") && 
 				splitTopic[1].equals(groupId) &&
 				splitTopic[2].equals("DCMD") && 
 				splitTopic[3].equals(edgeNode)) {
@@ -258,7 +258,7 @@ public class SparkplugExample implements MqttCallback {
 			}
 
 			// Publish the message in a new thread
-			executor.execute(new Publisher("spav1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, outboundPayload));
+			executor.execute(new Publisher("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, outboundPayload));
 		}
 	}
 
