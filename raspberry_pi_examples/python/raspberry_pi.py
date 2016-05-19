@@ -39,7 +39,7 @@ def button_changed(pin):
     addMetric(outboundPayload, "seq", "INT32", getSeqNum())
     addMetric(outboundPayload, "button", "BOOL", pin.read());
     byteArray = bytearray(outboundPayload.SerializeToString())
-    client.publish("spv1.0/" + myGroupId + "/DDATA/" + myNodeName + "/" + mySubNodeName, byteArray, 0, False)
+    client.publish("spav1.0/" + myGroupId + "/DDATA/" + myNodeName + "/" + mySubNodeName, byteArray, 0, False)
 
 ######################################################################
 # Input change event handler
@@ -58,7 +58,7 @@ def input_changed(name, pin):
     addMetric(outboundPayload, "seq", "INT32", getSeqNum())
     addMetric(outboundPayload, name, "BOOL", pin.read());
     byteArray = bytearray(outboundPayload.SerializeToString())
-    client.publish("spv1.0/" + myGroupId + "/DDATA/" + myNodeName + "/" + mySubNodeName, byteArray, 0, False)
+    client.publish("spav1.0/" + myGroupId + "/DDATA/" + myNodeName + "/" + mySubNodeName, byteArray, 0, False)
 
 ######################################################################
 # Helper method for getting the next sequence number
@@ -137,8 +137,8 @@ def on_connect(client, userdata, flags, rc):
 
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.
-    client.subscribe("spv1.0/" + myGroupId + "/NCMD/" + myNodeName + "/#")
-    client.subscribe("spv1.0/" + myGroupId + "/DCMD/" + myNodeName + "/#")
+    client.subscribe("spav1.0/" + myGroupId + "/NCMD/" + myNodeName + "/#")
+    client.subscribe("spav1.0/" + myGroupId + "/DCMD/" + myNodeName + "/#")
 ######################################################################
 
 ######################################################################
@@ -148,7 +148,7 @@ def on_message(client, userdata, msg):
     print("Message arrived: " + msg.topic)
     tokens = msg.topic.split("/")
 
-    if tokens[0] == "spv1.0" and tokens[1] == myGroupId and tokens[2] == "DCMD" and tokens[3] == myNodeName:
+    if tokens[0] == "spav1.0" and tokens[1] == myGroupId and tokens[2] == "DCMD" and tokens[3] == myNodeName:
 	inboundPayload = kurapayload_pb2.KuraPayload()
 	inboundPayload.ParseFromString(msg.payload)
 	outboundPayload = kurapayload_pb2.KuraPayload()
@@ -193,8 +193,8 @@ def on_message(client, userdata, msg):
 		pibrella.buzzer.success()
 
 	byteArray = bytearray(outboundPayload.SerializeToString())
-	client.publish("spv1.0/" + myGroupId + "/DDATA/" + myNodeName + "/" + mySubNodeName, byteArray, 0, False)
-    elif tokens[0] == "spv1.0" and tokens[1] == myGroupId and tokens[2] == "NCMD" and tokens[3] == myNodeName:
+	client.publish("spav1.0/" + myGroupId + "/DDATA/" + myNodeName + "/" + mySubNodeName, byteArray, 0, False)
+    elif tokens[0] == "spav1.0" and tokens[1] == myGroupId and tokens[2] == "NCMD" and tokens[3] == myNodeName:
         inboundPayload = kurapayload_pb2.KuraPayload()
         inboundPayload.ParseFromString(msg.payload)
         for metric in inboundPayload.metric:
@@ -229,7 +229,7 @@ def publishBirth():
 
     # Publish the node birth certificate
     byteArray = bytearray(payload.SerializeToString())
-    client.publish("spv1.0/" + myGroupId + "/NBIRTH/" + myNodeName, byteArray, 0, False)
+    client.publish("spav1.0/" + myGroupId + "/NBIRTH/" + myNodeName, byteArray, 0, False)
 
     # Set up the input metrics
     payload = kurapayload_pb2.KuraPayload()
@@ -259,7 +259,7 @@ def publishBirth():
 
     # Publish the initial data with the Device BIRTH certificate
     totalByteArray = bytearray(payload.SerializeToString())
-    client.publish("spv1.0/" + myGroupId + "/DBIRTH/" + myNodeName + "/" + mySubNodeName, totalByteArray, 0, False)
+    client.publish("spav1.0/" + myGroupId + "/DBIRTH/" + myNodeName + "/" + mySubNodeName, totalByteArray, 0, False)
 ######################################################################
 
 # Create the DEATH payload
@@ -273,7 +273,7 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 client.username_pw_set(myUsername, myPassword)
-client.will_set("spv1.0/" + myGroupId + "/NDEATH/" + myNodeName, deathByteArray, 0, False)
+client.will_set("spav1.0/" + myGroupId + "/NDEATH/" + myNodeName, deathByteArray, 0, False)
 client.connect(serverUrl, 1883, 60)
 
 publishBirth()
