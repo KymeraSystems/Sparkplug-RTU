@@ -64,6 +64,8 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 	// Some control and parameter points for this demo
 	private int configChangeCount = 1;
 	private int scanRateMs = 1000;
+	private long upTimeMs = 0;
+	private long upTimeStart = System.currentTimeMillis();
 	private int buttonCounter = 0;
 	private int buttonCounterSetpoint = 10;
 
@@ -90,8 +92,18 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 				if (client == null || !client.isConnected()) {
 					establishMqttSession();
 					publishBirth();
+				} else {
+					synchronized (lock) {
+						KuraPayload outboundPayload = new KuraPayload();
+						outboundPayload.setTimestamp(new Date());
+						outboundPayload = addSeqNum(outboundPayload);
+						outboundPayload.addMetric("Up Time ms", System.currentTimeMillis() - upTimeStart);
+						// Publish current Up Time
+						executor.execute(new Publisher("spAv1.0/" + groupId + "/NDATA/" + edgeNode, outboundPayload));
+
+					}
 				}
-				Thread.sleep(1000);
+				Thread.sleep(scanRateMs);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -177,23 +189,31 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 
 				//
 				// Create the EoN Node BIRTH payload with any number of
-				// parameters for this node. These parameters will appear in 
+				// read/write properties for this node. These parameters will
+				// appear in
 				// folders under this Node in the Ignition tag structure.
 				//
 				KuraPayload payload = new KuraPayload();
-				payload.setTimestamp(new Date());
-				payload.addMetric("bdSeq", bdSeq);
-				seq = 0; // Since this is a birth - reset the seq number
-				payload = addSeqNum(payload);
 
-				payload.addMetric("Properties/Node Manf", "Raspberry");
+				seq = 0; // Since this is a birth - reset the seq number
+							// Note that message sequence numbers will appear in
+							// the "Node Metrics" folder in Ignition.
+				payload = addSeqNum(payload);
+				payload.addMetric("bdSeq", bdSeq);
+				payload.setTimestamp(new Date());
+
+				payload.addMetric("Up Time ms", System.currentTimeMillis() - upTimeStart);
+				
+				payload.addMetric("Node Control/Reboot", false);
+				payload.addMetric("Node Control/Rebirth", false);
+				payload.addMetric("Node Control/Next Server", false);
+				payload.addMetric("Node Control/Scan Rate ms", scanRateMs);
+
+				payload.addMetric("Properties/Node Manf", "Element 14");
 				payload.addMetric("Properties/Hardware Version", HW_VERSION);
 				payload.addMetric("Properties/Software Version", SW_VERSION);
 				payload.addMetric("Properties/Config Change Count", configChangeCount);
 				payload.addMetric("Properties/Ip_adr", "192.168.0.55");
-
-				payload.addMetric("Node Control/Rebirth", false);
-				payload.addMetric("Node Control/Scan Rate ms", scanRateMs);
 
 				// Build a GPS Position object for the payload. Note that the
 				// Position object is optional.
@@ -214,15 +234,18 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 
 				//
 				// Now publish the EoN Node Birth Certificate.
-				// Note that the required "Sequence Number" metric 'seq' needs to
-				// be RESET TO A VALUE OF ZERO for the message. The 'timestamp' metric
+				// Note that the required "Sequence Number" metric 'seq' needs
+				// to
+				// be RESET TO A VALUE OF ZERO for the message. The 'timestamp'
+				// metric
 				// is added into the payload by the Publisher() thread.
 				//
 				executor.execute(new Publisher("spAv1.0/" + groupId + "/NBIRTH/" + edgeNode, payload));
-				
+
 				//
-				// Create the Device BIRTH Certificate now. The tags defined here will appear in a
-				// folder hierarchy under the associated Device. 
+				// Create the Device BIRTH Certificate now. The tags defined
+				// here will appear in a
+				// folder hierarchy under the associated Device.
 				//
 				payload = new KuraPayload();
 				payload.setTimestamp(new Date());
@@ -241,7 +264,8 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 				payload.addMetric("Outputs/LEDs/green", pibrella.getOutputPin(PibrellaOutput.LED_GREEN).isHigh());
 				payload.addMetric("Outputs/LEDs/red", pibrella.getOutputPin(PibrellaOutput.LED_RED).isHigh());
 				payload.addMetric("Outputs/LEDs/yellow", pibrella.getOutputPin(PibrellaOutput.LED_YELLOW).isHigh());
-				// Place the button process variables at the root level of the tag hierarchy 
+				// Place the button process variables at the root level of the
+				// tag hierarchy
 				payload.addMetric("button", pibrella.getInputPin(PibrellaInput.Button).isHigh());
 				payload.addMetric("button", pibrella.getInputPin(PibrellaInput.Button).isHigh());
 				payload.addMetric("button count", buttonCounter);
@@ -316,13 +340,24 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 					&& (Boolean) inboundPayload.getMetric("Node Control/Rebirth") == true) {
 				publishBirth();
 			}
+			if (inboundPayload.getMetric("Node Control/Reboot") != null
+					&& (Boolean) inboundPayload.getMetric("Node Control/Reboot") == true) {
+				System.out.println("Received a Reboot command.");
+			}
+			if (inboundPayload.getMetric("Node Control/Next Server") != null
+					&& (Boolean) inboundPayload.getMetric("Node Control/Next Server") == true) {
+				System.out.println("Received a Next Server command.");
+			}
 			if (inboundPayload.getMetric("Node Control/Scan Rate ms") != null) {
 				scanRateMs = (Integer) inboundPayload.getMetric("Node Control/Scan Rate ms");
+				if (scanRateMs < 100) {
+					// Limit Scan Rate to a minimum of 100ms
+					scanRateMs = 100;
+				}
 				outboundPayload.addMetric("Node Control/Scan Rate ms", scanRateMs);
 				// Publish the message in a new thread
 				synchronized (lock) {
-					executor.execute(new Publisher("spAv1.0/" + groupId + "/NDATA/" + edgeNode,
-							outboundPayload));
+					executor.execute(new Publisher("spAv1.0/" + groupId + "/NDATA/" + edgeNode, outboundPayload));
 				}
 			}
 		} else if (splitTopic[0].equals("spAv1.0") && splitTopic[1].equals(groupId) && splitTopic[2].equals("DCMD")
