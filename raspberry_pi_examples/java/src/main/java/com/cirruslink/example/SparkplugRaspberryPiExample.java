@@ -41,6 +41,17 @@ import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
 import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 
+/*
+ * This is a VERY simple implementation of an MQTT Edge of Network Node (EoN Node) and an associated 
+ * Device that follows the Sparkplug specification. This is NOT intended to be production quality code
+ * but rather a heavily commented tutorial covering all of the basic components defined in the Sparkplug
+ * specification document.
+ * 
+ * The version of Raspberry Pi used in this example is the Raspberry Pi 2 Model B. The plug on I/O board
+ * used for the real world I/O is a Pibrella I/O board, hardware version 3.0.
+ * 
+ */
+
 public class SparkplugRaspberryPiExample implements MqttCallback {
 
 	private static final Pibrella pibrella = new PibrellaDevice();
@@ -89,6 +100,11 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 
 			// Wait for 'ctrl c' to exit
 			while (true) {
+				//
+				// This is a very simple loop for the demo that tries to keep the MQTT Session 
+				// up, and published the Up Time metric based on the current value of
+				// the scanRateMs process variable.
+				//
 				if (client == null || !client.isConnected()) {
 					establishMqttSession();
 					publishBirth();
@@ -111,7 +127,12 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 	}
 
 	/**
-	 * Establish an MQTT Session with Sparkplug defined Death Certificate
+	 * Establish an MQTT Session with Sparkplug defined Death Certificate. It may not be
+	 * Immediately intuitive that the Death Certificate is created prior to publishing the
+	 * Birth Certificate, but the Death Certificate is actually part of the MQTT Session 
+	 * establishment. For complete details of the actual MQTT wire protocol refer to the 
+	 * latest OASyS MQTT V3.1.1 standards at:
+	 * http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html
 	 * 
 	 * @return true = MQTT Session Established
 	 */
@@ -174,6 +195,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 		return true;
 	}
 
+	
 	/**
 	 * Publish the EoN Node Birth Certificate and the Device Birth Certificate
 	 * per the Sparkplug Specification
@@ -203,7 +225,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 				payload.setTimestamp(new Date());
 
 				payload.addMetric("Up Time ms", System.currentTimeMillis() - upTimeStart);
-				
+
 				payload.addMetric("Node Control/Reboot", false);
 				payload.addMetric("Node Control/Rebirth", false);
 				payload.addMetric("Node Control/Next Server", false);
@@ -267,7 +289,6 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 				// Place the button process variables at the root level of the
 				// tag hierarchy
 				payload.addMetric("button", pibrella.getInputPin(PibrellaInput.Button).isHigh());
-				payload.addMetric("button", pibrella.getInputPin(PibrellaInput.Button).isHigh());
 				payload.addMetric("button count", buttonCounter);
 				payload.addMetric("button count setpoint", buttonCounterSetpoint);
 				payload.addMetric("buzzer", false);
@@ -316,6 +337,12 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 		System.out.println("The MQTT Connection was lost!");
 	}
 
+	/**
+	 * Based on our subscriptions to the MQTT Server, the messageArrived() callback is
+	 * called on all arriving MQTT messages. Based on the Sparkplug Topic Namespace, 
+	 * each message is parsed and an appropriate action is taken.
+	 * 
+	 */
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		System.out.println("Message Arrived on topic " + topic);
 
