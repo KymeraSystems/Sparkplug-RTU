@@ -50,7 +50,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 	private static final String SW_VERSION = "v1.0.0";
 
 	// Configuration
-	private String serverUrl = "tcp://192.168.0.17:1883"; // Change to point to
+	private String serverUrl = "tcp://192.168.1.1:1883"; // Change to point to
 															// your MQTT Server
 	private String groupId = "Sparkplug Devices";
 	private String edgeNode = "Java Raspberry Pi";
