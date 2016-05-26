@@ -4,4 +4,7 @@ Sparkplug is a specification for MQTT enabled devices and applications to send a
 
 The examples here provide reference implementations in various languages and for various devices to show how the device/remote application must connect and disconnect from the MQTT server.  This includes device lifecycle messages such as the required birth and last will & testament messages that must be sent to ensure the device lifecycle state and data integrity.
 
-The Sparkplug specification which explains these examples can be found here (coming soon).
+The Sparkplug specification which explains these examples can be found here: https://s3.amazonaws.com/cirrus-link-com/Sparkplug+Specification+Version+1.0.pdf
+
+Tutorials showing how to use this reference code can be found here:
+https://docs.chariot.io/display/CLD/Tutorials
