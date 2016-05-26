@@ -1,0 +1,11 @@
+target/
+bin/
+dependency-reduced-pom.xml
+.settings/
+.project
+.classpath
+javaClientId-tcplocalhost*
+javaSimpleEdgeNode-tcplocalhost*
+*.o
+sparkplug_example
+
