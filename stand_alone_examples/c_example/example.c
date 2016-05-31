@@ -16,6 +16,7 @@
 #include <unistd.h>
 #include <mosquitto.h>
 #include "kurapayload.pb-c.h"
+#include <string.h>
 
 #include <time.h>
 #include <sys/time.h>
@@ -119,7 +120,6 @@ void my_message_callback(struct mosquitto *mosq, void *userdata, const struct mo
 		}
 
 		//printf("Device input size %zu\n", kuradatatypes__kura_payload__get_packed_size(&outboundPayload));
-		printf("Seq Num (command): %lld\n", outboundPayload.metric[0]->long_value);
 		publisher(mosq, "spAv1.0/Sparkplug Devices/DDATA/C Edge Node/Emulated Device", outboundPayload);
 	} else {
 		printf("%s (null)\n", message->topic);
@@ -308,7 +308,8 @@ Kuradatatypes__KuraPayload getNextPayload(bool birth) {
 
 void freePayload(Kuradatatypes__KuraPayload *payload) {
 	// Get the metrics and free them
-	for(int i=0; i<payload->n_metric; i++) {
+	int i;
+	for(i=0; i<payload->n_metric; i++) {
 		free(payload->metric[i]);
 	}
 	free(payload->metric);
@@ -347,7 +348,6 @@ void publishBirth(struct mosquitto *mosq) {
 	metrics = malloc(sizeof(Kuradatatypes__KuraPayload__KuraMetric*) * 1);
 	seqNum = 0;
 	metrics[0] = getNextSeqMetric();
-	printf("Seq Num (birth): %lld\n", metrics[0]->long_value);
 	birthPayload.metric = metrics;
 	birthPayload.n_metric = 1;
 
@@ -393,15 +393,15 @@ int main(int argc, char *argv[])
 	publishBirth(mosq);
 
 	// Loop and publish more messages
-	for(int i=0; i<100; i++) {
+	int i;
+	for(i=0; i<100; i++) {
 		Kuradatatypes__KuraPayload payload;
 		payload = getNextPayload(false);
 
 		//printf("data size %zu\n", kuradatatypes__kura_payload__get_packed_size(&payload));
-		printf("Seq Num (data): %lld\n", payload.metric[0]->long_value);
 		publisher(mosq, "spAv1.0/Sparkplug Devices/DDATA/C Edge Node/Emulated Device", payload);
-
-		for(int j=0; j<50; j++) {
+		int j;
+		for(j=0; j<50; j++) {
 			usleep(100000);
 			mosquitto_loop(mosq, 0, 1);
 		}
