@@ -353,7 +353,7 @@ void publishBirth(struct mosquitto *mosq) {
 
 	//printf("Device birth size %zu\n", kuradatatypes__kura_payload__get_packed_size(&deviceBirthPayload));
 	publisher(mosq, "spAv1.0/Sparkplug Devices/DBIRTH/C Edge Node/Emulated Device", deviceBirthPayload);
-	freePayload(&deviceBirthPayload);
+	//freePayload(&deviceBirthPayload);
 }
 
 int main(int argc, char *argv[])
@@ -397,7 +397,7 @@ int main(int argc, char *argv[])
 
 		//printf("data size %zu\n", kuradatatypes__kura_payload__get_packed_size(&payload));
 		publisher(mosq, "spAv1.0/Sparkplug Devices/DDATA/C Edge Node/Emulated Device", payload);
-		freePayload(&payload);
+		//freePayload(&payload);
 		int j;
 		for(j=0; j<50; j++) {
 			usleep(100000);
