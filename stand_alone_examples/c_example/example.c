@@ -275,13 +275,6 @@ Kuradatatypes__KuraPayload getNextPayload(bool birth) {
 	        payload.metric = metrics;
 
 		return payload;
-
-		/* // TODO - need to handle cleanup
-		free(buf);
-		freePayload(&payload);
-		free(deviceParameterBuf);
-		freePayload(&deviceParameterPayload);
-		*/
 	} else {
 		Kuradatatypes__KuraPayload payload = KURADATATYPES__KURA_PAYLOAD__INIT;
 
@@ -360,11 +353,12 @@ void publishBirth(struct mosquitto *mosq) {
 
 	//printf("Device birth size %zu\n", kuradatatypes__kura_payload__get_packed_size(&deviceBirthPayload));
 	publisher(mosq, "spAv1.0/Sparkplug Devices/DBIRTH/C Edge Node/Emulated Device", deviceBirthPayload);
+	freePayload(&deviceBirthPayload);
 }
 
 int main(int argc, char *argv[])
 {
-	char *host = "localhost";
+	char *host = "52.0.30.234";
 	int port = 1883;
 	int keepalive = 60;
 	bool clean_session = true;
@@ -382,8 +376,11 @@ int main(int argc, char *argv[])
 	mosquitto_connect_callback_set(mosq, my_connect_callback);
 	mosquitto_message_callback_set(mosq, my_message_callback);
 	mosquitto_subscribe_callback_set(mosq, my_subscribe_callback);
-	mosquitto_username_pw_set(mosq,"admin","changeme");
+	mosquitto_username_pw_set(mosq,"CLAdmin","CLAdm79!");
 	mosquitto_will_set(mosq, "spAv1.0/Sparkplug Devices/NDEATH/C Edge Node", 0, NULL, 0, false);
+
+//	mosquitto_tls_insecure_set(mosq, true);
+//	mosquitto_tls_opts_set(mosq, 0, "tlsv1.2", NULL);               // 0 is DO NOT SSL_VERIFY_PEER
 
 	if(mosquitto_connect(mosq, host, port, keepalive)){
 		fprintf(stderr, "Unable to connect.\n");
@@ -400,6 +397,7 @@ int main(int argc, char *argv[])
 
 		//printf("data size %zu\n", kuradatatypes__kura_payload__get_packed_size(&payload));
 		publisher(mosq, "spAv1.0/Sparkplug Devices/DDATA/C Edge Node/Emulated Device", payload);
+		freePayload(&payload);
 		int j;
 		for(j=0; j<50; j++) {
 			usleep(100000);

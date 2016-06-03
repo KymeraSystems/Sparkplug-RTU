@@ -1,5 +1,4 @@
 CFLAGS=-Wall -ggdb
-#LDFLAGS=../../lib/libmosquitto.so.1 -lmysqlclient
 LDFLAGS=-lmosquitto -lprotobuf-c
 
 .PHONY: all clean
