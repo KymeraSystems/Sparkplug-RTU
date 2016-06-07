@@ -24,9 +24,9 @@ var sample = (function () {
         username = "admin",
         password = "changeme",
         groupId = "Sparkplug Devices",
-        edgeNode = "Javascript Edge Node",
+        edgeNode = "JavaScript Edge Node",
         deviceId = "Emulated Device",
-        clientId = "javascriptSimpleEdgeNode",
+        clientId = "JavaScriptSimpleEdgeNode",
         publishPeriod = 5000,
         bdSeq = 0,
         seq = 0,    
@@ -39,6 +39,7 @@ var sample = (function () {
         return seq++;
     },
     
+    // Generates a random integer
     randomInt = function() {
         return 1 + Math.floor(Math.random() * 10);
     }
@@ -120,6 +121,7 @@ var sample = (function () {
         };
     },
 
+    // Publishes BIRTH certificates for the edge node and device
     publishBirth = function(client) {
         var payload, topic;
         // Reset sequence number
@@ -140,6 +142,7 @@ var sample = (function () {
         messageAlert("published", topic, payload);
     },
 
+    // Logs a message alert to the console
     messageAlert = function(alert, topic, payload) {
         console.log("Message " + alert);
         console.log(" topic: " + topic);
