@@ -1,0 +1,10 @@
+{
+  "name" : "sparkplug-example",
+  "version" : "1.0.1-SNAPSHOT",
+  "description" : "An example Sparkplug module written in javascript",
+  "license" : "EPL-1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Cirrus-Link/Sparkplug.git"
+  }
+}
