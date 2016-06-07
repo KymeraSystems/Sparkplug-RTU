@@ -1,7 +1,7 @@
 {
-  "name" : "sparkplug-example",
+  "name" : "example",
   "version" : "1.0.1-SNAPSHOT",
-  "description" : "An example Sparkplug module written in javascript",
+  "description" : "An example Sparkplug module written in JavaScript",
   "license" : "EPL-1.0",
   "repository": {
     "type": "git",
