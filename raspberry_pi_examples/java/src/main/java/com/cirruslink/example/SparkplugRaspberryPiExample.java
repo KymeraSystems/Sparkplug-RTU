@@ -91,7 +91,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 
     private Object lock = new Object();
 
-    Map<String,Meter> meters = new HashMap();
+    RTU rtu = new RTU("rtu");
     private String adapter = "wlan0";
 
     public SparkplugRaspberryPiExample() {
@@ -131,11 +131,6 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
             }
         }
 
-//        for (int i = 0; i < random.nextInt(10); i++) {
-        for (int i = 0; i < 5; i++) {
-
-            meters.put(String.format("meter_%d", i),new Meter(String.format("meter_%d", i)));
-        }
     }
 
     public static void main(String[] args) {
@@ -169,6 +164,11 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                         outboundPayload = addSeqNum(outboundPayload);
                         outboundPayload.addMetric("Up Time ms", System.currentTimeMillis() - upTimeStart + uptimeAtStart);
 
+                        for (Entry<String, TagValue> t : rtu.values.entrySet()) {
+                            if (t.getValue().updateValue()) {
+                                outboundPayload.addMetric(t.getKey(), t.getValue().getValue());
+                            }
+                        }
                         // Publish current Up Time
                         executor.execute(new Publisher("spAv1.0/" + groupId + "/NDATA/" + edgeNode, outboundPayload));
 
@@ -176,7 +176,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                         outboundPayload.setTimestamp(new Date());
                         outboundPayload = addSeqNum(outboundPayload);
 
-                        for (Meter m : meters.values()) {
+                        for (Meter m : rtu.meters.values()) {
                             m.updateMeter(outboundPayload, false);
                         }
                         executor.execute(new Publisher("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/rtu", outboundPayload));
@@ -337,7 +337,9 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                 // metric
                 // is added into the payload by the Publisher() thread.
                 //
-
+                for (Entry<String, TagValue> t : rtu.values.entrySet()) {
+                    payload.addMetric(t.getKey(), t.getValue().getValue());
+                }
 
                 executor.execute(new Publisher("spAv1.0/" + groupId + "/NBIRTH/" + edgeNode, payload));
 
@@ -383,7 +385,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                 payload.setTimestamp(new Date());
                 payload = addSeqNum(payload);
 
-                for (Meter m : meters.values()) {
+                for (Meter m : rtu.meters.values()) {
                     m.updateMeter(payload, true);
                 }
 
@@ -428,7 +430,6 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
      * Based on our subscriptions to the MQTT Server, the messageArrived() callback is
      * called on all arriving MQTT messages. Based on the Sparkplug Topic Namespace,
      * each message is parsed and an appropriate action is taken.
-     *
      */
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         //System.out.println("Message Arrived on topic " + topic);
@@ -439,7 +440,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         outboundPayload = addSeqNum(outboundPayload);
 
         String[] splitTopic = topic.split("/");
-        //System.out.println(topic);
+        System.out.println(topic);
         if (splitTopic[0].equals("spAv1.0") && splitTopic[1].equals(groupId) && splitTopic[2].equals("NCMD")
                 && splitTopic[3].equals(edgeNode)) {
             CloudPayloadProtoBufDecoderImpl decoder = new CloudPayloadProtoBufDecoderImpl(message.getPayload());
@@ -478,7 +479,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         } else if (splitTopic[0].equals("spAv1.0") && splitTopic[1].equals(groupId) && splitTopic[2].equals("DCMD")
                 && splitTopic[3].equals(edgeNode) && splitTopic[4].equals(deviceId)) {
             synchronized (lock) {
-                //System.out.println("Command recevied for device: " + splitTopic[4] + " on topic: " + topic);
+                System.out.println("Command recevied for device: " + splitTopic[4] + " on topic: " + topic);
 
                 // Get the incoming metric key and value
                 CloudPayloadProtoBufDecoderImpl decoder = new CloudPayloadProtoBufDecoderImpl(message.getPayload());
@@ -545,7 +546,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         } else if (splitTopic[0].equals("spAv1.0") && splitTopic[1].equals(groupId) && splitTopic[2].equals("DCMD")
                 && splitTopic[3].equals(edgeNode) && splitTopic[4].equals("rtu")) {
             synchronized (lock) {
-                //System.out.println("Command received for device: " + splitTopic[4] + " on topic: " + topic);
+                System.out.println("Command received for device: " + splitTopic[4] + " on topic: " + topic);
 
                 // Get the incoming metric key and value
                 CloudPayloadProtoBufDecoderImpl decoder = new CloudPayloadProtoBufDecoderImpl(message.getPayload());
@@ -556,14 +557,14 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                     Entry<String, Object> entry = metrics.next();
                     System.out.println("Metric: " + entry.getKey() + " :: " + entry.getValue());
                     String[] splitMetric = entry.getKey().split("/");
-                    Meter m = meters.get(splitMetric[0]);
-                    if (m != null){
-                        String metric = String.join("/",Arrays.copyOfRange(splitMetric,0,splitMetric.length));
+                    Meter m = rtu.meters.get(splitMetric[0]);
+                    if (m != null) {
+                        String metric = String.join("/", Arrays.copyOfRange(splitMetric, 0, splitMetric.length));
                         System.out.println(metric);
                         TagValue v = m.get(metric);
-                        if (v != null){
-                            v.setValue(entry.getValue(),false);
-                            outboundPayload.addMetric(entry.getKey(),v.getValue());
+                        if (v != null) {
+                            v.setValue(entry.getValue(), false);
+                            outboundPayload.addMetric(entry.getKey(), v.getValue());
                         }
                     }
                 }

@@ -1,9 +1,6 @@
 package com.cirruslink.example;
 
-import com.cirruslink.example.impl.BooleanValue;
-import com.cirruslink.example.impl.FloatValue;
-import com.cirruslink.example.impl.MemoryFloatValue;
-import com.cirruslink.example.impl.TotalizerValue;
+import com.cirruslink.example.impl.*;
 import com.cirruslink.example.model.TagValue;
 import org.eclipse.kura.message.KuraPayload;
 
@@ -20,8 +17,6 @@ public class Meter extends HashMap<String,TagValue> {
         this.put(String.format("%s/meter/%s",tagPath,"sp"),new FloatValue(0.0f,2000.0f,0.1f,1.0f));
         this.put(String.format("%s/meter/%s",tagPath,"dp"),new FloatValue(0.0f,200.0f,0.1f,0.2f));
         this.put(String.format("%s/meter/%s",tagPath,"temp"),new FloatValue(0.0f,100.0f,0.1f,0.4f));
-        this.put(String.format("%s/rtu/%s",tagPath,"volts"),new FloatValue(0.0f,12.0f,0.1f,0.3f));
-        this.put(String.format("%s/rtu/%s",tagPath,"temp"),new FloatValue(0.0f,100.0f,0.1f,0.3f));
         this.put(String.format("%s/meter/%s",tagPath,"flowRate"),new FloatValue(0.0f,500.0f,0.1f,0.5f));
         this.put(String.format("%s/%s",tagPath,"casing pressure"),new FloatValue(0.0f,2000.0f,0.1f,5.0f));
         this.put(String.format("%s/%s",tagPath,"esd valve"),new BooleanValue());

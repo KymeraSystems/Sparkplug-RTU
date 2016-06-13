@@ -27,7 +27,6 @@ public class FloatValue implements TagValue<Float> {
 
     @Override
     public void setValue(Float newValue, boolean flag) {
-        System.out.println("Setting Value");
         this.target = newValue;
         if (flag) {
             this.value = newValue;
