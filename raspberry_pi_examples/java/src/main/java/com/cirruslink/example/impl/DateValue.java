@@ -18,9 +18,6 @@ public class DateValue implements TagValue<Long> {
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
         try {
             ProcessBuilder pb = new ProcessBuilder("/bin/date","-s",sdf.format(new Date(newValue)));
-//            File log = new File("log");
-//            pb.redirectErrorStream(true);
-//            pb.redirectOutput(ProcessBuilder.Redirect.appendTo(log));
             pb.start();
 
         } catch (IOException e) {

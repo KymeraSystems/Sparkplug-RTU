@@ -8,6 +8,10 @@ import com.cirruslink.example.model.TagValue;
 public class StringValue implements TagValue<String> {
     String value;
 
+
+    public StringValue(String initialValue){
+        this.value = initialValue;
+    }
     @Override
     public void setValue(String newValue,boolean flag) {
         this.value = newValue;

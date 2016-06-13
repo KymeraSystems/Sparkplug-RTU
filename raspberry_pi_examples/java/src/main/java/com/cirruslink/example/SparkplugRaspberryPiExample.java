@@ -91,7 +91,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 
     private Object lock = new Object();
 
-    RTU rtu = new RTU("rtu");
+    RTU rtu;
     private String adapter = "wlan0";
 
     public SparkplugRaspberryPiExample() {
@@ -131,6 +131,8 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
             }
         }
 
+        rtu = new RTU(edgeNode);
+
     }
 
     public static void main(String[] args) {
@@ -169,7 +171,8 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                                 outboundPayload.addMetric(t.getKey(), t.getValue().getValue());
                             }
                         }
-                        // Publish current Up Time
+
+                        // Publish the message
                         executor.execute(new Publisher("spAv1.0/" + groupId + "/NDATA/" + edgeNode, outboundPayload));
 
                         outboundPayload = new KuraPayload();
@@ -179,7 +182,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                         for (Meter m : rtu.meters.values()) {
                             m.updateMeter(outboundPayload, false);
                         }
-                        executor.execute(new Publisher("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/rtu", outboundPayload));
+                        executor.execute(new Publisher("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/meters", outboundPayload));
                     }
                 }
                 Thread.sleep(scanRateMs);
@@ -337,6 +340,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                 // metric
                 // is added into the payload by the Publisher() thread.
                 //
+
                 for (Entry<String, TagValue> t : rtu.values.entrySet()) {
                     payload.addMetric(t.getKey(), t.getValue().getValue());
                 }
@@ -389,7 +393,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                     m.updateMeter(payload, true);
                 }
 
-                executor.execute(new Publisher("spAv1.0/" + groupId + "/DBIRTH/" + edgeNode + "/rtu", payload));
+                executor.execute(new Publisher("spAv1.0/" + groupId + "/DBIRTH/" + edgeNode + "/meters", payload));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -437,7 +441,6 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         // Initialize the outbound payload if required.
         KuraPayload outboundPayload = new KuraPayload();
         outboundPayload.setTimestamp(new Date());
-        outboundPayload = addSeqNum(outboundPayload);
 
         String[] splitTopic = topic.split("/");
         System.out.println(topic);
@@ -450,30 +453,43 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
             while (metrics.hasNext()) {
                 Entry<String, Object> entry = metrics.next();
                 System.out.println("Metric: " + entry.getKey() + " :: " + entry.getValue());
-            }
 
-            if (inboundPayload.getMetric("Node Control/Rebirth") != null
-                    && (Boolean) inboundPayload.getMetric("Node Control/Rebirth") == true) {
-                publishBirth();
-            }
-            if (inboundPayload.getMetric("Node Control/Reboot") != null
-                    && (Boolean) inboundPayload.getMetric("Node Control/Reboot") == true) {
-                System.out.println("Received a Reboot command.");
-            }
-            if (inboundPayload.getMetric("Node Control/Next Server") != null
-                    && (Boolean) inboundPayload.getMetric("Node Control/Next Server") == true) {
-                System.out.println("Received a Next Server command.");
-            }
-            if (inboundPayload.getMetric("Node Control/Scan Rate ms") != null) {
-                scanRateMs = (Integer) inboundPayload.getMetric("Node Control/Scan Rate ms");
-                if (scanRateMs < 100) {
-                    // Limit Scan Rate to a minimum of 100ms
-                    scanRateMs = 100;
+                if ("Node Control/Rebirth".equals(entry.getKey())) {
+                    if ((boolean) entry.getValue() == true) {
+                        publishBirth();
+                    }
+                } else if ("Node Control/Reboot".equals(entry.getKey())) {
+                    if ((boolean) entry.getValue() == true) {
+                        System.out.println("Received a Reboot command.");
+                    }
+                } else if ("Node Control/Next Server".equals(entry.getKey())) {
+                    if ((boolean) entry.getValue() == true) {
+                        System.out.println("Received a Next Server command.");
+                    }
+                } else if ("Node Control/Scan Rate ms".equals(entry.getKey())) {
+                    scanRateMs = (Integer) inboundPayload.getMetric("Node Control/Scan Rate ms");
+                    if (scanRateMs < 100) {
+                        // Limit Scan Rate to a minimum of 100ms
+                        scanRateMs = 100;
+                    }
+                    outboundPayload.addMetric("Node Control/Scan Rate ms", scanRateMs);
+                } else {
+                    TagValue v = rtu.values.get(entry.getKey());
+                    if (v != null) {
+                        v.setValue(entry.getValue(), false);
+                        outboundPayload.addMetric(entry.getKey(), v.getValue());
+                    }
                 }
-                outboundPayload.addMetric("Node Control/Scan Rate ms", scanRateMs);
-                // Publish the message in a new thread
-                synchronized (lock) {
-                    executor.execute(new Publisher("spAv1.0/" + groupId + "/NDATA/" + edgeNode, outboundPayload));
+
+                if (!outboundPayload.metrics().isEmpty()) {
+
+                    outboundPayload = addSeqNum(outboundPayload);
+                    // Publish the message in a new thread
+                    synchronized (lock) {
+                        executor.execute(new Publisher("spAv1.0/" + groupId + "/NDATA/" + edgeNode, outboundPayload));
+                    }
+                } else {
+                    outboundPayload = null;
                 }
             }
         } else if (splitTopic[0].equals("spAv1.0") && splitTopic[1].equals(groupId) && splitTopic[2].equals("DCMD")
@@ -544,7 +560,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                         new Publisher("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, outboundPayload));
             }
         } else if (splitTopic[0].equals("spAv1.0") && splitTopic[1].equals(groupId) && splitTopic[2].equals("DCMD")
-                && splitTopic[3].equals(edgeNode) && splitTopic[4].equals("rtu")) {
+                && splitTopic[3].equals(edgeNode) && splitTopic[4].equals("meters")) {
             synchronized (lock) {
                 System.out.println("Command received for device: " + splitTopic[4] + " on topic: " + topic);
 
@@ -570,7 +586,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                 }
 
                 executor.execute(
-                        new Publisher("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/rtu", outboundPayload));
+                        new Publisher("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/meters", outboundPayload));
             }
         }
     }
