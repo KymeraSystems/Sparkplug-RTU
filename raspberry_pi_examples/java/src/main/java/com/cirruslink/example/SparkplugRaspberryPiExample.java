@@ -441,56 +441,51 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         // Initialize the outbound payload if required.
         KuraPayload outboundPayload = new KuraPayload();
         outboundPayload.setTimestamp(new Date());
+        outboundPayload = addSeqNum(outboundPayload);
 
         String[] splitTopic = topic.split("/");
         System.out.println(topic);
         if (splitTopic[0].equals("spAv1.0") && splitTopic[1].equals(groupId) && splitTopic[2].equals("NCMD")
                 && splitTopic[3].equals(edgeNode)) {
-            CloudPayloadProtoBufDecoderImpl decoder = new CloudPayloadProtoBufDecoderImpl(message.getPayload());
-            KuraPayload inboundPayload = decoder.buildFromByteArray();
+            synchronized (lock) {
+                CloudPayloadProtoBufDecoderImpl decoder = new CloudPayloadProtoBufDecoderImpl(message.getPayload());
+                KuraPayload inboundPayload = decoder.buildFromByteArray();
 
-            Iterator<Entry<String, Object>> metrics = inboundPayload.metrics().entrySet().iterator();
-            while (metrics.hasNext()) {
-                Entry<String, Object> entry = metrics.next();
-                System.out.println("Metric: " + entry.getKey() + " :: " + entry.getValue());
+                Iterator<Entry<String, Object>> metrics = inboundPayload.metrics().entrySet().iterator();
+                while (metrics.hasNext()) {
+                    Entry<String, Object> entry = metrics.next();
+                    System.out.println("Metric: " + entry.getKey() + " :: " + entry.getValue());
 
-                if ("Node Control/Rebirth".equals(entry.getKey())) {
-                    if ((boolean) entry.getValue() == true) {
-                        publishBirth();
+                    if ("Node Control/Rebirth".equals(entry.getKey())) {
+                        if ((boolean) entry.getValue() == true) {
+                            publishBirth();
+                        }
+                    } else if ("Node Control/Reboot".equals(entry.getKey())) {
+                        if ((boolean) entry.getValue() == true) {
+                            System.out.println("Received a Reboot command.");
+                        }
+                    } else if ("Node Control/Next Server".equals(entry.getKey())) {
+                        if ((boolean) entry.getValue() == true) {
+                            System.out.println("Received a Next Server command.");
+                        }
+                    } else if ("Node Control/Scan Rate ms".equals(entry.getKey())) {
+                        scanRateMs = (Integer) inboundPayload.getMetric("Node Control/Scan Rate ms");
+                        if (scanRateMs < 100) {
+                            // Limit Scan Rate to a minimum of 100ms
+                            scanRateMs = 100;
+                        }
+                        outboundPayload.addMetric("Node Control/Scan Rate ms", scanRateMs);
+                    } else {
+                        TagValue v = rtu.values.get(entry.getKey());
+                        if (v != null) {
+                            v.setValue(entry.getValue(), false);
+                            outboundPayload.addMetric(entry.getKey(), v.getValue());
+                        }
                     }
-                } else if ("Node Control/Reboot".equals(entry.getKey())) {
-                    if ((boolean) entry.getValue() == true) {
-                        System.out.println("Received a Reboot command.");
-                    }
-                } else if ("Node Control/Next Server".equals(entry.getKey())) {
-                    if ((boolean) entry.getValue() == true) {
-                        System.out.println("Received a Next Server command.");
-                    }
-                } else if ("Node Control/Scan Rate ms".equals(entry.getKey())) {
-                    scanRateMs = (Integer) inboundPayload.getMetric("Node Control/Scan Rate ms");
-                    if (scanRateMs < 100) {
-                        // Limit Scan Rate to a minimum of 100ms
-                        scanRateMs = 100;
-                    }
-                    outboundPayload.addMetric("Node Control/Scan Rate ms", scanRateMs);
-                } else {
-                    TagValue v = rtu.values.get(entry.getKey());
-                    if (v != null) {
-                        v.setValue(entry.getValue(), false);
-                        outboundPayload.addMetric(entry.getKey(), v.getValue());
-                    }
+
+
                 }
-
-                if (!outboundPayload.metrics().isEmpty()) {
-
-                    outboundPayload = addSeqNum(outboundPayload);
-                    // Publish the message in a new thread
-                    synchronized (lock) {
-                        executor.execute(new Publisher("spAv1.0/" + groupId + "/NDATA/" + edgeNode, outboundPayload));
-                    }
-                } else {
-                    outboundPayload = null;
-                }
+                executor.execute(new Publisher("spAv1.0/" + groupId + "/NDATA/" + edgeNode, outboundPayload));
             }
         } else if (splitTopic[0].equals("spAv1.0") && splitTopic[1].equals(groupId) && splitTopic[2].equals("DCMD")
                 && splitTopic[3].equals(edgeNode) && splitTopic[4].equals(deviceId)) {
