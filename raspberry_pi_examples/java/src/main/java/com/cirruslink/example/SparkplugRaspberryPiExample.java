@@ -66,12 +66,12 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
     private static final String SW_VERSION = "v1.0.0";
 
     // Configuration
-    private String serverUrl = "tcp://192.168.100.10:1883"; // Change to point to
+    private String serverUrl = "tcp://dv.kymerasystems.com:1883"; // Change to point to
     // your MQTT Server
     private String groupId = "Sparkplug Devices";
-    private String edgeNode = "Java Raspberry Pi";
+    private String edgeNode = null;
     private String deviceId = "Pibrella";
-    private String clientId = "javaPibrellaClientId";
+    private String clientId;
     private String username = "admin";
     private String password = "changeme";
     private ExecutorService executor;
@@ -85,6 +85,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
     private long uptimeAtStart = 0L;
     private int buttonCounter = 0;
     private int buttonCounterSetpoint = 10;
+    private boolean isAPi = false;
 
     private int bdSeq = 0;
     private int seq = 0;
@@ -114,6 +115,9 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                 while ((strLine = br.readLine()) != null) {
                     if (strLine.startsWith("Serial")) {
                         edgeNode = strLine.substring(strLine.length() - 8);
+                        clientId = strLine.substring(strLine.length() - 8);
+                        isAPi = true;
+                        break;
                     }
                 }
             } catch (FileNotFoundException e) {
@@ -131,6 +135,12 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
             }
         }
 
+
+        if (edgeNode == null) {
+            String uuid = UUID.randomUUID().toString();
+            edgeNode = uuid.substring(uuid.length() - 8);
+            clientId = uuid.substring(uuid.length() - 8);
+        }
         rtu = new RTU(edgeNode);
 
     }
@@ -463,6 +473,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                     } else if ("Node Control/Reboot".equals(entry.getKey())) {
                         if ((boolean) entry.getValue() == true) {
                             System.out.println("Received a Reboot command.");
+                            Runtime.getRuntime().exec("reboot");
                         }
                     } else if ("Node Control/Next Server".equals(entry.getKey())) {
                         if ((boolean) entry.getValue() == true) {

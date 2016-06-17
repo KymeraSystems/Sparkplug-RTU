@@ -58,15 +58,19 @@ public class Meter extends HashMap<String,TagValue> {
         }
 
         if (c.get(Calendar.HOUR_OF_DAY)==0){
+
             get(String.format("%s/meter/%s",tagPath,"yday/volume")).updateValue(get(String.format("%s/meter/%s",tagPath,"today/volume")).getValue());
             payload.addMetric(String.format("%s/meter/%s",tagPath,"yday/volume"),get(String.format("%s/meter/%s",tagPath,"today/volume")).getValue());
             get(String.format("%s/meter/%s",tagPath,"today/volume")).updateValue(0.0);
             payload.addMetric(String.format("%s/meter/%s",tagPath,"today/volume"),0.0);
+            //time, meterid, value (yday volume) in json into records/daily
         }
 
         if (c.get(Calendar.MINUTE)==0){
+            //store value
             get(String.format("%s/meter/%s",tagPath,"records/hourly")).updateValue((float)c.get(Calendar.HOUR_OF_DAY));
             payload.addMetric(String.format("%s/meter/%s",tagPath,"records/hourly"),(float)c.get(Calendar.HOUR_OF_DAY));
+            //time, meterid, value (stored volume) in json into records/hourly
         }
     }
 
