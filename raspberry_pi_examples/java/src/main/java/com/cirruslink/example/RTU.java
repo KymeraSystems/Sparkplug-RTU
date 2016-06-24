@@ -16,9 +16,9 @@ public class RTU {
     Map<String,Meter> meters = new HashMap();
     Map<String,TagValue> values = new HashMap<>();
 
-    public RTU(String rtu){
+    public RTU(String rtu, int count){
         this.tagPath = rtu;
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < count; i++) {
             meters.put(String.format("meter_%d", i),new Meter(String.format("meter_%d", i)));
         }
 

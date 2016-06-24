@@ -21,6 +21,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import com.cirruslink.example.model.TagValue;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.kura.core.cloud.CloudPayloadEncoder;
 import org.eclipse.kura.core.cloud.CloudPayloadProtoBufDecoderImpl;
 import org.eclipse.kura.core.cloud.CloudPayloadProtoBufEncoderImpl;
@@ -44,6 +48,9 @@ import com.pi4j.device.pibrella.impl.PibrellaDevice;
 import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
 import com.pi4j.io.gpio.event.GpioPinListenerDigital;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /*
  * This is a VERY simple implementation of an MQTT Edge of Network Node (EoN Node) and an associated 
@@ -58,8 +65,10 @@ import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 
 public class SparkplugRaspberryPiExample implements MqttCallback {
 
-    private static final Pibrella pibrella = new PibrellaDevice();
+    private static Pibrella pibrella;
     public static final Random random = new Random();
+
+    private static final HashMap<String, Object> settings = new HashMap();
 
     // HW/SW versions
     private static final String HW_VERSION = "Raspberry Pi 3 model B";
@@ -82,7 +91,6 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
     private int scanRateMs = 1000;
     private long upTimeMs = 0;
     private long upTimeStart = System.currentTimeMillis();
-    private long uptimeAtStart = 0L;
     private int buttonCounter = 0;
     private int buttonCounterSetpoint = 10;
     private boolean isAPi = false;
@@ -95,54 +103,89 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
     RTU rtu;
     private String adapter = "wlan0";
 
-    public SparkplugRaspberryPiExample() {
-        File uptimeFile = new File("/proc/uptime");
-        if (uptimeFile.exists()) {
-            try {
-                uptimeAtStart = (long) (Float.parseFloat(new Scanner(uptimeFile).useDelimiter(" ").next()) * 1000L);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
+    public SparkplugRaspberryPiExample()
+    {
 
+        Properties defaultProps = new Properties();
+        settings.put("meter id", "unknown");
+        settings.put("meter count", Integer.valueOf(5));
+        settings.put("IsAPi", Boolean.valueOf(false));
+        settings.put("broker ip", "192.168.100.10");
+        settings.put("broker port", Integer.valueOf(1883));
+        settings.put("broker username", "admin");
+        settings.put("broker password", "changeme");
+        settings.put("latitude",random.nextDouble()*(5.99995)+53.875221);
+        settings.put("longitude",random.nextDouble()*(-19.731444)-110.157104);
+
+        String settingsFile = "rtu-config.json";
+        if (new File(settingsFile).exists())
+        {
+            System.out.println("config file exists");
+            readConfig();
+        }
+        else
+        {
+            System.out.println("config file does not exist");
+            initializeProps();
+        }
+        writeConfig();
+
+        this.edgeNode = ((String)settings.get("meter id"));
+        this.clientId = ((String)settings.get("meter id"));
+        this.isAPi = (Boolean)settings.get("IsAPi");
+        int meterCount = (int) settings.get("meter count");
+        this.serverUrl = String.format("tcp://%s:%d", new Object[] { settings.get("broker ip"), settings.get("broker port") });
+        this.username = ((String)settings.get("broker username"));
+        this.password = ((String)settings.get("broker password"));
+
+        this.rtu = new RTU(this.edgeNode, meterCount);
+        if (this.isAPi) {
+            pibrella = new PibrellaDevice();
+        }
+    }
+
+    private void initializeProps()
+    {
+        System.out.println("props file doesn't exist");
+        String uuid = UUID.randomUUID().toString();
+        String id = uuid.substring(uuid.length() - 8);
+        settings.put("meter id", id);
         File cpuinfo = new File("/proc/cpuinfo");
-        if (cpuinfo.exists()) {
+        if (cpuinfo.exists())
+        {
             BufferedReader br = null;
-            try {
+            try
+            {
                 FileInputStream fstream = new FileInputStream(cpuinfo);
                 br = new BufferedReader(new InputStreamReader(fstream));
                 String strLine;
                 while ((strLine = br.readLine()) != null) {
-                    if (strLine.startsWith("Serial")) {
-                        edgeNode = strLine.substring(strLine.length() - 8);
-                        clientId = strLine.substring(strLine.length() - 8);
-                        isAPi = true;
-                        break;
+                    if (strLine.startsWith("Serial"))
+                    {
+                        settings.put("meter id", strLine.substring(strLine.length() - 8));
+                        this.isAPi = true;
                     }
                 }
-            } catch (FileNotFoundException e) {
-
-            } catch (IOException e) {
-
-            } finally {
                 if (br != null) {
-                    try {
+                    try
+                    {
                         br.close();
-                    } catch (IOException e) {
-
                     }
+                    catch (IOException localIOException) {}
+                }
+                settings.put("IsAPi", String.valueOf(this.isAPi));
+            }
+            catch (FileNotFoundException localFileNotFoundException) {}catch (IOException localIOException2) {}finally
+            {
+                if (br != null) {
+                    try
+                    {
+                        br.close();
+                    }
+                    catch (IOException localIOException4) {}
                 }
             }
         }
-
-
-        if (edgeNode == null) {
-            String uuid = UUID.randomUUID().toString();
-            edgeNode = uuid.substring(uuid.length() - 8);
-            clientId = uuid.substring(uuid.length() - 8);
-        }
-        rtu = new RTU(edgeNode);
-
     }
 
     public static void main(String[] args) {
@@ -154,8 +197,9 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
     public void run() {
         try {
             // Create the Raspberry Pi Pibrella board listeners
-            createPibrellaListeners();
-
+            if (this.isAPi) {
+                createPibrellaListeners();
+            }
             // Thread pool for outgoing published messages
             executor = Executors.newFixedThreadPool(1);
 
@@ -174,7 +218,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                         KuraPayload outboundPayload = new KuraPayload();
                         outboundPayload.setTimestamp(new Date());
                         outboundPayload = addSeqNum(outboundPayload);
-                        outboundPayload.addMetric("Up Time ms", System.currentTimeMillis() - upTimeStart + uptimeAtStart);
+                        outboundPayload.addMetric("Up Time ms", System.currentTimeMillis() - upTimeStart);
 
                         for (Entry<String, TagValue> t : rtu.values.entrySet()) {
                             if (t.getValue().updateValue()) {
@@ -333,8 +377,8 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                 KuraPosition position = new KuraPosition();
                 position.setAltitude(319);
                 position.setHeading(0);
-                position.setLatitude(38.83667239);
-                position.setLongitude(-94.67176706);
+                position.setLatitude((double)settings.get("latitude"));
+                position.setLongitude((double)settings.get("longitude"));
                 position.setPrecision(2.0);
                 position.setSatellites(8);
                 position.setSpeed(0);
@@ -362,39 +406,41 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                 // here will appear in a
                 // folder hierarchy under the associated Device.
                 //
-                payload = new KuraPayload();
-                payload.setTimestamp(new Date());
-                payload = addSeqNum(payload);
-                // Create an "Inputs" folder of process variables
-                payload.addMetric("Inputs/a", pibrella.getInputPin(PibrellaInput.A).isHigh());
-                payload.addMetric("Inputs/b", pibrella.getInputPin(PibrellaInput.B).isHigh());
-                payload.addMetric("Inputs/c", pibrella.getInputPin(PibrellaInput.C).isHigh());
-                payload.addMetric("Inputs/d", pibrella.getInputPin(PibrellaInput.D).isHigh());
-                // Create an "Outputs" folder of process variables
-                payload.addMetric("Outputs/e", pibrella.getOutputPin(PibrellaOutput.E).isHigh());
-                payload.addMetric("Outputs/f", pibrella.getOutputPin(PibrellaOutput.F).isHigh());
-                payload.addMetric("Outputs/g", pibrella.getOutputPin(PibrellaOutput.G).isHigh());
-                payload.addMetric("Outputs/h", pibrella.getOutputPin(PibrellaOutput.H).isHigh());
-                // Create an additional folder under "Outputs" called "LEDs"
-                payload.addMetric("Outputs/LEDs/green", pibrella.getOutputPin(PibrellaOutput.LED_GREEN).isHigh());
-                payload.addMetric("Outputs/LEDs/red", pibrella.getOutputPin(PibrellaOutput.LED_RED).isHigh());
-                payload.addMetric("Outputs/LEDs/yellow", pibrella.getOutputPin(PibrellaOutput.LED_YELLOW).isHigh());
-                // Place the button process variables at the root level of the
-                // tag hierarchy
-                payload.addMetric("button", pibrella.getInputPin(PibrellaInput.Button).isHigh());
-                payload.addMetric("button count", buttonCounter);
-                payload.addMetric("button count setpoint", buttonCounterSetpoint);
-                payload.addMetric("buzzer", false);
 
-                //
-                // Add some properties to the Properties folder
-                //
-                payload.addMetric("Properties/dev_type", "Pibrella");
-                payload.addMetric("Properties/hw_version", "3.0.1");
+                if (isAPi) {
+                    payload = new KuraPayload();
+                    payload.setTimestamp(new Date());
+                    payload = addSeqNum(payload);
+                    // Create an "Inputs" folder of process variables
+                    payload.addMetric("Inputs/a", pibrella.getInputPin(PibrellaInput.A).isHigh());
+                    payload.addMetric("Inputs/b", pibrella.getInputPin(PibrellaInput.B).isHigh());
+                    payload.addMetric("Inputs/c", pibrella.getInputPin(PibrellaInput.C).isHigh());
+                    payload.addMetric("Inputs/d", pibrella.getInputPin(PibrellaInput.D).isHigh());
+                    // Create an "Outputs" folder of process variables
+                    payload.addMetric("Outputs/e", pibrella.getOutputPin(PibrellaOutput.E).isHigh());
+                    payload.addMetric("Outputs/f", pibrella.getOutputPin(PibrellaOutput.F).isHigh());
+                    payload.addMetric("Outputs/g", pibrella.getOutputPin(PibrellaOutput.G).isHigh());
+                    payload.addMetric("Outputs/h", pibrella.getOutputPin(PibrellaOutput.H).isHigh());
+                    // Create an additional folder under "Outputs" called "LEDs"
+                    payload.addMetric("Outputs/LEDs/green", pibrella.getOutputPin(PibrellaOutput.LED_GREEN).isHigh());
+                    payload.addMetric("Outputs/LEDs/red", pibrella.getOutputPin(PibrellaOutput.LED_RED).isHigh());
+                    payload.addMetric("Outputs/LEDs/yellow", pibrella.getOutputPin(PibrellaOutput.LED_YELLOW).isHigh());
+                    // Place the button process variables at the root level of the
+                    // tag hierarchy
+                    payload.addMetric("button", pibrella.getInputPin(PibrellaInput.Button).isHigh());
+                    payload.addMetric("button count", buttonCounter);
+                    payload.addMetric("button count setpoint", buttonCounterSetpoint);
+                    payload.addMetric("buzzer", false);
 
-                // Publish the Device BIRTH Certificate now
-                executor.execute(new Publisher("spAv1.0/" + groupId + "/DBIRTH/" + edgeNode + "/" + deviceId, payload));
+                    //
+                    // Add some properties to the Properties folder
+                    //
+                    payload.addMetric("Properties/dev_type", "Pibrella");
+                    payload.addMetric("Properties/hw_version", "3.0.1");
 
+                    // Publish the Device BIRTH Certificate now
+                    executor.execute(new Publisher("spAv1.0/" + groupId + "/DBIRTH/" + edgeNode + "/" + deviceId, payload));
+                }
                 payload = new KuraPayload();
                 payload.setTimestamp(new Date());
                 payload = addSeqNum(payload);
@@ -501,7 +547,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         } else if (splitTopic[0].equals("spAv1.0") && splitTopic[1].equals(groupId) && splitTopic[2].equals("DCMD")
                 && splitTopic[3].equals(edgeNode) && splitTopic[4].equals(deviceId)) {
             synchronized (lock) {
-                System.out.println("Command recevied for device: " + splitTopic[4] + " on topic: " + topic);
+                System.out.println("Command received for device: " + splitTopic[4] + " on topic: " + topic);
 
                 // Get the incoming metric key and value
                 CloudPayloadProtoBufDecoderImpl decoder = new CloudPayloadProtoBufDecoderImpl(message.getPayload());
@@ -740,5 +786,43 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                 }
             }
         });
+    }
+
+    private void readConfig()
+    {
+
+        try {
+
+            ObjectMapper mapper = new ObjectMapper();
+
+            // read JSON from a file
+            Map<String, Object> map = mapper.readValue(
+                    new File("rtu-config.json"),
+                    new TypeReference<Map<String, Object>>() {
+                    });
+
+            for (Entry<String,Object> e:map.entrySet()){
+                settings.put(e.getKey(),e.getValue());}
+
+
+        } catch (JsonGenerationException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void writeConfig()
+    {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.writeValue(new File("rtu-config.json"),settings);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 }
