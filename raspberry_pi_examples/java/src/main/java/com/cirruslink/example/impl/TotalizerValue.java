@@ -26,7 +26,7 @@ public class TotalizerValue implements TagValue<Float> {
 
     @Override
     public void setValue(Float newValue, boolean flag) {
-        double value = newValue;
+        double value =  newValue;
         if (value > 0.0) {
             this.delta = value * updateRate / 86400000L;
         } else if (value == 0.0) {
@@ -48,7 +48,7 @@ public class TotalizerValue implements TagValue<Float> {
             double sub = delta * 0.03 * rand;
             value += delta + sub;
         }
-        if (Math.abs(value-lastSent)> deadBand){
+        if (Math.abs(value-lastSent) > deadBand){
             lastSent = (float) value;
             return true;
         } else{
@@ -58,6 +58,7 @@ public class TotalizerValue implements TagValue<Float> {
 
     @Override
     public boolean updateValue(Float newValue) {
+
         this.value = newValue;
         return true;
     }

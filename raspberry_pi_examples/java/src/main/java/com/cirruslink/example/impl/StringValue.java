@@ -24,7 +24,7 @@ public class StringValue implements TagValue<String> {
 
     @Override
     public boolean updateValue() {
-        return true;
+        return false;
     }
 
     @Override

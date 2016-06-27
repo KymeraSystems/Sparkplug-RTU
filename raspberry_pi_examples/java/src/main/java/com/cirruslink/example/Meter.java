@@ -2,6 +2,8 @@ package com.cirruslink.example;
 
 import com.cirruslink.example.impl.*;
 import com.cirruslink.example.model.TagValue;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.kura.message.KuraPayload;
 
 import java.util.*;
@@ -44,7 +46,7 @@ public class Meter extends HashMap<String, TagValue> {
         this.put(tagPath + "/meter/analysis/co", new MemoryFloatValue(0.0));
         this.put(tagPath + "/meter/analysis/he", new MemoryFloatValue(0.09));
         this.put(tagPath + "/meter/analysis/o2", new MemoryFloatValue(0.0));
-        this.put(tagPath + "/meter/config/pipe diameter", new MemoryFloatValue());
+        this.put(tagPath + "/meter/config/pipe diameter", new MemoryFloatValue(0.0));
         this.put(tagPath + "/meter/config/orifice diameter", new MemoryFloatValue(0.0));
 
     }
@@ -59,25 +61,18 @@ public class Meter extends HashMap<String, TagValue> {
             }
         }
 
-        if (c.get(Calendar.HOUR_OF_DAY) == 0) {
 
-            get(String.format("%s/meter/%s", tagPath, "yday/volume")).updateValue(get(String.format("%s/meter/%s", tagPath, "today/volume")).getValue());
-            payload.addMetric(String.format("%s/meter/%s", tagPath, "yday/volume"), get(String.format("%s/meter/%s", tagPath, "today/volume")).getValue());
-            get(String.format("%s/meter/%s", tagPath, "today/volume")).updateValue(0.0);
-            payload.addMetric(String.format("%s/meter/%s", tagPath, "today/volume"), 0.0);
-            //time, meterid, value (yday volume) in json into records/daily
+        if (/*c.get(Calendar.MINUTE) == 0 && */c.get(Calendar.SECOND) == 0) {
+            createHourlyJSONRecord(payload);
         }
 
-        if (c.get(Calendar.MINUTE) == 0) {
-            //store value
-            get(String.format("%s/meter/%s", tagPath, "records/hourly")).updateValue(String.valueOf(c.get(Calendar.HOUR_OF_DAY)));
-            payload.addMetric(String.format("%s/meter/%s", tagPath, "records/hourly"), String.valueOf(c.get(Calendar.HOUR_OF_DAY)));
-            //time, meterid, value (stored volume) in json into records/hourly
+        if (/*c.get(Calendar.HOUR_OF_DAY) == 0 && c.get(Calendar.MINUTE) == 0 &&*/ c.get(Calendar.SECOND) == 0) {
+            createDailyRecord(payload);
         }
     }
 
     public void createAnalog(Float lowValue, Float highValue, Float variance, Float deadBand, String basePath) {
-        System.out.println(String.format("Tag Path:%s || Base Path:%s", tagPath, basePath));
+        // System.out.println(String.format("Tag Path:%s || Base Path:%s", tagPath, basePath));
         FloatValue value = new FloatValue(lowValue, highValue, variance, deadBand);
         this.put(tagPath + basePath + "/value", value);
 
@@ -105,6 +100,44 @@ public class Meter extends HashMap<String, TagValue> {
         this.put(tagPath + basePath + "/alm/hh/en", en);
         this.put(tagPath + basePath + "/alm/hh/sp", sp);
         this.put(tagPath + basePath + "/alm/hh/alarm", new AnalogAlarmValue(en, value, sp, AnalogAlarmValue.AlarmType.HIGH));
+    }
+
+
+    public void createHourlyJSONRecord(KuraPayload payload) {
+        try {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("t_stamp", new Date());
+            map.put("id", tagPath);
+            map.put("value", get(String.format("%s/meter/%s", tagPath, "today/volume")));
+            ObjectMapper mapper = new ObjectMapper();
+            payload.addMetric(String.format("%s/meter/%s", tagPath, "records/hourly"), mapper.writeValueAsString(map));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void createDailyRecord(KuraPayload payload) {
+
+        try {
+            get(String.format("%s/meter/%s", tagPath, "yday/volume")).updateValue(get(String.format("%s/meter/%s", tagPath, "today/volume")).getValue());
+
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("t_stamp", new Date());
+            map.put("id", tagPath);
+            map.put("value", get(String.format("%s/meter/%s", tagPath, "yday/volume")));
+
+            ObjectMapper mapper = new ObjectMapper();
+
+            payload.addMetric(String.format("%s/meter/%s", tagPath, "yday/volume"), get(String.format("%s/meter/%s", tagPath, "today/volume")).getValue());
+            get(String.format("%s/meter/%s", tagPath, "today/volume")).updateValue((float) 0.0);
+            payload.addMetric(String.format("%s/meter/%s", tagPath, "today/volume"), (float) 0.0);
+
+            payload.addMetric(String.format("%s/meter/%s", tagPath, "records/daily"), mapper.writeValueAsString(map));
+
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
 }

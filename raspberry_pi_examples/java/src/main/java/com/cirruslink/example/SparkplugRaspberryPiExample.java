@@ -73,6 +73,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
     // HW/SW versions
     private static final String HW_VERSION = "Raspberry Pi 3 model B";
     private static final String SW_VERSION = "v1.0.0";
+    private String[] servers;
 
     // Configuration
     private String serverUrl = "tcp://dv.kymerasystems.com:1883"; // Change to point to
@@ -89,7 +90,6 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
     // Some control and parameter points for this demo
     private int configChangeCount = 1;
     private int scanRateMs = 1000;
-    private long upTimeMs = 0;
     private long upTimeStart = System.currentTimeMillis();
     private int buttonCounter = 0;
     private int buttonCounterSetpoint = 10;
@@ -103,40 +103,38 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
     RTU rtu;
     private String adapter = "wlan0";
 
-    public SparkplugRaspberryPiExample()
-    {
+    public SparkplugRaspberryPiExample() {
 
-        Properties defaultProps = new Properties();
         settings.put("meter id", "unknown");
         settings.put("meter count", Integer.valueOf(5));
         settings.put("IsAPi", Boolean.valueOf(false));
-        settings.put("broker ip", "192.168.100.10");
-        settings.put("broker port", Integer.valueOf(1883));
         settings.put("broker username", "admin");
         settings.put("broker password", "changeme");
-        settings.put("latitude",random.nextDouble()*(5.99995)+53.875221);
-        settings.put("longitude",random.nextDouble()*(-19.731444)-110.157104);
+        settings.put("latitude", random.nextDouble() * (5.99995) + 53.875221);
+        settings.put("longitude", random.nextDouble() * (-19.731444) - 110.157104);
+        settings.put("anonymous", false);
+        ArrayList<String> tempServerList = new ArrayList<>();
+        tempServerList.add("tcp://192.168.100.60:1883");
+        tempServerList.add("tcp://127.0.0.1:1883");
+        settings.put("servers",tempServerList);
 
         String settingsFile = "rtu-config.json";
-        if (new File(settingsFile).exists())
-        {
+        if (new File(settingsFile).exists()) {
             System.out.println("config file exists");
             readConfig();
-        }
-        else
-        {
+        } else {
             System.out.println("config file does not exist");
             initializeProps();
         }
         writeConfig();
 
-        this.edgeNode = ((String)settings.get("meter id"));
-        this.clientId = ((String)settings.get("meter id"));
-        this.isAPi = (Boolean)settings.get("IsAPi");
+        this.edgeNode = ((String) settings.get("meter id"));
+        this.clientId = MqttClient.generateClientId();
+        this.isAPi = (Boolean) settings.get("IsAPi");
         int meterCount = (int) settings.get("meter count");
-        this.serverUrl = String.format("tcp://%s:%d", new Object[] { settings.get("broker ip"), settings.get("broker port") });
-        this.username = ((String)settings.get("broker username"));
-        this.password = ((String)settings.get("broker password"));
+        this.servers = ((ArrayList<String>) settings.get("servers")).toArray(new String[]{});
+        this.username = ((String) settings.get("broker username"));
+        this.password = ((String) settings.get("broker password"));
 
         this.rtu = new RTU(this.edgeNode, meterCount);
         if (this.isAPi) {
@@ -144,45 +142,37 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         }
     }
 
-    private void initializeProps()
-    {
+    private void initializeProps() {
         System.out.println("props file doesn't exist");
         String uuid = UUID.randomUUID().toString();
         String id = uuid.substring(uuid.length() - 8);
         settings.put("meter id", id);
         File cpuinfo = new File("/proc/cpuinfo");
-        if (cpuinfo.exists())
-        {
+        if (cpuinfo.exists()) {
             BufferedReader br = null;
-            try
-            {
+            try {
                 FileInputStream fstream = new FileInputStream(cpuinfo);
                 br = new BufferedReader(new InputStreamReader(fstream));
                 String strLine;
                 while ((strLine = br.readLine()) != null) {
-                    if (strLine.startsWith("Serial"))
-                    {
+                    if (strLine.startsWith("Serial")) {
                         settings.put("meter id", strLine.substring(strLine.length() - 8));
                         this.isAPi = true;
                     }
                 }
-                if (br != null) {
-                    try
-                    {
-                        br.close();
-                    }
-                    catch (IOException localIOException) {}
+                try {
+                    br.close();
+                } catch (IOException localIOException) {
                 }
                 settings.put("IsAPi", String.valueOf(this.isAPi));
-            }
-            catch (FileNotFoundException localFileNotFoundException) {}catch (IOException localIOException2) {}finally
-            {
+            } catch (FileNotFoundException localFileNotFoundException) {
+            } catch (IOException localIOException2) {
+            } finally {
                 if (br != null) {
-                    try
-                    {
+                    try {
                         br.close();
+                    } catch (IOException localIOException4) {
                     }
-                    catch (IOException localIOException4) {}
                 }
             }
         }
@@ -269,10 +259,16 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
             options.setConnectionTimeout(10);
             // MQTT session parameter Keep Alive Period in Seconds
             options.setKeepAliveInterval(30);
-            // MQTT Client Username
-            options.setUserName(username);
-            // MQTT Client Password
-            options.setPassword(password.toCharArray());
+
+            options.setServerURIs(servers);
+
+            if (!(boolean) settings.get("anonymous")) {
+                // MQTT Client Username
+                options.setUserName(username);
+                // MQTT Client Password
+                options.setPassword(password.toCharArray());
+            }
+
             //
             // Build up the Death Certificate MQTT Payload. Note that the Death
             // Certificate payload sequence number
@@ -291,7 +287,9 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
             //
             // Create a new Paho MQTT Client
             //
-            client = new MqttClient(serverUrl, clientId);
+
+            client = new MqttClient(servers[0], clientId);
+
             //
             // Using the parameters set above, try to connect to the define MQTT
             // server now.
@@ -377,8 +375,8 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                 KuraPosition position = new KuraPosition();
                 position.setAltitude(319);
                 position.setHeading(0);
-                position.setLatitude((double)settings.get("latitude"));
-                position.setLongitude((double)settings.get("longitude"));
+                position.setLatitude((double) settings.get("latitude"));
+                position.setLongitude((double) settings.get("longitude"));
                 position.setPrecision(2.0);
                 position.setSatellites(8);
                 position.setSpeed(0);
@@ -499,50 +497,56 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         outboundPayload.setTimestamp(new Date());
         outboundPayload = addSeqNum(outboundPayload);
 
+        boolean sendPayload = false;
         String[] splitTopic = topic.split("/");
         System.out.println(topic);
         if (splitTopic[0].equals("spAv1.0") && splitTopic[1].equals(groupId) && splitTopic[2].equals("NCMD")
                 && splitTopic[3].equals(edgeNode)) {
-            synchronized (lock) {
-                CloudPayloadProtoBufDecoderImpl decoder = new CloudPayloadProtoBufDecoderImpl(message.getPayload());
-                KuraPayload inboundPayload = decoder.buildFromByteArray();
 
-                Iterator<Entry<String, Object>> metrics = inboundPayload.metrics().entrySet().iterator();
-                while (metrics.hasNext()) {
-                    Entry<String, Object> entry = metrics.next();
-                    System.out.println("Metric: " + entry.getKey() + " :: " + entry.getValue());
+            CloudPayloadProtoBufDecoderImpl decoder = new CloudPayloadProtoBufDecoderImpl(message.getPayload());
+            KuraPayload inboundPayload = decoder.buildFromByteArray();
 
-                    if ("Node Control/Rebirth".equals(entry.getKey())) {
-                        if ((boolean) entry.getValue() == true) {
-                            publishBirth();
-                        }
-                    } else if ("Node Control/Reboot".equals(entry.getKey())) {
-                        if ((boolean) entry.getValue() == true) {
-                            System.out.println("Received a Reboot command.");
-                            Runtime.getRuntime().exec("reboot");
-                        }
-                    } else if ("Node Control/Next Server".equals(entry.getKey())) {
-                        if ((boolean) entry.getValue() == true) {
-                            System.out.println("Received a Next Server command.");
-                        }
-                    } else if ("Node Control/Scan Rate ms".equals(entry.getKey())) {
-                        scanRateMs = (Integer) inboundPayload.getMetric("Node Control/Scan Rate ms");
-                        if (scanRateMs < 100) {
-                            // Limit Scan Rate to a minimum of 100ms
-                            scanRateMs = 100;
-                        }
-                        outboundPayload.addMetric("Node Control/Scan Rate ms", scanRateMs);
-                    } else {
-                        TagValue v = rtu.values.get(entry.getKey());
-                        if (v != null) {
-                            v.setValue(entry.getValue(), false);
-                            outboundPayload.addMetric(entry.getKey(), v.getValue());
-                        }
+            Iterator<Entry<String, Object>> metrics = inboundPayload.metrics().entrySet().iterator();
+            while (metrics.hasNext()) {
+                Entry<String, Object> entry = metrics.next();
+                System.out.println("Metric: " + entry.getKey() + " :: " + entry.getValue());
+
+                if ("Node Control/Rebirth".equals(entry.getKey())) {
+                    if ((boolean) entry.getValue()) {
+                        publishBirth();
                     }
+                } else if ("Node Control/Reboot".equals(entry.getKey())) {
+                    if ((boolean) entry.getValue() && isAPi) {
+                        System.out.println("Received a Reboot command.");
+                        Runtime.getRuntime().exec("reboot");
+                    }
+                } else if ("Node Control/Next Server".equals(entry.getKey())) {
+                    if ((boolean) entry.getValue()) {
 
-
+                        System.out.println("Received a Next Server command.");
+                    }
+                } else if ("Node Control/Scan Rate ms".equals(entry.getKey())) {
+                    scanRateMs = (Integer) inboundPayload.getMetric("Node Control/Scan Rate ms");
+                    if (scanRateMs < 100) {
+                        // Limit Scan Rate to a minimum of 100ms
+                        scanRateMs = 100;
+                    }
+                    outboundPayload.addMetric("Node Control/Scan Rate ms", scanRateMs);
+                    sendPayload = true;
+                } else {
+                    TagValue v = rtu.values.get(entry.getKey());
+                    if (v != null) {
+                        v.setValue(entry.getValue(), false);
+                        outboundPayload.addMetric(entry.getKey(), v.getValue());
+                        sendPayload = true;
+                    }
                 }
-                executor.execute(new Publisher("spAv1.0/" + groupId + "/NDATA/" + edgeNode, outboundPayload));
+
+                synchronized (lock) {
+                    if (sendPayload) {
+                        executor.execute(new Publisher("spAv1.0/" + groupId + "/NDATA/" + edgeNode, outboundPayload));
+                    }
+                }
             }
         } else if (splitTopic[0].equals("spAv1.0") && splitTopic[1].equals(groupId) && splitTopic[2].equals("DCMD")
                 && splitTopic[3].equals(edgeNode) && splitTopic[4].equals(deviceId)) {
@@ -627,6 +631,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                     String[] splitMetric = entry.getKey().split("/");
                     Meter m = rtu.meters.get(splitMetric[0]);
                     if (m != null) {
+
                         String metric = String.join("/", Arrays.copyOfRange(splitMetric, 0, splitMetric.length));
                         System.out.println(metric);
                         TagValue v = m.get(metric);
@@ -788,8 +793,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         });
     }
 
-    private void readConfig()
-    {
+    private void readConfig() {
 
         try {
 
@@ -801,8 +805,9 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                     new TypeReference<Map<String, Object>>() {
                     });
 
-            for (Entry<String,Object> e:map.entrySet()){
-                settings.put(e.getKey(),e.getValue());}
+            for (Entry<String, Object> e : map.entrySet()) {
+                settings.put(e.getKey(), e.getValue());
+            }
 
 
         } catch (JsonGenerationException e) {
@@ -814,14 +819,11 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         }
     }
 
-    private void writeConfig()
-    {
+    private void writeConfig() {
         try {
             ObjectMapper mapper = new ObjectMapper();
-            mapper.writeValue(new File("rtu-config.json"),settings);
-        }
-        catch (IOException e)
-        {
+            mapper.writeValue(new File("rtu-config.json"), settings);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
