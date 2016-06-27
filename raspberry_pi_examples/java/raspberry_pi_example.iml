@@ -15,6 +15,12 @@
       <excludeFolder url="file://$MODULE_DIR$/target/javaPibrellaClientId-tcp192168100101883" />
       <excludeFolder url="file://$MODULE_DIR$/target/maven-archiver" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho104525995795699-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho109605506521789-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho111355311469802-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho111653098649182-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho112145109519683-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho112230329100588-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho112457696307552-tcp192168100601883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho85849987121616-tcp192168100601883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho85857385894933-tcp192168100601883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho85865529761227-tcp192168100601883" />

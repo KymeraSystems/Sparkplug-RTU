@@ -15,6 +15,7 @@ import java.io.*;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ExecutorService;
@@ -113,10 +114,11 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         settings.put("latitude", random.nextDouble() * (5.99995) + 53.875221);
         settings.put("longitude", random.nextDouble() * (-19.731444) - 110.157104);
         settings.put("anonymous", false);
+        settings.put("updatable", false);
         ArrayList<String> tempServerList = new ArrayList<>();
         tempServerList.add("tcp://192.168.100.60:1883");
         tempServerList.add("tcp://127.0.0.1:1883");
-        settings.put("servers",tempServerList);
+        settings.put("servers", tempServerList);
 
         String settingsFile = "rtu-config.json";
         if (new File(settingsFile).exists()) {
@@ -147,6 +149,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         String uuid = UUID.randomUUID().toString();
         String id = uuid.substring(uuid.length() - 8);
         settings.put("meter id", id);
+
         File cpuinfo = new File("/proc/cpuinfo");
         if (cpuinfo.exists()) {
             BufferedReader br = null;
@@ -353,6 +356,9 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                 payload.addMetric("Properties/Hardware Version", HW_VERSION);
                 payload.addMetric("Properties/Software Version", SW_VERSION);
                 payload.addMetric("Properties/Config Change Count", configChangeCount);
+                if ((boolean) settings.get("updatable")) {
+                    payload.addMetric("System/Update Binary", new String());
+                }
 
                 String ipAddress = "unknown";
                 for (NetworkInterface netint : Collections.list(NetworkInterface.getNetworkInterfaces())) {
@@ -498,6 +504,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         outboundPayload = addSeqNum(outboundPayload);
 
         boolean sendPayload = false;
+        boolean reboot = false;
         String[] splitTopic = topic.split("/");
         System.out.println(topic);
         if (splitTopic[0].equals("spAv1.0") && splitTopic[1].equals(groupId) && splitTopic[2].equals("NCMD")
@@ -509,7 +516,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
             Iterator<Entry<String, Object>> metrics = inboundPayload.metrics().entrySet().iterator();
             while (metrics.hasNext()) {
                 Entry<String, Object> entry = metrics.next();
-                System.out.println("Metric: " + entry.getKey() + " :: " + entry.getValue());
+                //System.out.println("Metric: " + entry.getKey() + " :: " + entry.getValue());
 
                 if ("Node Control/Rebirth".equals(entry.getKey())) {
                     if ((boolean) entry.getValue()) {
@@ -518,12 +525,27 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                 } else if ("Node Control/Reboot".equals(entry.getKey())) {
                     if ((boolean) entry.getValue() && isAPi) {
                         System.out.println("Received a Reboot command.");
-                        Runtime.getRuntime().exec("reboot");
+                        outboundPayload.addMetric("Node Control/Reboot", false);
+                        sendPayload = true;
+                        reboot = true;
                     }
                 } else if ("Node Control/Next Server".equals(entry.getKey())) {
                     if ((boolean) entry.getValue()) {
 
                         System.out.println("Received a Next Server command.");
+                    }
+                } else if ("System/Update Binary".equals(entry.getKey())) {
+                    if (!((String) entry.getValue()).isEmpty()) {
+                        byte[] bytes = Base64.getDecoder().decode((String) entry.getValue());
+                        FileOutputStream stream = new FileOutputStream("raspberry_pi_example-1.0.1-SNAPSHOT.jar");
+                        try {
+                            stream.write(bytes);
+                        } finally {
+                            stream.close();
+                        }
+                        outboundPayload.addMetric("System/Update Binary", "");
+                        sendPayload = true;
+                        reboot = true;
                     }
                 } else if ("Node Control/Scan Rate ms".equals(entry.getKey())) {
                     scanRateMs = (Integer) inboundPayload.getMetric("Node Control/Scan Rate ms");
@@ -545,6 +567,12 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                 synchronized (lock) {
                     if (sendPayload) {
                         executor.execute(new Publisher("spAv1.0/" + groupId + "/NDATA/" + edgeNode, outboundPayload));
+                    }
+                }
+
+                if (reboot) {
+                    if (isAPi) {
+                        Runtime.getRuntime().exec("reboot");
                     }
                 }
             }

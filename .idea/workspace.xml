@@ -2,12 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bb4c5037-481c-4f31-ad9c-f0574619e717" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/raspberry_pi_examples/java/raspberry_pi_example.iml" afterPath="$PROJECT_DIR$/raspberry_pi_examples/java/raspberry_pi_example.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/Meter.java" afterPath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/Meter.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/SparkplugRaspberryPiExample.java" afterPath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/SparkplugRaspberryPiExample.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/impl/StringValue.java" afterPath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/impl/StringValue.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/impl/TotalizerValue.java" afterPath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/impl/TotalizerValue.java" />
     </list>
     <ignored path="Sparkplug-RTU.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -33,8 +31,20 @@
       <file leaf-file-name="SparkplugRaspberryPiExample.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/SparkplugRaspberryPiExample.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5148">
-              <caret line="238" column="7" selection-start-line="238" selection-start-column="7" selection-end-line="238" selection-end-column="7" />
+            <state relative-caret-position="723">
+              <caret line="539" column="107" selection-start-line="539" selection-start-column="107" selection-end-line="539" selection-end-column="107" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CloudPayloadProtoBufDecoderImpl.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/org/eclipse/kura/core/cloud/CloudPayloadProtoBufDecoderImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2911">
+              <caret line="162" column="32" selection-start-line="162" selection-start-column="32" selection-end-line="162" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -103,16 +113,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MemoryBooleanValue.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/impl/MemoryBooleanValue.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="792">
-              <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="StringValue.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/impl/StringValue.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -165,6 +165,7 @@
         <option value="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/impl/StringValue.java" />
         <option value="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/impl/TotalizerValue.java" />
         <option value="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/Meter.java" />
+        <option value="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/org/eclipse/kura/core/cloud/CloudPayloadProtoBufDecoderImpl.java" />
         <option value="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/SparkplugRaspberryPiExample.java" />
       </list>
     </option>
@@ -460,6 +461,48 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="kura" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cloud" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sparkplug-RTU" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sparkplug-RTU" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="raspberry_pi_examples" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="example" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -552,6 +595,8 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
+    <property name="settings.editor.splitter.proportion" value="0.2" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -1005,16 +1050,16 @@
       <workItem from="1466697977153" duration="11821000" />
       <workItem from="1466806191442" duration="5929000" />
       <workItem from="1467014030527" duration="5969000" />
-      <workItem from="1467033542037" duration="1859000" />
+      <workItem from="1467033542037" duration="5837000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="42421000" />
+    <option name="totallyTimeSpent" value="46399000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-13" y="-13" width="3026" height="1966" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1023,7 +1068,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.113667585" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2813046" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2813046" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1062,14 +1107,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/RTU.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="27" column="24" selection-start-line="27" selection-start-column="24" selection-end-line="27" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/impl/StringValue.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -1103,7 +1140,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2074">
           <caret line="164" column="0" selection-start-line="164" selection-start-column="0" selection-end-line="164" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1186,7 +1225,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1261,7 +1302,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1336,7 +1379,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1522,11 +1567,21 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/org/eclipse/kura/core/cloud/CloudPayloadProtoBufDecoderImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2911">
+          <caret line="162" column="32" selection-start-line="162" selection-start-column="32" selection-end-line="162" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/SparkplugRaspberryPiExample.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5148">
-          <caret line="238" column="7" selection-start-line="238" selection-start-column="7" selection-end-line="238" selection-end-column="7" />
-          <folding />
+        <state relative-caret-position="723">
+          <caret line="539" column="107" selection-start-line="539" selection-start-column="107" selection-end-line="539" selection-end-column="107" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
