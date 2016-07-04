@@ -15,7 +15,6 @@ import java.io.*;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.nio.file.Files;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ExecutorService;
@@ -49,9 +48,6 @@ import com.pi4j.device.pibrella.impl.PibrellaDevice;
 import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
 import com.pi4j.io.gpio.event.GpioPinListenerDigital;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 /*
  * This is a VERY simple implementation of an MQTT Edge of Network Node (EoN Node) and an associated 
@@ -107,8 +103,8 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
     public SparkplugRaspberryPiExample() {
 
         settings.put("meter id", "unknown");
-        settings.put("meter count", Integer.valueOf(5));
-        settings.put("IsAPi", Boolean.valueOf(false));
+        settings.put("meter count", 5);
+        settings.put("IsAPi", false);
         settings.put("broker username", "admin");
         settings.put("broker password", "changeme");
         settings.put("latitude", random.nextDouble() * (5.99995) + 53.875221);
@@ -167,7 +163,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                     br.close();
                 } catch (IOException localIOException) {
                 }
-                settings.put("IsAPi", String.valueOf(this.isAPi));
+                settings.put("IsAPi", this.isAPi);
             } catch (FileNotFoundException localFileNotFoundException) {
             } catch (IOException localIOException2) {
             } finally {
