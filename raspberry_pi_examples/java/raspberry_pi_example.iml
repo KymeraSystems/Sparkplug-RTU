@@ -22,10 +22,17 @@
       <excludeFolder url="file://$MODULE_DIR$/target/paho112230329100588-tcp192168100601883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho112457696307552-tcp192168100601883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho113301894850542-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho11606437933799-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho12894481064243-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho7919009977051-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho8237978798720-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho85658706791375-tcp192168100601883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho85849987121616-tcp192168100601883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho85857385894933-tcp192168100601883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho85865529761227-tcp192168100601883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho85872325705858-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho86523658001432-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho86664004805293-tcp192168100601883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho88013703229022-tcp192168100601883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho88129480564088-tcp192168100601883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho88247225758444-tcp192168100601883" />
@@ -33,6 +40,7 @@
       <excludeFolder url="file://$MODULE_DIR$/target/paho88415738425318-tcp192168100601883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho88539570384203-tcp192168100601883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho89390842904873-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho9016131017036-tcp192168100601883" />
       <excludeFolder url="file://$MODULE_DIR$/target/surefire" />
     </content>
     <orderEntry type="inheritedJdk" />

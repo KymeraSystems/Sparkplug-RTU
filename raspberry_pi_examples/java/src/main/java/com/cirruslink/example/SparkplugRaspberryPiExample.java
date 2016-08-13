@@ -69,7 +69,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 
     // HW/SW versions
     private static final String HW_VERSION = "Raspberry Pi 3 model B";
-    private static final String SW_VERSION = "v1.0.0";
+    private static final String SW_VERSION = "1.0.8";
     private String[] servers;
 
     // Configuration
@@ -83,6 +83,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
     private String password = "changeme";
     private ExecutorService executor;
     private MqttClient client;
+    private String settingsFile = "rtu-config.json";
 
     // Some control and parameter points for this demo
     private int configChangeCount = 1;
@@ -96,15 +97,14 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
     private int seq = 0;
 
     private Object lock = new Object();
-
     RTU rtu;
     private String adapter = "wlan0";
 
     public SparkplugRaspberryPiExample() {
 
         settings.put("meter id", "unknown");
+        initializeProps();
         settings.put("meter count", 5);
-        settings.put("IsAPi", false);
         settings.put("broker username", "admin");
         settings.put("broker password", "changeme");
         settings.put("latitude", random.nextDouble() * (5.99995) + 53.875221);
@@ -116,19 +116,16 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         tempServerList.add("tcp://127.0.0.1:1883");
         settings.put("servers", tempServerList);
 
-        String settingsFile = "rtu-config.json";
         if (new File(settingsFile).exists()) {
             System.out.println("config file exists");
             readConfig();
-        } else {
-            System.out.println("config file does not exist");
-            initializeProps();
         }
+        settings.put("version", SW_VERSION);
         writeConfig();
 
         this.edgeNode = ((String) settings.get("meter id"));
         this.clientId = MqttClient.generateClientId();
-        this.isAPi = (Boolean) settings.get("IsAPi");
+       // this.isAPi = (Boolean) settings.get("IsAPi");
         int meterCount = (int) settings.get("meter count");
         this.servers = ((ArrayList<String>) settings.get("servers")).toArray(new String[]{});
         this.username = ((String) settings.get("broker username"));
@@ -164,6 +161,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                 } catch (IOException localIOException) {
                 }
                 settings.put("IsAPi", this.isAPi);
+                settingsFile = "/home/pi/rtu-config.json";
             } catch (FileNotFoundException localFileNotFoundException) {
             } catch (IOException localIOException2) {
             } finally {
@@ -304,6 +302,9 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
             //
             client.subscribe("spAv1.0/" + groupId + "/NCMD/" + edgeNode + "/#", 0);
             client.subscribe("spAv1.0/" + groupId + "/DCMD/" + edgeNode + "/#", 0);
+            if ((boolean) settings.get("updatable")) {
+                client.subscribe("kymera/#", 0);
+            }
         } catch (Exception e) {
             System.out.println("Error Establishing an MQTT Session:");
             e.printStackTrace();
@@ -352,9 +353,6 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                 payload.addMetric("Properties/Hardware Version", HW_VERSION);
                 payload.addMetric("Properties/Software Version", SW_VERSION);
                 payload.addMetric("Properties/Config Change Count", configChangeCount);
-                if ((boolean) settings.get("updatable")) {
-                    payload.addMetric("System/Update Binary", new String());
-                }
 
                 String ipAddress = "unknown";
                 for (NetworkInterface netint : Collections.list(NetworkInterface.getNetworkInterfaces())) {
@@ -530,19 +528,6 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 
                         System.out.println("Received a Next Server command.");
                     }
-                } else if ("System/Update Binary".equals(entry.getKey())) {
-                    if (!((String) entry.getValue()).isEmpty()) {
-                        byte[] bytes = Base64.getDecoder().decode((String) entry.getValue());
-                        FileOutputStream stream = new FileOutputStream("raspberry_pi_example-1.0.1-SNAPSHOT.jar");
-                        try {
-                            stream.write(bytes);
-                        } finally {
-                            stream.close();
-                        }
-                        outboundPayload.addMetric("System/Update Binary", "");
-                        sendPayload = true;
-                        reboot = true;
-                    }
                 } else if ("Node Control/Scan Rate ms".equals(entry.getKey())) {
                     scanRateMs = (Integer) inboundPayload.getMetric("Node Control/Scan Rate ms");
                     if (scanRateMs < 100) {
@@ -668,6 +653,19 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 
                 executor.execute(
                         new Publisher("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/meters", outboundPayload));
+            }
+
+        } else if (splitTopic[0].equals("kymera") && splitTopic[1].equals("upgrade")) {
+            byte[] bytes = message.getPayload();
+            if (bytes.length > 0) {
+                //byte[] bytes = Base64.getDecoder().decode((String) entry.getValue());
+                FileOutputStream stream = new FileOutputStream("/home/pi/sparkplug-rtu.jar");
+                try {
+                    stream.write(bytes);
+                } finally {
+                    stream.close();
+                }
+                Runtime.getRuntime().exec("reboot");
             }
         }
     }
@@ -825,7 +823,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 
             // read JSON from a file
             Map<String, Object> map = mapper.readValue(
-                    new File("rtu-config.json"),
+                    new File(settingsFile),
                     new TypeReference<Map<String, Object>>() {
                     });
 
@@ -846,7 +844,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
     private void writeConfig() {
         try {
             ObjectMapper mapper = new ObjectMapper();
-            mapper.writeValue(new File("rtu-config.json"), settings);
+            mapper.writeValue(new File(settingsFile), settings);
         } catch (IOException e) {
             e.printStackTrace();
         }

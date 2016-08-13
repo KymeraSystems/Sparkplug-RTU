@@ -8,9 +8,9 @@ import com.cirruslink.example.model.TagValue;
  */
 public class MemoryFloatValue implements TagValue<Float> {
 
-    double value;
+    float value;
 
-    public MemoryFloatValue(double initialValue) {
+    public MemoryFloatValue(float initialValue) {
 
         this.value = initialValue;
     }
@@ -25,7 +25,7 @@ public class MemoryFloatValue implements TagValue<Float> {
 
     @Override
     public Float getValue() {
-        return (float) value;
+        return value;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class MemoryFloatValue implements TagValue<Float> {
 
     @Override
     public boolean updateValue(Float newValue) {
-        this.value = newValue.doubleValue();
+        this.value = newValue;
         return true;
     }
 }

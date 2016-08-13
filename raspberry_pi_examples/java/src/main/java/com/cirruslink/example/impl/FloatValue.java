@@ -11,7 +11,7 @@ public class FloatValue implements TagValue<Float> {
     private final Float highValue;
     private final Float variance;
     private final Float deadBand;
-    double value;
+    float value = 0.0f;
     private Float target;
     private Float lastSent = 0.0f;
 
@@ -35,17 +35,17 @@ public class FloatValue implements TagValue<Float> {
 
     @Override
     public Float getValue() {
-        return (float) value;
+        return value;
     }
 
     @Override
     public boolean updateValue() {
-        double rand = SparkplugRaspberryPiExample.random.nextDouble();
-        double sub = (target > (highValue - lowValue) / 2.0) ? (highValue - lowValue - target) : target + lowValue;
-        double v2 = rand + (target - value) / sub - 0.5;
+        float rand = SparkplugRaspberryPiExample.random.nextFloat();
+        float sub = (target > (highValue - lowValue) / 2.0) ? (highValue - lowValue - target) : target + lowValue;
+        float v2 = (rand*variance + ((target - value) / sub)) - (variance/2);
         value = value + v2;
         if (Math.abs(value - lastSent) > deadBand) {
-            lastSent = (float) value;
+            lastSent = value;
             return true;
         } else {
             return false;
