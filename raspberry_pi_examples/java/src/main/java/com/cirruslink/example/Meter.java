@@ -15,6 +15,33 @@ public class Meter extends HashMap<String, TagValue> {
     String tagPath;
     private int hourRecord;
     private int dayRecord;
+    public HashMap<Integer,TagValue> registers = new HashMap<>();
+    public HashMap<Integer,TagValue> coils = new HashMap<>();
+    int i = 0;
+    int j = 0;
+
+    @Override
+    public TagValue put(String key, TagValue value) {
+
+        if (value.getValue() instanceof Float) {
+            registers.put(i,value);
+            i += 2;
+        } else if (value.getValue() instanceof Integer) {
+            registers.put(i,value);
+            i += 2;
+        } else if (value.getValue() instanceof Double) {
+            registers.put(i,value);
+            i += 4;
+        } else if (value.getValue() instanceof Long) {
+            registers.put(i,value);
+            i += 4;
+        } else if (value.getValue() instanceof Boolean) {
+            coils.put(i,value);
+            j += 1;
+        }
+
+        return super.put(key, value);
+    }
 
     public Meter(String tagPath) {
         this.tagPath = tagPath;

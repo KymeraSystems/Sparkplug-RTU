@@ -17,14 +17,28 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import com.cirruslink.example.model.TagValue;
+import com.digitalpetri.modbus.requests.ReadCoilsRequest;
+import com.digitalpetri.modbus.requests.ReadHoldingRegistersRequest;
+import com.digitalpetri.modbus.requests.WriteSingleRegisterRequest;
+import com.digitalpetri.modbus.responses.ReadCoilsResponse;
+import com.digitalpetri.modbus.responses.ReadHoldingRegistersResponse;
+import com.digitalpetri.modbus.responses.WriteSingleRegisterResponse;
+import com.digitalpetri.modbus.slave.ModbusTcpSlave;
+import com.digitalpetri.modbus.slave.ModbusTcpSlaveConfig;
+import com.digitalpetri.modbus.slave.ServiceRequestHandler;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.PooledByteBufAllocator;
+import io.netty.util.ReferenceCountUtil;
+import org.apache.commons.lang3.SerializationUtils;
 import org.eclipse.kura.core.cloud.CloudPayloadEncoder;
 import org.eclipse.kura.core.cloud.CloudPayloadProtoBufDecoderImpl;
 import org.eclipse.kura.core.cloud.CloudPayloadProtoBufEncoderImpl;
@@ -92,13 +106,15 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
     private int buttonCounter = 0;
     private int buttonCounterSetpoint = 10;
     private boolean isAPi = false;
-
+    ModbusTcpSlave slave = null;
     private int bdSeq = 0;
     private int seq = 0;
 
     private Object lock = new Object();
     RTU rtu;
     private String adapter = "wlan0";
+    public static HashMap<Short, HashMap<Integer, TagValue>> modbusRegisters = new HashMap<>();
+    public static HashMap<Short, HashMap<Integer, TagValue>> modbusCoils = new HashMap<>();
 
     public SparkplugRaspberryPiExample() {
 
@@ -125,7 +141,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 
         this.edgeNode = ((String) settings.get("meter id"));
         this.clientId = MqttClient.generateClientId();
-       // this.isAPi = (Boolean) settings.get("IsAPi");
+        // this.isAPi = (Boolean) settings.get("IsAPi");
         int meterCount = (int) settings.get("meter count");
         this.servers = ((ArrayList<String>) settings.get("servers")).toArray(new String[]{});
         this.username = ((String) settings.get("broker username"));
@@ -135,6 +151,8 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         if (this.isAPi) {
             pibrella = new PibrellaDevice();
         }
+
+        setupModbusSlave();
     }
 
     private void initializeProps() {
@@ -846,6 +864,88 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
             ObjectMapper mapper = new ObjectMapper();
             mapper.writeValue(new File(settingsFile), settings);
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setupModbusSlave() {
+        ModbusTcpSlaveConfig mtsc = new ModbusTcpSlaveConfig.Builder().build();
+        slave = new ModbusTcpSlave(mtsc);
+
+        slave.setRequestHandler(new ServiceRequestHandler() {
+/*            @Override
+            public void onReadCoils(ServiceRequest<ReadCoilsRequest, ReadCoilsResponse> service) {
+                System.out.println(String.format("unit: %d coils: %d count: %d", service.getUnitId(), service.getRequest().getAddress(), service.getRequest().getQuantity()));
+                ReadCoilsRequest request = service.getRequest();
+                ByteBuf coils = PooledByteBufAllocator.DEFAULT.buffer(1);
+                coils.writeBoolean(false);
+                coils.writeBoolean(true);
+                coils.writeBoolean(false);
+                coils.writeBoolean(true);
+                coils.writeBoolean(true);
+                coils.writeBoolean(true);
+                coils.writeBoolean(false);
+                service.sendResponse(new ReadCoilsResponse(coils));
+
+                ReferenceCountUtil.release(request);
+            }
+*/
+            @Override
+            public void onReadHoldingRegisters(ServiceRequest<ReadHoldingRegistersRequest, ReadHoldingRegistersResponse> service) {
+                System.out.println(String.format("unit: %d register: %d count: %d", service.getUnitId(), service.getRequest().getAddress(), service.getRequest().getQuantity()));
+                ReadHoldingRegistersRequest request = service.getRequest();
+                HashMap map = modbusRegisters.get(service.getUnitId());
+                ByteBuf registers = PooledByteBufAllocator.DEFAULT.buffer(request.getQuantity());
+
+                int i = request.getAddress();
+
+                if (map != null) {
+                    try {
+
+                        while (i < request.getAddress() + request.getQuantity()) {
+
+                            TagValue tv = (TagValue) map.get(i);
+                            if (tv != null) {
+                                Object value = tv.getValue();
+                                if (value instanceof Float) {
+                                    registers.writeFloat((Float) value);
+                                   // System.out.println(String.format("Reference found %d,%d", i,2));
+                                    i += 2;
+                                } else if (value instanceof Integer) {
+                                    registers.writeInt((Integer) value);
+                                    //System.out.println(String.format("Reference found %d,%d", i,2));
+                                    i += 2;
+                                } else if (value instanceof Double) {
+                                    registers.writeDouble((Double) value);
+                                    //System.out.println(String.format("Reference found %d,%d", i,4));
+                                    i += 4;
+                                } else if (value instanceof Long) {
+                                    registers.writeLong((Long) value);
+                                    //System.out.println(String.format("Reference found %d,%d", i,4));
+                                    i += 4;
+                                }
+
+                            } else {
+                                registers.writeChar(0);
+                                i += 1;
+                            }
+                        }
+
+                    } catch (Exception e) {
+                    }
+                } else {
+                    System.out.println(String.format("Map Not Found: %d", service.getUnitId()));
+                }
+                service.sendResponse(new ReadHoldingRegistersResponse(registers));
+
+                ReferenceCountUtil.release(request);
+            }
+        });
+        try {
+            slave.bind("localhost", 502).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
             e.printStackTrace();
         }
     }
