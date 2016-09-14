@@ -89,6 +89,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
     // Configuration
     private String serverUrl = "tcp://dv.kymerasystems.com:1883"; // Change to point to
     // your MQTT Server
+    private String bindUrl = "localhost";
     private String groupId = "Sparkplug Devices";
     private String edgeNode = null;
     private String deviceId = "Pibrella";
@@ -116,7 +117,12 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
     public static HashMap<Short, HashMap<Integer, TagValue>> modbusRegisters = new HashMap<>();
     public static HashMap<Short, HashMap<Integer, TagValue>> modbusCoils = new HashMap<>();
 
-    public SparkplugRaspberryPiExample() {
+    public SparkplugRaspberryPiExample(String[] args) {
+
+        // if provided, use the first arg as the address to bind to
+        if(args.length > 0 && args[0] != null){
+            bindUrl = args[0];
+        }
 
         settings.put("meter id", "unknown");
         initializeProps();
@@ -195,7 +201,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 
     public static void main(String[] args) {
 
-        SparkplugRaspberryPiExample example = new SparkplugRaspberryPiExample();
+        SparkplugRaspberryPiExample example = new SparkplugRaspberryPiExample(args);
         example.run();
     }
 
@@ -942,7 +948,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
             }
         });
         try {
-            slave.bind("localhost", 502).get();
+            slave.bind(bindUrl, 502).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
