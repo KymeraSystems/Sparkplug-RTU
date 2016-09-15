@@ -18,15 +18,14 @@ public class RTU {
     Map<String,Meter> meters = new HashMap<>();
     Map<String,TagValue> values = new HashMap<>();
 
-    public RTU(String rtu, int count){
+    public RTU(String rtu, int meterCount){
 
         this.tagPath = rtu;
-        for (short i = 1; i < count+1; i++) {
+        for (short i = 1; i < meterCount+1; i++) {
             Meter meter = new Meter(String.format("meter_%d", i));
             meters.put(String.format("meter_%d", i),meter);
             SparkplugRaspberryPiExample.modbusRegisters.put(i,meter.registers);
             SparkplugRaspberryPiExample.modbusCoils.put(i,meter.registers);
-
         }
 
         values.put("rtu/stats/volts",new FloatValue(0.0f,12.0f,0.1f,0.3f));

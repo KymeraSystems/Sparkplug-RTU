@@ -17,27 +17,32 @@ public class Meter extends HashMap<String, TagValue> {
     private int dayRecord;
     public HashMap<Integer,TagValue> registers = new HashMap<>();
     public HashMap<Integer,TagValue> coils = new HashMap<>();
-    int i = 0;
-    int j = 0;
+    int registerIndex = 0;
+    int coilIndex = 0;
 
     @Override
     public TagValue put(String key, TagValue value) {
 
         if (value.getValue() instanceof Float) {
-            registers.put(i,value);
-            i += 2;
+            printDebug(registerIndex, key, "float", value.getValue().toString());
+            registers.put(registerIndex,value);
+            registerIndex += 2;
         } else if (value.getValue() instanceof Integer) {
-            registers.put(i,value);
-            i += 2;
+            printDebug(registerIndex, key, "integer", value.getValue().toString());
+            registers.put(registerIndex,value);
+            registerIndex += 2;
         } else if (value.getValue() instanceof Double) {
-            registers.put(i,value);
-            i += 4;
+            printDebug(registerIndex, key, "double", value.getValue().toString());
+            registers.put(registerIndex,value);
+            registerIndex += 4;
         } else if (value.getValue() instanceof Long) {
-            registers.put(i,value);
-            i += 4;
+            printDebug(registerIndex, key, "long", value.getValue().toString());
+            registers.put(registerIndex,value);
+            registerIndex += 4;
         } else if (value.getValue() instanceof Boolean) {
-            coils.put(i,value);
-            j += 1;
+            printDebug(registerIndex, key, "boolean", value.getValue().toString());
+            coils.put(coilIndex,value);
+            coilIndex += 1;
         }
 
         return super.put(key, value);
@@ -82,6 +87,12 @@ public class Meter extends HashMap<String, TagValue> {
         hourRecord = c.get(Calendar.HOUR_OF_DAY);
         dayRecord = c.get(Calendar.DAY_OF_YEAR);
 
+    }
+
+    private void printDebug(int index, String key, String type, String value){
+        if(SparkplugRaspberryPiExample.debug) {
+            System.out.println("registerIndex: " + index + "\tpath: " + key + "   \ttype: " + type + "\tvalue: " + value);
+        }
     }
 
     public void updateMeter(KuraPayload payload, boolean init) {

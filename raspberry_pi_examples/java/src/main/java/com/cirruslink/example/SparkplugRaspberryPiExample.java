@@ -35,6 +35,7 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.std.StdArraySerializers;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.util.ReferenceCountUtil;
@@ -99,6 +100,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
     private ExecutorService executor;
     private MqttClient client;
     private String settingsFile = "rtu-config.json";
+    public static boolean debug = false;
 
     // Some control and parameter points for this demo
     private int configChangeCount = 1;
@@ -137,6 +139,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         tempServerList.add("tcp://192.168.100.60:1883");
         tempServerList.add("tcp://127.0.0.1:1883");
         settings.put("servers", tempServerList);
+        settings.put("debug", debug);
 
         if (new File(settingsFile).exists()) {
             System.out.println("config file exists");
@@ -152,6 +155,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         this.servers = ((ArrayList<String>) settings.get("servers")).toArray(new String[]{});
         this.username = ((String) settings.get("broker username"));
         this.password = ((String) settings.get("broker password"));
+        this.debug = ((boolean) settings.get("debug"));
 
         this.rtu = new RTU(this.edgeNode, meterCount);
         if (this.isAPi) {
@@ -231,9 +235,26 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                         outboundPayload = addSeqNum(outboundPayload);
                         outboundPayload.addMetric("Up Time ms", System.currentTimeMillis() - upTimeStart);
 
+                        if(debug){
+                            System.out.println("-----------RTU VALUES-----------");
+                        }
+
                         for (Entry<String, TagValue> t : rtu.values.entrySet()) {
+                            if(debug){
+                                System.out.println("key " + t.getKey() + "   \tvalue " + t.getValue().getValue());
+                            }
+
                             if (t.getValue().updateValue()) {
                                 outboundPayload.addMetric(t.getKey(), t.getValue().getValue());
+                            }
+                        }
+
+                        if(debug){
+                            System.out.println("----------------------------------");
+                            System.out.println("Meter 1's data: ");
+                            Meter m1 = rtu.meters.get("meter_1");
+                            for(String key : m1.keySet()){
+                                System.out.println("- key: " + key + "\t val: " + m1.get(key).getValue());
                             }
                         }
 
@@ -898,42 +919,42 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 */
             @Override
             public void onReadHoldingRegisters(ServiceRequest<ReadHoldingRegistersRequest, ReadHoldingRegistersResponse> service) {
-                System.out.println(String.format("unit: %d register: %d count: %d", service.getUnitId(), service.getRequest().getAddress(), service.getRequest().getQuantity()));
+                System.out.println(String.format("unit: %d registerIndex: %d count: %d", service.getUnitId(), service.getRequest().getAddress(), service.getRequest().getQuantity()));
                 ReadHoldingRegistersRequest request = service.getRequest();
                 HashMap map = modbusRegisters.get(service.getUnitId());
                 ByteBuf registers = PooledByteBufAllocator.DEFAULT.buffer(request.getQuantity());
 
-                int i = request.getAddress();
+                int registerIndex = request.getAddress();
 
                 if (map != null) {
                     try {
 
-                        while (i < request.getAddress() + request.getQuantity()) {
+                        while (registerIndex < request.getAddress() + request.getQuantity()) {
 
-                            TagValue tv = (TagValue) map.get(i);
+                            TagValue tv = (TagValue) map.get(registerIndex);
                             if (tv != null) {
                                 Object value = tv.getValue();
                                 if (value instanceof Float) {
                                     registers.writeFloat((Float) value);
-                                   // System.out.println(String.format("Reference found %d,%d", i,2));
-                                    i += 2;
+                                   // System.out.println(String.format("Reference found %d,%d", registerIndex,2));
+                                    registerIndex += 2;
                                 } else if (value instanceof Integer) {
                                     registers.writeInt((Integer) value);
-                                    //System.out.println(String.format("Reference found %d,%d", i,2));
-                                    i += 2;
+                                    //System.out.println(String.format("Reference found %d,%d", registerIndex,2));
+                                    registerIndex += 2;
                                 } else if (value instanceof Double) {
                                     registers.writeDouble((Double) value);
-                                    //System.out.println(String.format("Reference found %d,%d", i,4));
-                                    i += 4;
+                                    //System.out.println(String.format("Reference found %d,%d", registerIndex,4));
+                                    registerIndex += 4;
                                 } else if (value instanceof Long) {
                                     registers.writeLong((Long) value);
-                                    //System.out.println(String.format("Reference found %d,%d", i,4));
-                                    i += 4;
+                                    //System.out.println(String.format("Reference found %d,%d", registerIndex,4));
+                                    registerIndex += 4;
                                 }
 
                             } else {
                                 registers.writeChar(0);
-                                i += 1;
+                                registerIndex += 1;
                             }
                         }
 
