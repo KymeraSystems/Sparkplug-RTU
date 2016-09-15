@@ -119,12 +119,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
     public static HashMap<Short, HashMap<Integer, TagValue>> modbusRegisters = new HashMap<>();
     public static HashMap<Short, HashMap<Integer, TagValue>> modbusCoils = new HashMap<>();
 
-    public SparkplugRaspberryPiExample(String[] args) {
-
-        // if provided, use the first arg as the address to bind to
-        if(args.length > 0 && args[0] != null){
-            bindUrl = args[0];
-        }
+    public SparkplugRaspberryPiExample() {
 
         settings.put("meter id", "unknown");
         initializeProps();
@@ -140,6 +135,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         tempServerList.add("tcp://127.0.0.1:1883");
         settings.put("servers", tempServerList);
         settings.put("debug", debug);
+        settings.put("bindUrl", bindUrl);
 
         if (new File(settingsFile).exists()) {
             System.out.println("config file exists");
@@ -156,6 +152,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         this.username = ((String) settings.get("broker username"));
         this.password = ((String) settings.get("broker password"));
         this.debug = ((boolean) settings.get("debug"));
+        this.bindUrl = ((String) settings.get("bindUrl"));
 
         this.rtu = new RTU(this.edgeNode, meterCount);
         if (this.isAPi) {
@@ -205,7 +202,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 
     public static void main(String[] args) {
 
-        SparkplugRaspberryPiExample example = new SparkplugRaspberryPiExample(args);
+        SparkplugRaspberryPiExample example = new SparkplugRaspberryPiExample();
         example.run();
     }
 
