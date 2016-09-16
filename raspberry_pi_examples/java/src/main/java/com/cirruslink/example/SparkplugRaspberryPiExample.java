@@ -118,6 +118,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
     private String adapter = "wlan0";
     public static HashMap<Short, HashMap<Integer, TagValue>> modbusRegisters = new HashMap<>();
     public static HashMap<Short, HashMap<Integer, TagValue>> modbusCoils = new HashMap<>();
+    public static HashMap<Short, Compressor> compressors = new HashMap<>();
 
     public SparkplugRaspberryPiExample() {
 
@@ -159,6 +160,8 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
             pibrella = new PibrellaDevice();
         }
 
+        compressors.put((short) 100, new Compressor("k351"));
+        compressors.put((short) 101, new Compressor("k352"));
         setupModbusSlave();
     }
 
@@ -232,12 +235,12 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                         outboundPayload = addSeqNum(outboundPayload);
                         outboundPayload.addMetric("Up Time ms", System.currentTimeMillis() - upTimeStart);
 
-                        if(debug){
+                        if (debug) {
                             System.out.println("-----------RTU VALUES-----------");
                         }
 
                         for (Entry<String, TagValue> t : rtu.values.entrySet()) {
-                            if(debug){
+                            if (debug) {
                                 System.out.println("key " + t.getKey() + "   \tvalue " + t.getValue().getValue());
                             }
 
@@ -246,11 +249,11 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                             }
                         }
 
-                        if(debug){
+                        if (debug) {
                             System.out.println("----------------------------------");
                             System.out.println("Meter 1's data: ");
                             Meter m1 = rtu.meters.get("meter_1");
-                            for(String key : m1.keySet()){
+                            for (String key : m1.keySet()) {
                                 System.out.println("- key: " + key + "\t val: " + m1.get(key).getValue());
                             }
                         }
@@ -897,43 +900,59 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         slave = new ModbusTcpSlave(mtsc);
 
         slave.setRequestHandler(new ServiceRequestHandler() {
-/*            @Override
-            public void onReadCoils(ServiceRequest<ReadCoilsRequest, ReadCoilsResponse> service) {
-                System.out.println(String.format("unit: %d coils: %d count: %d", service.getUnitId(), service.getRequest().getAddress(), service.getRequest().getQuantity()));
-                ReadCoilsRequest request = service.getRequest();
-                ByteBuf coils = PooledByteBufAllocator.DEFAULT.buffer(1);
-                coils.writeBoolean(false);
-                coils.writeBoolean(true);
-                coils.writeBoolean(false);
-                coils.writeBoolean(true);
-                coils.writeBoolean(true);
-                coils.writeBoolean(true);
-                coils.writeBoolean(false);
-                service.sendResponse(new ReadCoilsResponse(coils));
+            /*            @Override
+                        public void onReadCoils(ServiceRequest<ReadCoilsRequest, ReadCoilsResponse> service) {
+                            System.out.println(String.format("unit: %d coils: %d count: %d", service.getUnitId(), service.getRequest().getAddress(), service.getRequest().getQuantity()));
+                            ReadCoilsRequest request = service.getRequest();
+                            ByteBuf coils = PooledByteBufAllocator.DEFAULT.buffer(1);
+                            coils.writeBoolean(false);
+                            coils.writeBoolean(true);
+                            coils.writeBoolean(false);
+                            coils.writeBoolean(true);
+                            coils.writeBoolean(true);
+                            coils.writeBoolean(true);
+                            coils.writeBoolean(false);
+                            service.sendResponse(new ReadCoilsResponse(coils));
 
-                ReferenceCountUtil.release(request);
-            }
-*/
+                            ReferenceCountUtil.release(request);
+                        }
+            */
             @Override
             public void onReadHoldingRegisters(ServiceRequest<ReadHoldingRegistersRequest, ReadHoldingRegistersResponse> service) {
                 System.out.println(String.format("unit: %d registerIndex: %d count: %d", service.getUnitId(), service.getRequest().getAddress(), service.getRequest().getQuantity()));
                 ReadHoldingRegistersRequest request = service.getRequest();
-                HashMap map = modbusRegisters.get(service.getUnitId());
+                HashMap map = null;
+                if (service.getUnitId() < 100) {
+                    map = modbusRegisters.get(service.getUnitId());
+                } else if (service.getUnitId() >= 100 && service.getUnitId() < 110) {
+                    map = compressors.get(service.getUnitId());
+                }
+
                 ByteBuf registers = PooledByteBufAllocator.DEFAULT.buffer(request.getQuantity());
 
                 int registerIndex = request.getAddress();
-
+             //   System.out.println(map);
                 if (map != null) {
+
                     try {
 
                         while (registerIndex < request.getAddress() + request.getQuantity()) {
 
-                            TagValue tv = (TagValue) map.get(registerIndex);
+                            TagValue tv = null;
+                            if (map instanceof Compressor) {
+                                String path = ((Compressor) map).registers.get(registerIndex);
+                                System.out.println(String.format("%d %s",registerIndex,path));
+                                tv = (TagValue) map.get(path);
+                                System.out.println(tv);
+                                System.out.println(tv.getValue());
+                            } else {
+                                tv = (TagValue) map.get(registerIndex);
+                            }
                             if (tv != null) {
                                 Object value = tv.getValue();
                                 if (value instanceof Float) {
                                     registers.writeFloat((Float) value);
-                                   // System.out.println(String.format("Reference found %d,%d", registerIndex,2));
+                                    // System.out.println(String.format("Reference found %d,%d", registerIndex,2));
                                     registerIndex += 2;
                                 } else if (value instanceof Integer) {
                                     registers.writeInt((Integer) value);
@@ -960,6 +979,8 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                 } else {
                     System.out.println(String.format("Map Not Found: %d", service.getUnitId()));
                 }
+
+                System.out.println(registers.copy().array());
                 service.sendResponse(new ReadHoldingRegistersResponse(registers));
 
                 ReferenceCountUtil.release(request);
