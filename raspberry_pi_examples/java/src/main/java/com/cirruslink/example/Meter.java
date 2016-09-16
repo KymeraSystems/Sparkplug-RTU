@@ -58,8 +58,10 @@ public class Meter extends HashMap<String, TagValue> {
         this.put(tagPath + "/esd valve", new BooleanValue());
         this.put(tagPath + "/meter/today/volume", new TotalizerValue(1000l, 0.01f));
         this.put(tagPath + "/meter/yday/volume", new MemoryFloatValue());
+        // meter records
         this.put(tagPath + "/meter/records/hourly", new StringValue(""));
         this.put(tagPath + "/meter/records/daily", new StringValue(""));
+        // meter analysis
         this.put(tagPath + "/meter/analysis/co2", new MemoryFloatValue(3.11f));
         this.put(tagPath + "/meter/analysis/n2", new MemoryFloatValue(2.2f));
         this.put(tagPath + "/meter/analysis/c1", new MemoryFloatValue(93.34f));
@@ -80,8 +82,43 @@ public class Meter extends HashMap<String, TagValue> {
         this.put(tagPath + "/meter/analysis/co", new MemoryFloatValue(0.0f));
         this.put(tagPath + "/meter/analysis/he", new MemoryFloatValue(0.09f));
         this.put(tagPath + "/meter/analysis/o2", new MemoryFloatValue(0.0f));
+        // meter config
         this.put(tagPath + "/meter/config/pipe diameter", new MemoryFloatValue(0.0f));
         this.put(tagPath + "/meter/config/orifice diameter", new MemoryFloatValue(0.0f));
+
+        // compressor temperature
+        this.put(tagPath + "/compressor/t1", new MemoryFloatValue(24f));
+        this.put(tagPath + "/compressor/t2", new MemoryFloatValue(30f));
+        this.put(tagPath + "/compressor/t3", new MemoryFloatValue(-20f));
+        this.put(tagPath + "/compressor/t4", new MemoryFloatValue(40f));
+        this.put(tagPath + "/compressor/t5", new MemoryFloatValue(-10f));
+        this.put(tagPath + "/compressor/t6", new MemoryFloatValue(-50f));
+        this.put(tagPath + "/compressor/t7", new MemoryFloatValue(18f));
+        this.put(tagPath + "/compressor/t8", new MemoryFloatValue(95f));
+        this.put(tagPath + "/compressor/t9", new MemoryFloatValue(85f));
+        this.put(tagPath + "/compressor/t10", new MemoryFloatValue(66f));
+        this.put(tagPath + "/compressor/t11", new MemoryFloatValue(100f));
+        this.put(tagPath + "/compressor/t12", new MemoryFloatValue(88f));
+        this.put(tagPath + "/compressor/t13", new MemoryFloatValue(-25f));
+        this.put(tagPath + "/compressor/t14", new MemoryFloatValue(-14f));
+        this.put(tagPath + "/compressor/t15", new MemoryFloatValue(29f));
+        this.put(tagPath + "/compressor/t16", new MemoryFloatValue(14f));
+        this.put(tagPath + "/compressor/t_LT", new MemoryFloatValue(55f));
+        this.put(tagPath + "/compressor/t_RT", new MemoryFloatValue(-26f));
+
+        // compressor pressure
+        this.put(tagPath + "/compressor/p_c1_1", new MemoryFloatValue(50f));
+        this.put(tagPath + "/compressor/p_c1_2", new MemoryFloatValue(180f));
+        this.put(tagPath + "/compressor/p_c1_3", new MemoryFloatValue(2000f));
+        this.put(tagPath + "/compressor/p_c2_1", new MemoryFloatValue(750f));
+        this.put(tagPath + "/compressor/p_c2_2", new MemoryFloatValue(250f));
+        this.put(tagPath + "/compressor/p_c2_3", new MemoryFloatValue(2880f));
+        this.put(tagPath + "/compressor/p_c3_1", new MemoryFloatValue(998f));
+        this.put(tagPath + "/compressor/p_c3_2", new MemoryFloatValue(2856f));
+        this.put(tagPath + "/compressor/p_c3_3", new MemoryFloatValue(2668f));
+        this.put(tagPath + "/compressor/p_c4_1", new MemoryFloatValue(1998f));
+        this.put(tagPath + "/compressor/p_c4_2", new MemoryFloatValue(2489f));
+        this.put(tagPath + "/compressor/p_c4_3", new MemoryFloatValue(2226f));
 
         Calendar c = Calendar.getInstance();
         hourRecord = c.get(Calendar.HOUR_OF_DAY);
