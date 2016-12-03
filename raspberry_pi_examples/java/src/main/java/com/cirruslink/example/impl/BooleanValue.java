@@ -22,7 +22,7 @@ public class BooleanValue implements TagValue<Boolean> {
     @Override
     public boolean updateValue() {
         boolean oldValue = value;
-        value = SparkplugRaspberryPiExample.random.nextDouble()>0.95?!value:value;
+        value = SparkplugRaspberryPiExample.random.nextDouble()>0.99?!value:value;
         return value != oldValue?true:false;
     }
 

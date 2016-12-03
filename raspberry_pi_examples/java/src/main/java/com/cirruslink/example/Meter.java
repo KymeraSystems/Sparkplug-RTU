@@ -19,6 +19,7 @@ public class Meter extends HashMap<String, TagValue> {
     public HashMap<Integer,TagValue> coils = new HashMap<>();
     int registerIndex = 0;
     int coilIndex = 0;
+    Integer updateIndex = 0;
 
     @Override
     public TagValue put(String key, TagValue value) {
@@ -132,10 +133,44 @@ public class Meter extends HashMap<String, TagValue> {
         }
     }
 
-    public void updateMeter(KuraPayload payload, boolean init) {
+    public void updateMeter(HashMap changeSet, boolean init) {
 
         Calendar c = Calendar.getInstance();
 
+        int len = changeSet.size();
+
+        for (Entry<String, TagValue> e : this.entrySet()) {
+            if (init || e.getValue().updateValue()) {
+                changeSet.put(e.getKey(), e.getValue().getValue());
+            }
+        }
+
+
+        if (c.get(Calendar.HOUR_OF_DAY) != hourRecord){
+            hourRecord = c.get(Calendar.HOUR_OF_DAY);
+            createHourlyJSONRecord(changeSet);
+        }
+
+
+        if (c.get(Calendar.DAY_OF_YEAR) != dayRecord) {
+            dayRecord = c.get(Calendar.DAY_OF_YEAR);
+            createDailyRecord(changeSet);
+        }
+
+        if (changeSet.size() > len){
+            changeSet.put(tagPath + "/updateCount",updateIndex);
+            if (updateIndex == Integer.MAX_VALUE){
+                updateIndex = Integer.MIN_VALUE;
+            } else {
+                updateIndex++;
+            }
+        }
+    }
+
+    public void updateMeter(KuraPayload payload, boolean init) {
+
+        Calendar c = Calendar.getInstance();
+        int len = payload.metrics().size();
         for (Entry<String, TagValue> e : this.entrySet()) {
             if (init || e.getValue().updateValue()) {
                 payload.addMetric(e.getKey(), e.getValue().getValue());
@@ -152,6 +187,16 @@ public class Meter extends HashMap<String, TagValue> {
         if (c.get(Calendar.DAY_OF_YEAR) != dayRecord) {
             dayRecord = c.get(Calendar.DAY_OF_YEAR);
             createDailyRecord(payload);
+        }
+
+        if (payload.metrics().size() > len){
+            payload.addMetric(tagPath + "/updateCount",updateIndex);
+            if (updateIndex == Integer.MAX_VALUE){
+                updateIndex = Integer.MIN_VALUE;
+            } else {
+                updateIndex++;
+            }
+
         }
     }
 
@@ -187,6 +232,19 @@ public class Meter extends HashMap<String, TagValue> {
     }
 
 
+    public void createHourlyJSONRecord(HashMap changeSet) {
+        try {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("t_stamp", new Date());
+            map.put("id", tagPath);
+            map.put("value", get(String.format("%s/meter/%s", tagPath, "today/volume")));
+            ObjectMapper mapper = new ObjectMapper();
+            changeSet.put(String.format("%s/meter/%s", tagPath, "records/hourly"), mapper.writeValueAsString(map));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void createHourlyJSONRecord(KuraPayload payload) {
         try {
             HashMap<String, Object> map = new HashMap<>();
@@ -198,7 +256,29 @@ public class Meter extends HashMap<String, TagValue> {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+    }
 
+    public void createDailyRecord(HashMap changeSet) {
+
+        try {
+            get(String.format("%s/meter/%s", tagPath, "yday/volume")).updateValue(get(String.format("%s/meter/%s", tagPath, "today/volume")).getValue());
+
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("t_stamp", new Date());
+            map.put("id", tagPath);
+            map.put("value", get(String.format("%s/meter/%s", tagPath, "yday/volume")));
+
+            ObjectMapper mapper = new ObjectMapper();
+
+            changeSet.put(String.format("%s/meter/%s", tagPath, "yday/volume"), get(String.format("%s/meter/%s", tagPath, "today/volume")).getValue());
+            get(String.format("%s/meter/%s", tagPath, "today/volume")).updateValue((float) 0.0);
+            changeSet.put(String.format("%s/meter/%s", tagPath, "today/volume"), (float) 0.0);
+
+            changeSet.put(String.format("%s/meter/%s", tagPath, "records/daily"), mapper.writeValueAsString(map));
+
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
     public void createDailyRecord(KuraPayload payload) {
@@ -223,7 +303,6 @@ public class Meter extends HashMap<String, TagValue> {
             e.printStackTrace();
         }
     }
-
 }
 
 

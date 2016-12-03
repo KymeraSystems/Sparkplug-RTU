@@ -84,7 +84,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 
     // HW/SW versions
     private static final String HW_VERSION = "Raspberry Pi 3 model B";
-    private static final String SW_VERSION = "1.0.8";
+    private static final String SW_VERSION = "1.1.0";
     private String[] servers;
 
     // Configuration
@@ -163,7 +163,6 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
     }
 
     private void initializeProps() {
-        System.out.println("props file doesn't exist");
         String uuid = UUID.randomUUID().toString();
         String id = uuid.substring(uuid.length() - 8);
         settings.put("meter id", id);
@@ -227,45 +226,53 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                     publishBirth();
                 } else {
                     synchronized (lock) {
-                        KuraPayload outboundPayload = new KuraPayload();
-                        outboundPayload.setTimestamp(new Date());
-                        outboundPayload = addSeqNum(outboundPayload);
-                        outboundPayload.addMetric("Up Time ms", System.currentTimeMillis() - upTimeStart);
 
-                        if(debug){
+                        //outboundPayload.addMetric("Up Time ms", System.currentTimeMillis() - upTimeStart);
+                        HashMap changeSet = new HashMap<String, Object>();
+                        if (debug) {
                             System.out.println("-----------RTU VALUES-----------");
                         }
 
                         for (Entry<String, TagValue> t : rtu.values.entrySet()) {
-                            if(debug){
+                            if (debug) {
                                 System.out.println("key " + t.getKey() + "   \tvalue " + t.getValue().getValue());
                             }
 
                             if (t.getValue().updateValue()) {
-                                outboundPayload.addMetric(t.getKey(), t.getValue().getValue());
+                                changeSet.put(t.getKey(), t.getValue().getValue());
                             }
                         }
 
-                        if(debug){
+                        if (!changeSet.isEmpty()) {
+                            final KuraPayload outboundPayload = initPayload();
+
+                            changeSet.forEach((k, v) -> outboundPayload.addMetric((String) k, v));
+
+                            executor.execute(new Publisher("spAv1.0/" + groupId + "/NDATA/" + edgeNode, outboundPayload));
+                        }
+
+                        if (debug) {
                             System.out.println("----------------------------------");
                             System.out.println("Meter 1's data: ");
                             Meter m1 = rtu.meters.get("meter_1");
-                            for(String key : m1.keySet()){
+                            for (String key : m1.keySet()) {
                                 System.out.println("- key: " + key + "\t val: " + m1.get(key).getValue());
                             }
                         }
 
-                        // Publish the message
-                        executor.execute(new Publisher("spAv1.0/" + groupId + "/NDATA/" + edgeNode, outboundPayload));
-
-                        outboundPayload = new KuraPayload();
-                        outboundPayload.setTimestamp(new Date());
-                        outboundPayload = addSeqNum(outboundPayload);
+                        changeSet = new HashMap<String, Object>();
 
                         for (Meter m : rtu.meters.values()) {
-                            m.updateMeter(outboundPayload, false);
+                            m.updateMeter(changeSet, false);
                         }
-                        executor.execute(new Publisher("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/meters", outboundPayload));
+
+                        if (!changeSet.isEmpty()) {
+                            final KuraPayload outboundPayload = initPayload();
+
+                            changeSet.forEach((k, v) -> outboundPayload.addMetric((String) k, v));
+
+                            executor.execute(new Publisher("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/meters", outboundPayload));
+                        }
                     }
                 }
                 Thread.sleep(scanRateMs);
@@ -298,7 +305,6 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
             options.setConnectionTimeout(10);
             // MQTT session parameter Keep Alive Period in Seconds
             options.setKeepAliveInterval(30);
-
             options.setServerURIs(servers);
 
             if (!(boolean) settings.get("anonymous")) {
@@ -485,6 +491,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                 payload.setTimestamp(new Date());
                 payload = addSeqNum(payload);
 
+
                 for (Meter m : rtu.meters.values()) {
                     m.updateMeter(payload, true);
                 }
@@ -514,6 +521,18 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         if (payload == null) {
             payload = new KuraPayload();
         }
+        if (seq == 256) {
+            seq = 0;
+        }
+        payload.setTimestamp(new Date());
+        payload.addMetric("seq", seq);
+        seq++;
+        return payload;
+    }
+
+    // Used to add the sequence number
+    private KuraPayload initPayload() throws Exception {
+        KuraPayload payload = new KuraPayload();
         if (seq == 256) {
             seq = 0;
         }
@@ -897,23 +916,23 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         slave = new ModbusTcpSlave(mtsc);
 
         slave.setRequestHandler(new ServiceRequestHandler() {
-/*            @Override
-            public void onReadCoils(ServiceRequest<ReadCoilsRequest, ReadCoilsResponse> service) {
-                System.out.println(String.format("unit: %d coils: %d count: %d", service.getUnitId(), service.getRequest().getAddress(), service.getRequest().getQuantity()));
-                ReadCoilsRequest request = service.getRequest();
-                ByteBuf coils = PooledByteBufAllocator.DEFAULT.buffer(1);
-                coils.writeBoolean(false);
-                coils.writeBoolean(true);
-                coils.writeBoolean(false);
-                coils.writeBoolean(true);
-                coils.writeBoolean(true);
-                coils.writeBoolean(true);
-                coils.writeBoolean(false);
-                service.sendResponse(new ReadCoilsResponse(coils));
+            /*            @Override
+                        public void onReadCoils(ServiceRequest<ReadCoilsRequest, ReadCoilsResponse> service) {
+                            System.out.println(String.format("unit: %d coils: %d count: %d", service.getUnitId(), service.getRequest().getAddress(), service.getRequest().getQuantity()));
+                            ReadCoilsRequest request = service.getRequest();
+                            ByteBuf coils = PooledByteBufAllocator.DEFAULT.buffer(1);
+                            coils.writeBoolean(false);
+                            coils.writeBoolean(true);
+                            coils.writeBoolean(false);
+                            coils.writeBoolean(true);
+                            coils.writeBoolean(true);
+                            coils.writeBoolean(true);
+                            coils.writeBoolean(false);
+                            service.sendResponse(new ReadCoilsResponse(coils));
 
-                ReferenceCountUtil.release(request);
-            }
-*/
+                            ReferenceCountUtil.release(request);
+                        }
+            */
             @Override
             public void onReadHoldingRegisters(ServiceRequest<ReadHoldingRegistersRequest, ReadHoldingRegistersResponse> service) {
                 System.out.println(String.format("unit: %d registerIndex: %d count: %d", service.getUnitId(), service.getRequest().getAddress(), service.getRequest().getQuantity()));
@@ -933,7 +952,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
                                 Object value = tv.getValue();
                                 if (value instanceof Float) {
                                     registers.writeFloat((Float) value);
-                                   // System.out.println(String.format("Reference found %d,%d", registerIndex,2));
+                                    // System.out.println(String.format("Reference found %d,%d", registerIndex,2));
                                     registerIndex += 2;
                                 } else if (value instanceof Integer) {
                                     registers.writeInt((Integer) value);

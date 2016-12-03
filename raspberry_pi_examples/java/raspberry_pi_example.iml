@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_7" inherit-compiler-output="false">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
@@ -43,6 +43,8 @@
       <excludeFolder url="file://$MODULE_DIR$/target/paho12070210493226-tcp192168100601883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho12160653665500-tcpdvkymerasystemscom1883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho12369666215688-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho12414275943579-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho12564345348664-tcp192168100601883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho12657170437986-tcp192168100601883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho12711850439612-tcpdvkymerasystemscom1883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho12894481064243-tcp192168100601883" />
@@ -54,6 +56,14 @@
       <excludeFolder url="file://$MODULE_DIR$/target/paho15343514230607-tcp192168100601883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho15513311254370-tcp192168100601883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho15648141384179-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho1916903784966-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho193463071229616-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho193588241537414-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho2082981255864-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho2140550449622-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho2363608734037-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho260077315234423-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho283261596530216-tcp192168100601883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho4139038381030-tcpdvkymerasystemscom1883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho4308557116798-tcpdvkymerasystemscom1883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho4506507046927-tcpdvkymerasystemscom1883" />
@@ -61,10 +71,14 @@
       <excludeFolder url="file://$MODULE_DIR$/target/paho4897130101947-tcpdvkymerasystemscom1883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho4983648912474-tcpdvkymerasystemscom1883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho5153863895181-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho5526378024725-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho5607246306329-tcp192168100601883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho5965575071439-tcpdvkymerasystemscom1883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho6224528048769-tcpdvkymerasystemscom1883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho6317873572854-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho6335227635128-tcp192168100601883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho6497940304968-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho6500167353769-tcp192168100601883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho6546875877583-tcpdvkymerasystemscom1883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho6786221828700-tcpdvkymerasystemscom1883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho7093443647919-tcpdvkymerasystemscom1883" />
@@ -74,6 +88,7 @@
       <excludeFolder url="file://$MODULE_DIR$/target/paho7315061023168-tcpdvkymerasystemscom1883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho7336255315463-tcpdvkymerasystemscom1883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho7386685108023-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho7413835283173-tcp192168100601883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho7688291011411-tcpdvkymerasystemscom1883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho7752473221038-tcp192168100601883" />
       <excludeFolder url="file://$MODULE_DIR$/target/paho7823631234524-tcpdvkymerasystemscom1883" />
