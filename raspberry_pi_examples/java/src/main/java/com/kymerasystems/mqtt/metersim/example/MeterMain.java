@@ -9,7 +9,7 @@
  * Contributors:
  * Cirrus Link Solutions
  */
-package com.cirruslink.example;
+package com.kymerasystems.mqtt.metersim.example;
 
 import java.io.*;
 import java.net.Inet4Address;
@@ -21,13 +21,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.cirruslink.example.model.TagValue;
-import com.digitalpetri.modbus.requests.ReadCoilsRequest;
+import com.kymerasystems.mqtt.metersim.example.model.TagValue;
 import com.digitalpetri.modbus.requests.ReadHoldingRegistersRequest;
-import com.digitalpetri.modbus.requests.WriteSingleRegisterRequest;
-import com.digitalpetri.modbus.responses.ReadCoilsResponse;
 import com.digitalpetri.modbus.responses.ReadHoldingRegistersResponse;
-import com.digitalpetri.modbus.responses.WriteSingleRegisterResponse;
 import com.digitalpetri.modbus.slave.ModbusTcpSlave;
 import com.digitalpetri.modbus.slave.ModbusTcpSlaveConfig;
 import com.digitalpetri.modbus.slave.ServiceRequestHandler;
@@ -35,11 +31,9 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ser.std.StdArraySerializers;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.util.ReferenceCountUtil;
-import org.apache.commons.lang3.SerializationUtils;
 import org.eclipse.kura.core.cloud.CloudPayloadEncoder;
 import org.eclipse.kura.core.cloud.CloudPayloadProtoBufDecoderImpl;
 import org.eclipse.kura.core.cloud.CloudPayloadProtoBufEncoderImpl;
@@ -75,7 +69,7 @@ import com.pi4j.io.gpio.event.GpioPinListenerDigital;
  * 
  */
 
-public class SparkplugRaspberryPiExample implements MqttCallback {
+public class MeterMain implements MqttCallback {
 
     private static Pibrella pibrella;
     public static final Random random = new Random();
@@ -85,6 +79,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
     // HW/SW versions
     private static final String HW_VERSION = "Raspberry Pi 3 model B";
     private static final String SW_VERSION = "1.1.0";
+    private final boolean enableModbusServer;
     private String[] servers;
 
     // Configuration
@@ -119,7 +114,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
     public static HashMap<Short, HashMap<Integer, TagValue>> modbusRegisters = new HashMap<>();
     public static HashMap<Short, HashMap<Integer, TagValue>> modbusCoils = new HashMap<>();
 
-    public SparkplugRaspberryPiExample() {
+    public MeterMain() {
 
         settings.put("meter id", "unknown");
         initializeProps();
@@ -131,11 +126,12 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         settings.put("anonymous", false);
         settings.put("updatable", false);
         ArrayList<String> tempServerList = new ArrayList<>();
-        tempServerList.add("tcp://192.168.100.60:1883");
         tempServerList.add("tcp://127.0.0.1:1883");
         settings.put("servers", tempServerList);
         settings.put("debug", debug);
         settings.put("bindUrl", bindUrl);
+        settings.put("enableModbusServer", false);
+        settings.put("groupId",groupId);
 
         if (new File(settingsFile).exists()) {
             System.out.println("config file exists");
@@ -153,13 +149,18 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
         this.password = ((String) settings.get("broker password"));
         this.debug = ((boolean) settings.get("debug"));
         this.bindUrl = ((String) settings.get("bindUrl"));
+        this.groupId = (String) settings.get("groupId");
+
+        this.enableModbusServer = (boolean) settings.get("enableModbusServer");
 
         this.rtu = new RTU(this.edgeNode, meterCount);
         if (this.isAPi) {
             pibrella = new PibrellaDevice();
         }
 
-        setupModbusSlave();
+        if (enableModbusServer) {
+            setupModbusSlave();
+        }
     }
 
     private void initializeProps() {
@@ -201,7 +202,7 @@ public class SparkplugRaspberryPiExample implements MqttCallback {
 
     public static void main(String[] args) {
 
-        SparkplugRaspberryPiExample example = new SparkplugRaspberryPiExample();
+        MeterMain example = new MeterMain();
         example.run();
     }
 

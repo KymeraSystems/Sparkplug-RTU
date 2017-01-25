@@ -14,9 +14,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.cirruslink.example</groupId>
-    <artifactId>raspberry_pi_example</artifactId>
-    <version>1.0.4</version>
+    <groupId>com.kymerasystems.mqtt</groupId>
+    <artifactId>meter_simulator</artifactId>
+    <version>1.1.1</version>
     <packaging>jar</packaging>
 
     <name>Maven Quick Start Archetype</name>
@@ -127,7 +127,7 @@
                             <transformers>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.cirruslink.example.SparkplugRaspberryPiExample</mainClass>
+                                    <mainClass>com.kymerasystems.mqtt.metersim.example.MeterMain</mainClass>
                                 </transformer>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
@@ -152,7 +152,7 @@
                             <useMissingFile>true</useMissingFile>
                             <excludedScopes>test</excludedScopes>
                             <excludedGroups>
-                                (com.cirruslink*)
+                                (com.kymerasystems*)
                             </excludedGroups>
                             <licenseMerges>
                                 <licenseMerge>The Apache Software License, Version 2.0|Apache License, Version

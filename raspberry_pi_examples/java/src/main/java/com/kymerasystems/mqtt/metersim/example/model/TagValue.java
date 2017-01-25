@@ -1,4 +1,4 @@
-package com.cirruslink.example.model;
+package com.kymerasystems.mqtt.metersim.example.model;
 
 /**
  * Created by KyleChase on 6/12/2016.

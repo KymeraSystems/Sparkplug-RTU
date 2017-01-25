@@ -1,7 +1,7 @@
-package com.cirruslink.example.impl;
+package com.kymerasystems.mqtt.metersim.example.impl;
 
-import com.cirruslink.example.SparkplugRaspberryPiExample;
-import com.cirruslink.example.model.TagValue;
+import com.kymerasystems.mqtt.metersim.example.MeterMain;
+import com.kymerasystems.mqtt.metersim.example.model.TagValue;
 
 /**
  * Created by KyleChase on 6/13/2016.
@@ -21,7 +21,7 @@ public class FloatValue implements TagValue<Float> {
         this.highValue = highValue;
         this.variance = variance;
         this.deadBand = deadBand;
-        this.target = (float) SparkplugRaspberryPiExample.random.nextDouble() * (highValue - lowValue) + lowValue;
+        this.target = (float) MeterMain.random.nextDouble() * (highValue - lowValue) + lowValue;
 
     }
 
@@ -40,7 +40,7 @@ public class FloatValue implements TagValue<Float> {
 
     @Override
     public boolean updateValue() {
-        float rand = SparkplugRaspberryPiExample.random.nextFloat();
+        float rand = MeterMain.random.nextFloat();
         float sub = (target > (highValue - lowValue) / 2.0) ? (highValue - lowValue - target) : target + lowValue;
         float v2 = (rand*variance + ((target - value) / sub)) - (variance/2);
         value = value + v2;

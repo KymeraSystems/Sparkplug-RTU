@@ -1,7 +1,6 @@
-package com.cirruslink.example.impl;
+package com.kymerasystems.mqtt.metersim.example.impl;
 
-import com.cirruslink.example.SparkplugRaspberryPiExample;
-import com.cirruslink.example.model.TagValue;
+import com.kymerasystems.mqtt.metersim.example.model.TagValue;
 
 /**
  * Created by KyleChase on 6/13/2016.

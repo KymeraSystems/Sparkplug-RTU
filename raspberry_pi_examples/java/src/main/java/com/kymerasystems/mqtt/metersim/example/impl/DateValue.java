@@ -1,8 +1,7 @@
-package com.cirruslink.example.impl;
+package com.kymerasystems.mqtt.metersim.example.impl;
 
-import com.cirruslink.example.model.TagValue;
+import com.kymerasystems.mqtt.metersim.example.model.TagValue;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

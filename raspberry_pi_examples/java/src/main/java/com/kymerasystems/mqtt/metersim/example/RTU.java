@@ -1,12 +1,10 @@
-package com.cirruslink.example;
+package com.kymerasystems.mqtt.metersim.example;
 
-import com.cirruslink.example.impl.DateValue;
-import com.cirruslink.example.impl.FloatValue;
-import com.cirruslink.example.impl.StringValue;
-import com.cirruslink.example.model.TagValue;
-import com.digitalpetri.modbus.ModbusPdu;
+import com.kymerasystems.mqtt.metersim.example.impl.DateValue;
+import com.kymerasystems.mqtt.metersim.example.impl.FloatValue;
+import com.kymerasystems.mqtt.metersim.example.impl.StringValue;
+import com.kymerasystems.mqtt.metersim.example.model.TagValue;
 
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,8 +22,8 @@ public class RTU {
         for (short i = 1; i < meterCount+1; i++) {
             Meter meter = new Meter(String.format("meter_%d", i));
             meters.put(String.format("meter_%d", i),meter);
-            SparkplugRaspberryPiExample.modbusRegisters.put(i,meter.registers);
-            SparkplugRaspberryPiExample.modbusCoils.put(i,meter.registers);
+            MeterMain.modbusRegisters.put(i,meter.registers);
+            MeterMain.modbusCoils.put(i,meter.registers);
         }
 
         values.put("rtu/stats/volts",new FloatValue(0.0f,12.0f,0.1f,0.3f));

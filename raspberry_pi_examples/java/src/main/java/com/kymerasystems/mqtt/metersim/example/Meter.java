@@ -1,7 +1,7 @@
-package com.cirruslink.example;
+package com.kymerasystems.mqtt.metersim.example;
 
-import com.cirruslink.example.impl.*;
-import com.cirruslink.example.model.TagValue;
+import com.kymerasystems.mqtt.metersim.example.impl.*;
+import com.kymerasystems.mqtt.metersim.example.model.TagValue;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.kura.message.KuraPayload;
@@ -128,7 +128,7 @@ public class Meter extends HashMap<String, TagValue> {
     }
 
     private void printDebug(int index, String key, String type, String value){
-        if(SparkplugRaspberryPiExample.debug) {
+        if(MeterMain.debug) {
             System.out.println("registerIndex: " + index + "\tpath: " + key + "   \ttype: " + type + "\tvalue: " + value);
         }
     }

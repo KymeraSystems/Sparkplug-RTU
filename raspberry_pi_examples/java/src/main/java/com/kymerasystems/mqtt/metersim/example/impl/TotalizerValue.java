@@ -1,10 +1,9 @@
-package com.cirruslink.example.impl;
+package com.kymerasystems.mqtt.metersim.example.impl;
 
-import com.cirruslink.example.SparkplugRaspberryPiExample;
-import com.cirruslink.example.model.TagValue;
+import com.kymerasystems.mqtt.metersim.example.MeterMain;
+import com.kymerasystems.mqtt.metersim.example.model.TagValue;
 
 import java.util.Calendar;
-import java.util.Map;
 
 /**
  * Created by KyleChase on 6/13/2016.
@@ -23,8 +22,8 @@ public class TotalizerValue implements TagValue<Float> {
     public TotalizerValue(long updateRate, Float deadBand) {
 
         this.updateRate = updateRate;
-        this.delta = SparkplugRaspberryPiExample.random.nextFloat() * 0.1;
-        this.value = SparkplugRaspberryPiExample.random.nextFloat() * 100;
+        this.delta = MeterMain.random.nextFloat() * 0.1;
+        this.value = MeterMain.random.nextFloat() * 100;
         this.deadBand = deadBand;
     }
 
@@ -50,7 +49,7 @@ public class TotalizerValue implements TagValue<Float> {
         Calendar c = Calendar.getInstance();
 
         if (enabled) {
-            double rand = SparkplugRaspberryPiExample.random.nextDouble();
+            double rand = MeterMain.random.nextDouble();
             double sub = delta * 0.03 * rand;
             value += delta + sub;
         }

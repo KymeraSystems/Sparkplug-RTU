@@ -1,7 +1,7 @@
-package com.cirruslink.example.impl;
+package com.kymerasystems.mqtt.metersim.example.impl;
 
-import com.cirruslink.example.SparkplugRaspberryPiExample;
-import com.cirruslink.example.model.TagValue;
+import com.kymerasystems.mqtt.metersim.example.MeterMain;
+import com.kymerasystems.mqtt.metersim.example.model.TagValue;
 
 /**
  * Created by KyleChase on 6/13/2016.
@@ -22,7 +22,7 @@ public class BooleanValue implements TagValue<Boolean> {
     @Override
     public boolean updateValue() {
         boolean oldValue = value;
-        value = SparkplugRaspberryPiExample.random.nextDouble()>0.99?!value:value;
+        value = MeterMain.random.nextDouble()>0.99?!value:value;
         return value != oldValue?true:false;
     }
 

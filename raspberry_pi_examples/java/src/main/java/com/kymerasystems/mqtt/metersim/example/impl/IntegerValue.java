@@ -1,7 +1,7 @@
-package com.cirruslink.example.impl;
+package com.kymerasystems.mqtt.metersim.example.impl;
 
-import com.cirruslink.example.SparkplugRaspberryPiExample;
-import com.cirruslink.example.model.TagValue;
+import com.kymerasystems.mqtt.metersim.example.MeterMain;
+import com.kymerasystems.mqtt.metersim.example.model.TagValue;
 
 /**
  * Created by KyleChase on 6/13/2016.
@@ -39,7 +39,7 @@ public class IntegerValue implements TagValue<Integer> {
 
     @Override
     public boolean updateValue() {
-        double rand = SparkplugRaspberryPiExample.random.nextDouble();
+        double rand = MeterMain.random.nextDouble();
         double sub = (target > (highValue-lowValue)/2.0) ? (highValue-lowValue - target) : target+lowValue;
         double v2 = rand + (target - value) / sub - 0.5;
         value = value + v2;
