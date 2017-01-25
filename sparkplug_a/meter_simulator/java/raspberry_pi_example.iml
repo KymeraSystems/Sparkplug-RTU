@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="false">
+    <output url="file://$MODULE_DIR$/target/classes" />
+    <output-test url="file://$MODULE_DIR$/target/test-classes" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/generated-sources/license" isTestSource="false" generated="true" />
+      <excludeFolder url="file://$MODULE_DIR$/target/4df091ea-tcp192168100101883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/8e734920-tcp1270011883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/8e734920-tcp192168100101883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/8e734920-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/classes" />
+      <excludeFolder url="file://$MODULE_DIR$/target/generated-resources" />
+      <excludeFolder url="file://$MODULE_DIR$/target/javaPibrellaClientId-tcp192168100101883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/maven-archiver" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho10089900967767-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho104525995795699-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho10579033581918-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho10753834506970-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho10889610598179-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho10948436441311-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho109605506521789-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho11110003598586-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho11132172623705-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho111355311469802-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho111653098649182-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho11212349279480-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho112145109519683-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho112230329100588-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho112457696307552-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho11266388160840-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho113301894850542-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho11386591864166-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho11544422942246-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho11604656183561-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho11606437933799-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho11715218438911-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho11760099222519-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho11865271638726-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho12008601906944-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho12009170502408-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho12070210493226-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho12160653665500-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho1218749641617-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho12369666215688-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho12414275943579-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho1248029138807-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho12564345348664-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho12657170437986-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho12711850439612-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho12894481064243-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho12919143941156-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho12964011599496-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho14165908239697-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho14444588317795-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho15018515595940-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho15343514230607-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho15513311254370-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho15648141384179-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho1916903784966-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho193463071229616-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho193588241537414-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho2082981255864-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho2140550449622-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho2363608734037-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho260077315234423-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho283261596530216-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho4139038381030-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho4308557116798-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho4506507046927-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho4635224277474-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho4897130101947-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho4983648912474-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho5153863895181-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho5526378024725-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho5607246306329-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho5965575071439-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho6224528048769-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho6317873572854-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho6335227635128-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho6497940304968-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho6500167353769-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho6546875877583-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho6786221828700-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho7093443647919-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho7151419853780-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho7229348868859-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho7292126081071-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho7315061023168-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho7336255315463-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho7386685108023-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho7413835283173-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho7688291011411-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho7752473221038-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho7823631234524-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho7919009977051-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho81331460579150-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho8215059466382-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho8237978798720-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho8310519221862-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho8352417329944-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho85658706791375-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho85849987121616-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho85857385894933-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho85865529761227-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho85872325705858-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho8602032764688-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho86523658001432-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho86664004805293-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho88013703229022-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho88129480564088-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho88247225758444-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho88379566360415-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho88415738425318-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho88539570384203-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho8902315310255-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho89390842904873-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho8998959267927-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho9016131017036-tcp192168100601883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho9249764385957-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho9615822054505-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/paho9885382638608-tcpdvkymerasystemscom1883" />
+      <excludeFolder url="file://$MODULE_DIR$/target/surefire" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.8.2" level="project" />
+    <orderEntry type="library" name="Maven: com.googlecode.json-simple:json-simple:1.1" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.7.5" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.7.5" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.7.0" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.7.5" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.5" level="project" />
+    <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.0.2" level="project" />
+    <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:2.6.1" level="project" />
+    <orderEntry type="library" name="Maven: com.pi4j:pi4j-core:1.0" level="project" />
+    <orderEntry type="library" name="Maven: com.digitalpetri.modbus:modbus-slave-tcp:1.0.2" level="project" />
+    <orderEntry type="library" name="Maven: com.digitalpetri.modbus:modbus-codec:1.0.2" level="project" />
+    <orderEntry type="library" name="Maven: com.digitalpetri.modbus:modbus-core:1.0.2" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-codec:4.0.26.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-handler:4.0.26.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-buffer:4.0.26.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-common:4.0.26.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-transport:4.0.26.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.dropwizard.metrics:metrics-core:3.1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.4" level="project" />
+    <orderEntry type="library" name="Maven: com.pi4j:pi4j-device:1.0" level="project" />
+    <orderEntry type="library" name="Maven: com.pi4j:pi4j-gpio-extension:1.0" level="project" />
+  </component>
+</module>

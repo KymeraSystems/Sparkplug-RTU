@@ -10,46 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bb4c5037-481c-4f31-ad9c-f0574619e717" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/Meter.java" afterPath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/Meter.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/RTU.java" afterPath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/RTU.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/SparkplugRaspberryPiExample.java" afterPath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/MeterMain.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/impl/AnalogAlarmValue.java" afterPath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/AnalogAlarmValue.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/impl/BooleanValue.java" afterPath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/BooleanValue.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/impl/DateValue.java" afterPath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/DateValue.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/impl/FloatValue.java" afterPath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/FloatValue.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/impl/IntegerValue.java" afterPath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/IntegerValue.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/impl/MemoryBooleanValue.java" afterPath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/MemoryBooleanValue.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/impl/MemoryFloatValue.java" afterPath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/MemoryFloatValue.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/impl/StringValue.java" afterPath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/StringValue.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/impl/TotalizerValue.java" afterPath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/TotalizerValue.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/model/TagValue.java" afterPath="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/model/TagValue.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_digitalpetri_modbus_modbus_codec_1_0_2.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_digitalpetri_modbus_modbus_codec_1_0_2.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_digitalpetri_modbus_modbus_core_1_0_2.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_digitalpetri_modbus_modbus_core_1_0_2.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_digitalpetri_modbus_modbus_slave_tcp_1_0_2.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_digitalpetri_modbus_modbus_slave_tcp_1_0_2.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_annotations_2_7_0.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_annotations_2_7_0.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_7_5.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_7_5.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_7_5.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_7_5.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_protobuf_protobuf_java_2_6_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_protobuf_protobuf_java_2_6_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_googlecode_json_simple_json_simple_1_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_googlecode_json_simple_json_simple_1_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_pi4j_pi4j_core_1_0.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_pi4j_pi4j_core_1_0.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_pi4j_pi4j_device_1_0.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_pi4j_pi4j_device_1_0.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_pi4j_pi4j_gpio_extension_1_0.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_pi4j_pi4j_gpio_extension_1_0.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__io_dropwizard_metrics_metrics_core_3_1_0.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_dropwizard_metrics_metrics_core_3_1_0.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_buffer_4_0_26_Final.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_buffer_4_0_26_Final.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_codec_4_0_26_Final.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_codec_4_0_26_Final.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_common_4_0_26_Final.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_common_4_0_26_Final.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_handler_4_0_26_Final.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_handler_4_0_26_Final.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_transport_4_0_26_Final.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_transport_4_0_26_Final.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_4_8_2.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_4_8_2.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__log4j_log4j_1_2_17.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__log4j_log4j_1_2_17.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_commons_commons_lang3_3_4.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_commons_commons_lang3_3_4.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_paho_org_eclipse_paho_client_mqttv3_1_0_2.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_paho_org_eclipse_paho_client_mqttv3_1_0_2.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_api_1_7_5.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_api_1_7_5.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_log4j12_1_7_5.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_log4j12_1_7_5.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/raspberry_pi_examples/java/pom.xml" afterPath="$PROJECT_DIR$/raspberry_pi_examples/java/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/raspberry_pi_examples/java/raspberry_pi_example.iml" afterPath="$PROJECT_DIR$/raspberry_pi_examples/java/raspberry_pi_example.iml" />
     </list>
     <ignored path="Sparkplug-RTU.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -70,98 +31,7 @@
     <favorites_list name="Sparkplug-RTU" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
-      <file leaf-file-name="BooleanValue.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/BooleanValue.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="627">
-              <caret line="24" column="50" selection-start-line="24" selection-start-column="50" selection-end-line="24" selection-end-column="50" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RTU.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/RTU.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FloatValue.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/FloatValue.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="297">
-              <caret line="10" column="34" selection-start-line="10" selection-start-column="34" selection-end-line="10" selection-end-column="34" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DateValue.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/DateValue.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="957">
-              <caret line="36" column="31" selection-start-line="36" selection-start-column="31" selection-end-line="36" selection-end-column="31" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Meter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/Meter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="924">
-              <caret line="48" column="37" selection-start-line="48" selection-start-column="37" selection-end-line="48" selection-end-column="37" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/pom.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="297">
-              <caret line="18" column="18" selection-start-line="18" selection-start-column="18" selection-end-line="18" selection-end-column="18" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MeterMain.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/MeterMain.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="297">
-              <caret line="127" column="61" selection-start-line="127" selection-start-column="61" selection-end-line="127" selection-end-column="61" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TotalizerValue.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/TotalizerValue.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1914">
-              <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MemoryFloatValue.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/MemoryFloatValue.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1089">
-              <caret line="39" column="1" selection-start-line="39" selection-start-column="1" selection-end-line="39" selection-end-column="1" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="450" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -219,32 +89,7 @@
     </option>
   </component>
   <component name="MavenProjectNavigator">
-    <treeState>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="" />
-          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="Maven Quick Start Archetype" />
-          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="" />
-          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="Maven Quick Start Archetype" />
-          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="Lifecycle" />
-          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$LifecycleNode" />
-        </PATH_ELEMENT>
-      </PATH>
-    </treeState>
+    <treeState />
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-13" />
@@ -310,108 +155,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sparkplug-RTU" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sparkplug-RTU" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="raspberry_pi_examples" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sparkplug-RTU" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sparkplug-RTU" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="raspberry_pi_examples" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="example" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sparkplug-RTU" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sparkplug-RTU" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="raspberry_pi_examples" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -655,6 +398,7 @@
       <setting name="cmdLine" value="run-app" />
       <setting name="passParentEnv" value="true" />
       <setting name="launchBrowser" value="true" />
+      <setting name="depsClasspath" value="false" />
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <method />
     </configuration>
@@ -973,11 +717,12 @@
       <workItem from="1483648881284" duration="17000" />
       <workItem from="1484281045211" duration="19000" />
       <workItem from="1485356760360" duration="2146000" />
+      <workItem from="1485360427208" duration="20000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="104943000" />
+    <option name="totallyTimeSpent" value="104963000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-13" y="47" width="3026" height="1966" extended-state="6" />
@@ -994,19 +739,19 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.221" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.221" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17150997" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24986738" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17150997" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -1029,37 +774,10 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/Meter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/MemoryFloatValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/RTU.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="27" column="24" selection-start-line="27" selection-start-column="24" selection-end-line="27" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/StringValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/Meter.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/MemoryFloatValue.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/RTU.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/StringValue.java" />
     <entry file="file://$PROJECT_DIR$/kurapayload.proto">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="544">
@@ -1067,59 +785,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/DateValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/MeterMain.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/IntegerValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/FloatValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/Meter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="350">
-          <caret line="18" column="100" selection-start-line="18" selection-start-column="100" selection-end-line="18" selection-end-column="100" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/RTU.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="27" column="24" selection-start-line="27" selection-start-column="24" selection-end-line="27" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/StringValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="675">
-          <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/DateValue.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/MeterMain.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/IntegerValue.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/FloatValue.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/Meter.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/RTU.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/StringValue.java" />
     <entry file="file://$PROJECT_DIR$/kurapayload.proto">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="800">
@@ -1127,59 +799,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/DateValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/MeterMain.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/IntegerValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/FloatValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/Meter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="350">
-          <caret line="18" column="100" selection-start-line="18" selection-start-column="100" selection-end-line="18" selection-end-column="100" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/RTU.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="27" column="24" selection-start-line="27" selection-start-column="24" selection-end-line="27" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/StringValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="675">
-          <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/DateValue.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/MeterMain.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/IntegerValue.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/FloatValue.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/Meter.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/RTU.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/StringValue.java" />
     <entry file="file://$PROJECT_DIR$/kurapayload.proto">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="800">
@@ -1187,59 +813,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/DateValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/MeterMain.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/IntegerValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/FloatValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/Meter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="350">
-          <caret line="18" column="100" selection-start-line="18" selection-start-column="100" selection-end-line="18" selection-end-column="100" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/RTU.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="27" column="24" selection-start-line="27" selection-start-column="24" selection-end-line="27" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/StringValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="675">
-          <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/DateValue.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/MeterMain.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/IntegerValue.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/FloatValue.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/Meter.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/RTU.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/StringValue.java" />
     <entry file="file://$PROJECT_DIR$/kurapayload.proto">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="800">
@@ -1247,20 +827,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/DateValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/IntegerValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/DateValue.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/IntegerValue.java" />
     <entry file="file://$PROJECT_DIR$/kurapayload.proto">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1056">
@@ -1268,128 +836,25 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/MemoryBooleanValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="792">
-          <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/org/eclipse/kura/core/cloud/CloudPayloadProtoBufDecoderImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3425">
-          <caret line="162" column="32" selection-start-line="162" selection-start-column="32" selection-end-line="162" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/model/TagValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="9" column="18" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/AnalogAlarmValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="278">
-          <caret line="29" column="24" selection-start-line="29" selection-start-column="24" selection-end-line="29" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/MemoryBooleanValue.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/org/eclipse/kura/core/cloud/CloudPayloadProtoBufDecoderImpl.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/model/TagValue.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/AnalogAlarmValue.java" />
     <entry file="jar://$MAVEN_REPOSITORY$/com/digitalpetri/modbus/modbus-slave-tcp/1.0.2/modbus-slave-tcp-1.0.2.jar!/com/digitalpetri/modbus/slave/ServiceRequestHandler.class" />
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_45/src.zip!/java/util/Map.java" />
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/cirruslink/example/Compressor.java" />
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/StringValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/MemoryFloatValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1089">
-          <caret line="39" column="1" selection-start-line="39" selection-start-column="1" selection-end-line="39" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/FloatValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="10" column="34" selection-start-line="10" selection-start-column="34" selection-end-line="10" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/DateValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="957">
-          <caret line="36" column="31" selection-start-line="36" selection-start-column="31" selection-end-line="36" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/TotalizerValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1914">
-          <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/RTU.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/StringValue.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/MemoryFloatValue.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/FloatValue.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/DateValue.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/TotalizerValue.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/RTU.java" />
     <entry file="file://$PROJECT_DIR$/stand_alone_examples/c_example/example.c" />
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/BooleanValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="627">
-          <caret line="24" column="50" selection-start-line="24" selection-start-column="50" selection-end-line="24" selection-end-column="50" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/Meter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="924">
-          <caret line="48" column="37" selection-start-line="48" selection-start-column="37" selection-end-line="48" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/target/classes/com/cirruslink/example/Compressor.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-18">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#5135#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="18" column="18" selection-start-line="18" selection-start-column="18" selection-end-line="18" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/MeterMain.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="127" column="61" selection-start-line="127" selection-start-column="61" selection-end-line="127" selection-end-column="61" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/BooleanValue.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/Meter.java" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/target/classes/com/cirruslink/example/Compressor.class" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/pom.xml" />
+    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/MeterMain.java" />
   </component>
   <component name="masterDetails">
     <states>
