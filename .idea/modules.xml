@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Sparkplug-RTU.iml" filepath="$PROJECT_DIR$/.idea/Sparkplug-RTU.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sparkplug_a/meter_simulator/java/meter_simulator.iml" filepath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/meter_simulator.iml" />
       <module fileurl="file://$PROJECT_DIR$/raspberry_pi_examples/java/raspberry_pi_example.iml" filepath="$PROJECT_DIR$/raspberry_pi_examples/java/raspberry_pi_example.iml" />
     </modules>
   </component>

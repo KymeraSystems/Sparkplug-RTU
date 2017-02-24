@@ -22,10 +22,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
+        <module name="meter_simulator" />
         <module name="raspberry_pi_example" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
+      <module name="meter_simulator" target="1.8" />
       <module name="raspberry_pi_example" target="1.8" />
     </bytecodeTargetLevel>
   </component>

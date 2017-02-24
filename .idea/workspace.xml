@@ -10,12 +10,113 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bb4c5037-481c-4f31-ad9c-f0574619e717" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/meter_simulator.iml" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/Sparkplug-RTU.iml" afterPath="$PROJECT_DIR$/.idea/Sparkplug-RTU.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" afterPath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_digitalpetri_modbus_modbus_codec_1_0_2.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_digitalpetri_modbus_modbus_codec_1_0_2.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_digitalpetri_modbus_modbus_core_1_0_2.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_digitalpetri_modbus_modbus_core_1_0_2.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_digitalpetri_modbus_modbus_slave_tcp_1_0_2.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_digitalpetri_modbus_modbus_slave_tcp_1_0_2.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_annotations_2_7_0.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_annotations_2_7_0.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_7_5.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_7_5.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_7_5.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_7_5.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_protobuf_protobuf_java_2_6_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_protobuf_protobuf_java_2_6_1.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_googlecode_json_simple_json_simple_1_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_googlecode_json_simple_json_simple_1_1.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_pi4j_pi4j_core_1_0.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_pi4j_pi4j_core_1_0.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_pi4j_pi4j_device_1_0.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_pi4j_pi4j_device_1_0.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_pi4j_pi4j_gpio_extension_1_0.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_pi4j_pi4j_gpio_extension_1_0.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__io_dropwizard_metrics_metrics_core_3_1_0.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_dropwizard_metrics_metrics_core_3_1_0.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_buffer_4_0_26_Final.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_buffer_4_0_26_Final.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_codec_4_0_26_Final.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_codec_4_0_26_Final.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_common_4_0_26_Final.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_common_4_0_26_Final.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_handler_4_0_26_Final.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_handler_4_0_26_Final.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_transport_4_0_26_Final.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_transport_4_0_26_Final.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_4_8_2.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_4_8_2.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__log4j_log4j_1_2_17.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__log4j_log4j_1_2_17.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_commons_commons_lang3_3_4.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_commons_commons_lang3_3_4.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_paho_org_eclipse_paho_client_mqttv3_1_0_2.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_paho_org_eclipse_paho_client_mqttv3_1_0_2.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_api_1_7_5.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_api_1_7_5.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_log4j12_1_7_5.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_log4j12_1_7_5.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LICENSE" afterPath="$PROJECT_DIR$/LICENSE" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/compiler.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/compiler.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/copyright/profiles_settings.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/copyright/profiles_settings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__com_digitalpetri_modbus_modbus_codec_1_0_2.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__com_digitalpetri_modbus_modbus_codec_1_0_2.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__com_digitalpetri_modbus_modbus_core_1_0_2.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__com_digitalpetri_modbus_modbus_core_1_0_2.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__com_digitalpetri_modbus_modbus_slave_tcp_1_0_2.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__com_digitalpetri_modbus_modbus_slave_tcp_1_0_2.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_annotations_2_7_0.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_annotations_2_7_0.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_7_5.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_7_5.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_7_5.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_7_5.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__com_google_protobuf_protobuf_java_2_6_1.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__com_google_protobuf_protobuf_java_2_6_1.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__com_googlecode_json_simple_json_simple_1_1.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__com_googlecode_json_simple_json_simple_1_1.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__com_pi4j_pi4j_core_1_0.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__com_pi4j_pi4j_core_1_0.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__com_pi4j_pi4j_device_1_0.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__com_pi4j_pi4j_device_1_0.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__com_pi4j_pi4j_gpio_extension_1_0.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__com_pi4j_pi4j_gpio_extension_1_0.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__io_dropwizard_metrics_metrics_core_3_1_0.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__io_dropwizard_metrics_metrics_core_3_1_0.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__io_netty_netty_buffer_4_0_26_Final.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__io_netty_netty_buffer_4_0_26_Final.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__io_netty_netty_codec_4_0_26_Final.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__io_netty_netty_codec_4_0_26_Final.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__io_netty_netty_common_4_0_26_Final.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__io_netty_netty_common_4_0_26_Final.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__io_netty_netty_handler_4_0_26_Final.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__io_netty_netty_handler_4_0_26_Final.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__io_netty_netty_transport_4_0_26_Final.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__io_netty_netty_transport_4_0_26_Final.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__junit_junit_4_8_2.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__junit_junit_4_8_2.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__log4j_log4j_1_2_17.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__log4j_log4j_1_2_17.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__org_apache_commons_commons_lang3_3_4.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__org_apache_commons_commons_lang3_3_4.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__org_eclipse_paho_org_eclipse_paho_client_mqttv3_1_0_2.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__org_eclipse_paho_org_eclipse_paho_client_mqttv3_1_0_2.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__org_slf4j_slf4j_api_1_7_5.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__org_slf4j_slf4j_api_1_7_5.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__org_slf4j_slf4j_log4j12_1_7_5.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/libraries/Maven__org_slf4j_slf4j_log4j12_1_7_5.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/misc.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/modules.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/modules.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/sparkplug_a.iml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/sparkplug_a.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/.idea/workspace.xml" afterPath="$PROJECT_DIR$/sparkplug_a/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/kurapayload.proto" afterPath="$PROJECT_DIR$/sparkplug_a/kurapayload.proto" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/.idea/compiler.xml" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/.idea/compiler.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/.idea/copyright/profiles_settings.xml" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/.idea/copyright/profiles_settings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/.idea/misc.xml" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/.idea/modules.xml" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/.idea/modules.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/.idea/sparkplug_a.iml" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/.idea/sparkplug_a.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/.idea/workspace.xml" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/THIRD-PARTY.txt" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/THIRD-PARTY.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/pom.xml" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/pom.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/raspberry_pi_example.iml" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/raspberry_pi_example.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/Meter.java" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/Meter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/MeterMain.java" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/MeterMain.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/RTU.java" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/RTU.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/AnalogAlarmValue.java" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/AnalogAlarmValue.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/BooleanValue.java" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/BooleanValue.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/DateValue.java" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/DateValue.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/FloatValue.java" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/FloatValue.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/IntegerValue.java" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/IntegerValue.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/MemoryBooleanValue.java" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/MemoryBooleanValue.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/MemoryFloatValue.java" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/MemoryFloatValue.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/StringValue.java" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/StringValue.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/TotalizerValue.java" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/TotalizerValue.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/model/TagValue.java" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/model/TagValue.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/org/eclipse/kura/KuraErrorCode.java" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/org/eclipse/kura/KuraErrorCode.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/org/eclipse/kura/KuraException.java" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/org/eclipse/kura/KuraException.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/org/eclipse/kura/KuraInvalidMessageException.java" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/org/eclipse/kura/KuraInvalidMessageException.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/org/eclipse/kura/KuraInvalidMetricTypeException.java" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/org/eclipse/kura/KuraInvalidMetricTypeException.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/org/eclipse/kura/KuraRuntimeException.java" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/org/eclipse/kura/KuraRuntimeException.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/org/eclipse/kura/core/cloud/CloudPayloadEncoder.java" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/org/eclipse/kura/core/cloud/CloudPayloadEncoder.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/org/eclipse/kura/core/cloud/CloudPayloadProtoBufDecoderImpl.java" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/org/eclipse/kura/core/cloud/CloudPayloadProtoBufDecoderImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/org/eclipse/kura/core/cloud/CloudPayloadProtoBufEncoderImpl.java" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/org/eclipse/kura/core/cloud/CloudPayloadProtoBufEncoderImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/org/eclipse/kura/core/message/protobuf/KuraPayloadProto.java" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/org/eclipse/kura/core/message/protobuf/KuraPayloadProto.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/org/eclipse/kura/core/util/GZipUtil.java" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/org/eclipse/kura/core/util/GZipUtil.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/org/eclipse/kura/message/KuraPayload.java" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/org/eclipse/kura/message/KuraPayload.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/org/eclipse/kura/message/KuraPosition.java" afterPath="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/org/eclipse/kura/message/KuraPosition.java" />
     </list>
     <ignored path="Sparkplug-RTU.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/raspberry_pi_examples/java/target/" />
     <ignored path=".idea/dataSources.local.xml" />
+    <ignored path="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -31,7 +132,22 @@
     <favorites_list name="Sparkplug-RTU" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="450" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
+      <file leaf-file-name="MeterMain.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/MeterMain.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="556">
+              <caret line="332" column="48" lean-forward="false" selection-start-line="332" selection-start-column="48" selection-end-line="332" selection-end-column="48" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#27743#31675#0" expanded="true" />
+                <element signature="e#31674#31675#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -67,6 +183,7 @@
         <option value="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/Meter.java" />
         <option value="$PROJECT_DIR$/raspberry_pi_examples/java/pom.xml" />
         <option value="$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/MeterMain.java" />
+        <option value="$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/MeterMain.java" />
       </list>
     </option>
   </component>
@@ -77,11 +194,6 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="mavenHome" value="Bundled (Maven 3)" />
-      </MavenGeneralSettings>
-    </option>
     <option name="importingSettings">
       <MavenImportingSettings>
         <option name="importAutomatically" value="true" />
@@ -89,23 +201,38 @@
     </option>
   </component>
   <component name="MavenProjectNavigator">
-    <treeState />
+    <treeState>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Maven Quick Start Archetype" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Maven Quick Start Archetype" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Lifecycle" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$LifecycleNode" />
+        </PATH_ELEMENT>
+      </PATH>
+    </treeState>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-13" />
-    <option name="y" value="47" />
-    <option name="width" value="3026" />
-    <option name="height" value="1966" />
-  </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
-    <OptionsSetting value="true" id="Add" />
-    <OptionsSetting value="true" id="Remove" />
-    <OptionsSetting value="true" id="Checkout" />
-    <OptionsSetting value="true" id="Update" />
-    <OptionsSetting value="true" id="Status" />
-    <OptionsSetting value="true" id="Edit" />
-    <ConfirmationsSetting value="0" id="Add" />
-    <ConfirmationsSetting value="0" id="Remove" />
+    <option name="x" value="75" />
+    <option name="y" value="602" />
+    <option name="width" value="1940" />
+    <option name="height" value="1558" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -122,6 +249,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -129,12 +259,6 @@
               <option name="myItemId" value="Sparkplug-RTU" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Sparkplug-RTU" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="Sparkplug-RTU" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
@@ -150,7 +274,25 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="raspberry_pi_examples" />
+              <option name="myItemId" value="sparkplug_a" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sparkplug-RTU" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sparkplug-RTU" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sparkplug_a" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="meter_simulator" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -158,22 +300,108 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sparkplug-RTU" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sparkplug-RTU" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sparkplug_a" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="meter_simulator" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sparkplug-RTU" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sparkplug-RTU" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sparkplug_a" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="meter_simulator" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="example" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sparkplug-RTU" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sparkplug-RTU" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sparkplug_a" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="meter_simulator" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../VASP-IgnitionAnalytics" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
-    <property name="settings.editor.splitter.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
@@ -185,30 +413,6 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android Application">
-      <module name="" />
-      <option name="DEPLOY" value="true" />
-      <option name="ARTIFACT_NAME" value="" />
-      <option name="PM_INSTALL_OPTIONS" value="" />
-      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
-      <option name="MODE" value="default_activity" />
-      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
-      <option name="PREFERRED_AVD" value="" />
-      <option name="CLEAR_LOGCAT" value="false" />
-      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
-      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
-      <option name="FORCE_STOP_RUNNING_APP" value="true" />
-      <option name="DEBUGGER_TYPE" value="Java" />
-      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
-      <option name="PREFERRED_AVD" value="" />
-      <Java />
-      <Profilers>
-        <option name="GAPID_DISABLE_PCS" value="false" />
-      </Profilers>
-      <option name="DEEP_LINK" value="" />
-      <option name="ACTIVITY_CLASS" value="" />
-      <method />
-    </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
       <module name="" />
       <option name="TESTING_TYPE" value="0" />
@@ -228,7 +432,11 @@
       <option name="PREFERRED_AVD" value="" />
       <Java />
       <Profilers>
+        <option name="ENABLE_ADVANCED_PROFILING" value="true" />
+        <option name="GAPID_ENABLED" value="false" />
         <option name="GAPID_DISABLE_PCS" value="false" />
+        <option name="SUPPORT_LIB_ENABLED" value="true" />
+        <option name="INSTRUMENTATION_ENABLED" value="true" />
       </Profilers>
       <method />
     </configuration>
@@ -398,32 +606,12 @@
       <setting name="cmdLine" value="run-app" />
       <setting name="passParentEnv" value="true" />
       <setting name="launchBrowser" value="true" />
+      <setting name="launchBrowserUrl" value="" />
       <setting name="depsClasspath" value="false" />
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <method />
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-      <method />
-    </configuration>
-    <configuration default="true" type="JUnitTestDiscovery" factoryName="JUnit Test Discovery" changeList="All">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -530,6 +718,8 @@
       <setting name="testName" value="" />
       <setting name="testKind" value="Class" />
       <setting name="showProgressMessages" value="true" />
+      <classRegexps />
+      <testRegexps />
       <envs />
       <method />
     </configuration>
@@ -545,6 +735,8 @@
       <setting name="testName" value="" />
       <setting name="testKind" value="Class" />
       <setting name="showProgressMessages" value="true" />
+      <classRegexps />
+      <testRegexps />
       <envs />
       <method />
     </configuration>
@@ -582,34 +774,6 @@
       <listeners />
       <method />
     </configuration>
-    <configuration default="true" type="TestNGTestDiscovery" factoryName="TestNG Test Discovery" changeList="All">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="SUITE_NAME" />
-      <option name="PACKAGE_NAME" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="METHOD_NAME" />
-      <option name="GROUP_NAME" />
-      <option name="TEST_OBJECT" value="CLASS" />
-      <option name="VM_PARAMETERS" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" />
-      <option name="OUTPUT_DIRECTORY" />
-      <option name="ANNOTATION_TYPE" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <option name="USE_DEFAULT_REPORTERS" value="false" />
-      <option name="PROPERTIES_FILE" />
-      <envs />
-      <properties />
-      <listeners />
-      <method />
-    </configuration>
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
       <node-interpreter>project</node-interpreter>
       <node-options />
@@ -620,7 +784,7 @@
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.npm" factoryName="npm">
-      <command value="run-script" />
+      <command value="run" />
       <scripts />
       <node-interpreter value="project" />
       <envs />
@@ -657,7 +821,33 @@
       <setting name="testName" value="" />
       <setting name="testKind" value="Class" />
       <setting name="showProgressMessages" value="true" />
+      <classRegexps />
+      <testRegexps />
       <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android Application">
+      <module name="" />
+      <option name="DEPLOY" value="true" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="DEBUGGER_TYPE" value="Java" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <Java />
+      <Profilers>
+        <option name="GAPID_DISABLE_PCS" value="false" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
       <method />
     </configuration>
   </component>
@@ -718,32 +908,40 @@
       <workItem from="1484281045211" duration="19000" />
       <workItem from="1485356760360" duration="2146000" />
       <workItem from="1485360427208" duration="20000" />
+      <workItem from="1486111084937" duration="2837000" />
+      <workItem from="1486418572210" duration="738000" />
+      <workItem from="1486419721190" duration="46000" />
+      <workItem from="1487956681223" duration="1915000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="104963000" />
+    <option name="totallyTimeSpent" value="110499000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-13" y="47" width="3026" height="1966" extended-state="6" />
+    <frame x="75" y="602" width="1940" height="1558" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.308" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13917525" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43076923" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28590694" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.221" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25979382" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24986738" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -753,6 +951,9 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17150997" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="processedProjectFiles" value="true" />
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">
@@ -774,17 +975,10 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/Meter.java" />
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/MemoryFloatValue.java" />
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/RTU.java" />
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/StringValue.java" />
-    <entry file="file://$PROJECT_DIR$/kurapayload.proto">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="32" column="5" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/kurapayload.proto" />
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/DateValue.java" />
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/MeterMain.java" />
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/IntegerValue.java" />
@@ -792,13 +986,7 @@
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/Meter.java" />
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/RTU.java" />
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/StringValue.java" />
-    <entry file="file://$PROJECT_DIR$/kurapayload.proto">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="800">
-          <caret line="32" column="5" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/kurapayload.proto" />
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/DateValue.java" />
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/MeterMain.java" />
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/IntegerValue.java" />
@@ -806,13 +994,7 @@
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/Meter.java" />
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/RTU.java" />
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/StringValue.java" />
-    <entry file="file://$PROJECT_DIR$/kurapayload.proto">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="800">
-          <caret line="32" column="5" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/kurapayload.proto" />
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/DateValue.java" />
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/MeterMain.java" />
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/IntegerValue.java" />
@@ -820,22 +1002,10 @@
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/Meter.java" />
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/RTU.java" />
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/StringValue.java" />
-    <entry file="file://$PROJECT_DIR$/kurapayload.proto">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="800">
-          <caret line="32" column="5" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/kurapayload.proto" />
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/DateValue.java" />
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/IntegerValue.java" />
-    <entry file="file://$PROJECT_DIR$/kurapayload.proto">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1056">
-          <caret line="32" column="5" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/kurapayload.proto" />
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/impl/MemoryBooleanValue.java" />
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/org/eclipse/kura/core/cloud/CloudPayloadProtoBufDecoderImpl.java" />
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/model/TagValue.java" />
@@ -855,6 +1025,18 @@
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/target/classes/com/cirruslink/example/Compressor.class" />
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/pom.xml" />
     <entry file="file://$PROJECT_DIR$/raspberry_pi_examples/java/src/main/java/com/kymerasystems/mqtt/metersim/example/MeterMain.java" />
+    <entry file="file://$PROJECT_DIR$/sparkplug_a/meter_simulator/java/src/main/java/com/kymerasystems/mqtt/metersim/example/MeterMain.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="556">
+          <caret line="332" column="48" lean-forward="false" selection-start-line="332" selection-start-column="48" selection-end-line="332" selection-end-column="48" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#27743#31675#0" expanded="true" />
+            <element signature="e#31674#31675#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
   </component>
   <component name="masterDetails">
     <states>

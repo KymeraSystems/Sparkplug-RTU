@@ -46,17 +46,8 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
-import com.pi4j.component.button.ButtonState;
-import com.pi4j.component.button.ButtonStateChangeEvent;
-import com.pi4j.component.button.ButtonStateChangeListener;
-import com.pi4j.device.pibrella.Pibrella;
-import com.pi4j.device.pibrella.PibrellaInput;
-import com.pi4j.device.pibrella.PibrellaOutput;
-import com.pi4j.device.pibrella.impl.PibrellaDevice;
-import com.pi4j.io.gpio.PinState;
-import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
-import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 
 /*
  * This is a VERY simple implementation of an MQTT Edge of Network Node (EoN Node) and an associated 
@@ -71,7 +62,6 @@ import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 
 public class MeterMain implements MqttCallback {
 
-    private static Pibrella pibrella;
     public static final Random random = new Random();
 
     private static final HashMap<String, Object> settings = new HashMap();
@@ -83,12 +73,11 @@ public class MeterMain implements MqttCallback {
     private String[] servers;
 
     // Configuration
-    private String serverUrl = "tcp://dv.kymerasystems.com:1883"; // Change to point to
+    private String serverUrl = "tcp://127.0.0.1:1883"; // Change to point to
     // your MQTT Server
     private String bindUrl = "localhost";
     private String groupId = "Sparkplug Devices";
     private String edgeNode = null;
-    private String deviceId = "Pibrella";
     private String clientId;
     private String username = "admin";
     private String password = "changeme";
@@ -101,16 +90,13 @@ public class MeterMain implements MqttCallback {
     private int configChangeCount = 1;
     private int scanRateMs = 1000;
     private long upTimeStart = System.currentTimeMillis();
-    private int buttonCounter = 0;
-    private int buttonCounterSetpoint = 10;
-    private boolean isAPi = false;
     ModbusTcpSlave slave = null;
     private int bdSeq = 0;
     private int seq = 0;
 
     private Object lock = new Object();
     RTU rtu;
-    private String adapter = "wlan0";
+    private String adapter = "";
     public static HashMap<Short, HashMap<Integer, TagValue>> modbusRegisters = new HashMap<>();
     public static HashMap<Short, HashMap<Integer, TagValue>> modbusCoils = new HashMap<>();
 
@@ -119,11 +105,11 @@ public class MeterMain implements MqttCallback {
         settings.put("meter id", "unknown");
         initializeProps();
         settings.put("meter count", 5);
-        settings.put("broker username", "admin");
-        settings.put("broker password", "changeme");
+        settings.put("broker username", "");
+        settings.put("broker password", "");
         settings.put("latitude", random.nextDouble() * (5.99995) + 53.875221);
         settings.put("longitude", random.nextDouble() * (-19.731444) - 110.157104);
-        settings.put("anonymous", false);
+        settings.put("anonymous", true);
         settings.put("updatable", true);
         ArrayList<String> tempServerList = new ArrayList<>();
         tempServerList.add("tcp://127.0.0.1:1883");
@@ -131,7 +117,8 @@ public class MeterMain implements MqttCallback {
         settings.put("debug", debug);
         settings.put("bindUrl", bindUrl);
         settings.put("enableModbusServer", false);
-        settings.put("groupId",groupId);
+        settings.put("groupId", groupId);
+        settings.put("adapter", adapter);
 
         if (new File(settingsFile).exists()) {
             System.out.println("config file exists");
@@ -142,7 +129,6 @@ public class MeterMain implements MqttCallback {
 
         this.edgeNode = ((String) settings.get("meter id"));
         this.clientId = MqttClient.generateClientId();
-        // this.isAPi = (Boolean) settings.get("IsAPi");
         int meterCount = (int) settings.get("meter count");
         this.servers = ((ArrayList<String>) settings.get("servers")).toArray(new String[]{});
         this.username = ((String) settings.get("broker username"));
@@ -150,13 +136,11 @@ public class MeterMain implements MqttCallback {
         this.debug = ((boolean) settings.get("debug"));
         this.bindUrl = ((String) settings.get("bindUrl"));
         this.groupId = (String) settings.get("groupId");
+        this.adapter = (String) settings.getOrDefault("adapter", "");
 
         this.enableModbusServer = (boolean) settings.get("enableModbusServer");
 
         this.rtu = new RTU(this.edgeNode, meterCount);
-        if (this.isAPi) {
-            pibrella = new PibrellaDevice();
-        }
 
         if (enableModbusServer) {
             setupModbusSlave();
@@ -178,15 +162,12 @@ public class MeterMain implements MqttCallback {
                 while ((strLine = br.readLine()) != null) {
                     if (strLine.startsWith("Serial")) {
                         settings.put("meter id", strLine.substring(strLine.length() - 8));
-                        this.isAPi = true;
                     }
                 }
                 try {
                     br.close();
                 } catch (IOException localIOException) {
                 }
-                settings.put("IsAPi", this.isAPi);
-                settingsFile = "/home/pi/rtu-config.json";
             } catch (FileNotFoundException localFileNotFoundException) {
             } catch (IOException localIOException2) {
             } finally {
@@ -208,10 +189,7 @@ public class MeterMain implements MqttCallback {
 
     public void run() {
         try {
-            // Create the Raspberry Pi Pibrella board listeners
-            if (this.isAPi) {
-                createPibrellaListeners();
-            }
+
             // Thread pool for outgoing published messages
             executor = Executors.newFixedThreadPool(1);
 
@@ -334,7 +312,7 @@ public class MeterMain implements MqttCallback {
             // Create a new Paho MQTT Client
             //
 
-            client = new MqttClient(servers[0], clientId);
+            client = new MqttClient(servers[0], clientId, new MemoryPersistence());
 
             //
             // Using the parameters set above, try to connect to the define MQTT
@@ -352,7 +330,7 @@ public class MeterMain implements MqttCallback {
             client.subscribe("spAv1.0/" + groupId + "/NCMD/" + edgeNode + "/#", 0);
             client.subscribe("spAv1.0/" + groupId + "/DCMD/" + edgeNode + "/#", 0);
             if ((boolean) settings.get("updatable")) {
-                client.subscribe("kymera/#", 0);
+                client.subscribe("kymera/upgrade", 0);
             }
         } catch (Exception e) {
             System.out.println("Error Establishing an MQTT Session:");
@@ -454,40 +432,6 @@ public class MeterMain implements MqttCallback {
                 // folder hierarchy under the associated Device.
                 //
 
-                if (isAPi) {
-                    payload = new KuraPayload();
-                    payload.setTimestamp(new Date());
-                    payload = addSeqNum(payload);
-                    // Create an "Inputs" folder of process variables
-                    payload.addMetric("Inputs/a", pibrella.getInputPin(PibrellaInput.A).isHigh());
-                    payload.addMetric("Inputs/b", pibrella.getInputPin(PibrellaInput.B).isHigh());
-                    payload.addMetric("Inputs/c", pibrella.getInputPin(PibrellaInput.C).isHigh());
-                    payload.addMetric("Inputs/d", pibrella.getInputPin(PibrellaInput.D).isHigh());
-                    // Create an "Outputs" folder of process variables
-                    payload.addMetric("Outputs/e", pibrella.getOutputPin(PibrellaOutput.E).isHigh());
-                    payload.addMetric("Outputs/f", pibrella.getOutputPin(PibrellaOutput.F).isHigh());
-                    payload.addMetric("Outputs/g", pibrella.getOutputPin(PibrellaOutput.G).isHigh());
-                    payload.addMetric("Outputs/h", pibrella.getOutputPin(PibrellaOutput.H).isHigh());
-                    // Create an additional folder under "Outputs" called "LEDs"
-                    payload.addMetric("Outputs/LEDs/green", pibrella.getOutputPin(PibrellaOutput.LED_GREEN).isHigh());
-                    payload.addMetric("Outputs/LEDs/red", pibrella.getOutputPin(PibrellaOutput.LED_RED).isHigh());
-                    payload.addMetric("Outputs/LEDs/yellow", pibrella.getOutputPin(PibrellaOutput.LED_YELLOW).isHigh());
-                    // Place the button process variables at the root level of the
-                    // tag hierarchy
-                    payload.addMetric("button", pibrella.getInputPin(PibrellaInput.Button).isHigh());
-                    payload.addMetric("button count", buttonCounter);
-                    payload.addMetric("button count setpoint", buttonCounterSetpoint);
-                    payload.addMetric("buzzer", false);
-
-                    //
-                    // Add some properties to the Properties folder
-                    //
-                    payload.addMetric("Properties/dev_type", "Pibrella");
-                    payload.addMetric("Properties/hw_version", "3.0.1");
-
-                    // Publish the Device BIRTH Certificate now
-                    executor.execute(new Publisher("spAv1.0/" + groupId + "/DBIRTH/" + edgeNode + "/" + deviceId, payload));
-                }
                 payload = new KuraPayload();
                 payload.setTimestamp(new Date());
                 payload = addSeqNum(payload);
@@ -571,120 +515,55 @@ public class MeterMain implements MqttCallback {
 
             Iterator<Entry<String, Object>> metrics = inboundPayload.metrics().entrySet().iterator();
             while (metrics.hasNext()) {
-                Entry<String, Object> entry = metrics.next();
-                //System.out.println("Metric: " + entry.getKey() + " :: " + entry.getValue());
-
-                if ("Node Control/Rebirth".equals(entry.getKey())) {
-                    if ((boolean) entry.getValue()) {
-                        publishBirth();
-                    }
-                } else if ("Node Control/Reboot".equals(entry.getKey())) {
-                    if ((boolean) entry.getValue() && isAPi) {
-                        System.out.println("Received a Reboot command.");
-                        outboundPayload.addMetric("Node Control/Reboot", false);
-                        sendPayload = true;
-                        reboot = true;
-                    }
-                } else if ("Node Control/Next Server".equals(entry.getKey())) {
-                    if ((boolean) entry.getValue()) {
-
-                        System.out.println("Received a Next Server command.");
-                    }
-                } else if ("Node Control/Scan Rate ms".equals(entry.getKey())) {
-                    scanRateMs = (Integer) inboundPayload.getMetric("Node Control/Scan Rate ms");
-                    if (scanRateMs < 100) {
-                        // Limit Scan Rate to a minimum of 100ms
-                        scanRateMs = 100;
-                    }
-                    outboundPayload.addMetric("Node Control/Scan Rate ms", scanRateMs);
-                    sendPayload = true;
-                } else {
-                    TagValue v = rtu.values.get(entry.getKey());
-                    if (v != null) {
-                        v.setValue(entry.getValue(), false);
-                        outboundPayload.addMetric(entry.getKey(), v.getValue());
-                        sendPayload = true;
-                    }
-                }
-
                 synchronized (lock) {
+                    Entry<String, Object> entry = metrics.next();
+                    //System.out.println("Metric: " + entry.getKey() + " :: " + entry.getValue());
+
+                    if ("Node Control/Rebirth".equals(entry.getKey())) {
+                        if ((boolean) entry.getValue()) {
+                            publishBirth();
+                        }
+                    } else if ("Node Control/Reboot".equals(entry.getKey())) {
+                        if ((boolean) entry.getValue()) {
+                            System.out.println("Received a Reboot command.");
+                            outboundPayload.addMetric("Node Control/Reboot", false);
+                            sendPayload = true;
+                            reboot = true;
+                        }
+                    } else if ("Node Control/Next Server".equals(entry.getKey())) {
+                        if ((boolean) entry.getValue()) {
+                            System.out.println("Received a Next Server command.");
+                        }
+                    } else if ("Node Control/Scan Rate ms".equals(entry.getKey())) {
+                        scanRateMs = (Integer) inboundPayload.getMetric("Node Control/Scan Rate ms");
+                        if (scanRateMs < 100) {
+                            // Limit Scan Rate to a minimum of 100ms
+                            scanRateMs = 100;
+                        }
+                        outboundPayload.addMetric("Node Control/Scan Rate ms", scanRateMs);
+                        sendPayload = true;
+                    } else {
+                        TagValue v = rtu.values.get(entry.getKey());
+                        if (v != null) {
+                            v.setValue(entry.getValue(), false);
+                            outboundPayload.addMetric(entry.getKey(), v.getValue());
+                            sendPayload = true;
+                        }
+                    }
+
+
                     if (sendPayload) {
                         executor.execute(new Publisher("spAv1.0/" + groupId + "/NDATA/" + edgeNode, outboundPayload));
                     }
                 }
 
                 if (reboot) {
-                    if (isAPi) {
+                    try {
                         Runtime.getRuntime().exec("reboot");
+                    } catch (Error e) {
                     }
-                }
-            }
-        } else if (splitTopic[0].equals("spAv1.0") && splitTopic[1].equals(groupId) && splitTopic[2].equals("DCMD")
-                && splitTopic[3].equals(edgeNode) && splitTopic[4].equals(deviceId)) {
-            synchronized (lock) {
-                System.out.println("Command received for device: " + splitTopic[4] + " on topic: " + topic);
 
-                // Get the incoming metric key and value
-                CloudPayloadProtoBufDecoderImpl decoder = new CloudPayloadProtoBufDecoderImpl(message.getPayload());
-                KuraPayload inboundPayload = decoder.buildFromByteArray();
-
-                Iterator<Entry<String, Object>> metrics = inboundPayload.metrics().entrySet().iterator();
-                while (metrics.hasNext()) {
-                    Entry<String, Object> entry = metrics.next();
-                    //System.out.println("Metric: " + entry.getKey() + " :: " + entry.getValue());
                 }
-
-                if (inboundPayload.getMetric("Outputs/e") != null) {
-                    pibrella.getOutputPin(PibrellaOutput.E).setState((Boolean) inboundPayload.getMetric("Outputs/e"));
-                    outboundPayload.addMetric("Outputs/e", pibrella.getOutputPin(PibrellaOutput.E).isHigh());
-                }
-                if (inboundPayload.getMetric("Outputs/f") != null) {
-                    pibrella.getOutputPin(PibrellaOutput.F).setState((Boolean) inboundPayload.getMetric("Outputs/f"));
-                    outboundPayload.addMetric("Outputs/f", pibrella.getOutputPin(PibrellaOutput.F).isHigh());
-                }
-                if (inboundPayload.getMetric("Outputs/g") != null) {
-                    pibrella.getOutputPin(PibrellaOutput.G).setState((Boolean) inboundPayload.getMetric("Outputs/g"));
-                    outboundPayload.addMetric("Outputs/g", pibrella.getOutputPin(PibrellaOutput.G).isHigh());
-                }
-                if (inboundPayload.getMetric("Outputs/h") != null) {
-                    pibrella.getOutputPin(PibrellaOutput.H).setState((Boolean) inboundPayload.getMetric("Outputs/h"));
-                    outboundPayload.addMetric("Outputs/h", pibrella.getOutputPin(PibrellaOutput.H).isHigh());
-                }
-                if (inboundPayload.getMetric("Outputs/LEDs/green") != null) {
-                    if ((Boolean) inboundPayload.getMetric("Outputs/LEDs/green") == true) {
-                        pibrella.ledGreen().on();
-                    } else {
-                        pibrella.ledGreen().off();
-                    }
-                    outboundPayload.addMetric("Outputs/LEDs/green", pibrella.ledGreen().isOn());
-                }
-                if (inboundPayload.getMetric("Outputs/LEDs/red") != null) {
-                    if ((Boolean) inboundPayload.getMetric("Outputs/LEDs/red") == true) {
-                        pibrella.ledRed().on();
-                    } else {
-                        pibrella.ledRed().off();
-                    }
-                    outboundPayload.addMetric("Outputs/LEDs/red", pibrella.ledRed().isOn());
-                }
-                if (inboundPayload.getMetric("Outputs/LEDs/yellow") != null) {
-                    if ((Boolean) inboundPayload.getMetric("Outputs/LEDs/yellow") == true) {
-                        pibrella.ledYellow().on();
-                    } else {
-                        pibrella.ledYellow().off();
-                    }
-                    outboundPayload.addMetric("Outputs/LEDs/yellow", pibrella.ledYellow().isOn());
-                }
-                if (inboundPayload.getMetric("button count setpoint") != null) {
-                    buttonCounterSetpoint = (Integer) inboundPayload.getMetric("button count setpoint");
-                    outboundPayload.addMetric("button count setpoint", buttonCounterSetpoint);
-                }
-                if (inboundPayload.getMetric("buzzer") != null) {
-                    pibrella.getBuzzer().buzz(100, 2000);
-                }
-
-                // Publish the message in a new thread
-                executor.execute(
-                        new Publisher("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, outboundPayload));
             }
         } else if (splitTopic[0].equals("spAv1.0") && splitTopic[1].equals(groupId) && splitTopic[2].equals("DCMD")
                 && splitTopic[3].equals(edgeNode) && splitTopic[4].equals("meters")) {
@@ -758,123 +637,6 @@ public class MeterMain implements MqttCallback {
                 e.printStackTrace();
             }
         }
-    }
-
-    private void createPibrellaListeners() {
-        pibrella.button().addListener(new ButtonStateChangeListener() {
-            public void onStateChange(ButtonStateChangeEvent event) {
-                try {
-                    synchronized (lock) {
-                        KuraPayload outboundPayload = new KuraPayload();
-                        outboundPayload.setTimestamp(new Date());
-                        outboundPayload = addSeqNum(outboundPayload);
-                        if (event.getButton().getState() == ButtonState.PRESSED) {
-                            outboundPayload.addMetric("button", true);
-                            buttonCounter++;
-                            if (buttonCounter > buttonCounterSetpoint) {
-                                buttonCounter = 0;
-                            }
-                            outboundPayload.addMetric("button count", buttonCounter);
-                        } else {
-                            outboundPayload.addMetric("button", false);
-                        }
-                        CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(outboundPayload);
-                        client.publish("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, encoder.getBytes(),
-                                0, false);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        pibrella.inputA().addListener(new GpioPinListenerDigital() {
-            public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
-                try {
-                    synchronized (lock) {
-                        KuraPayload outboundPayload = new KuraPayload();
-                        outboundPayload.setTimestamp(new Date());
-                        outboundPayload = addSeqNum(outboundPayload);
-                        if (event.getState() == PinState.HIGH) {
-                            outboundPayload.addMetric("Inputs/a", true);
-                        } else {
-                            outboundPayload.addMetric("Inputs/a", false);
-                        }
-                        CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(outboundPayload);
-                        client.publish("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, encoder.getBytes(),
-                                0, false);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        pibrella.inputB().addListener(new GpioPinListenerDigital() {
-            public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
-                try {
-                    synchronized (lock) {
-                        KuraPayload outboundPayload = new KuraPayload();
-                        outboundPayload.setTimestamp(new Date());
-                        outboundPayload = addSeqNum(outboundPayload);
-                        if (event.getState() == PinState.HIGH) {
-                            outboundPayload.addMetric("Inputs/b", true);
-                        } else {
-                            outboundPayload.addMetric("Inputs/b", false);
-                        }
-                        CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(outboundPayload);
-                        client.publish("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, encoder.getBytes(),
-                                0, false);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        pibrella.inputC().addListener(new GpioPinListenerDigital() {
-            public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
-                try {
-                    synchronized (lock) {
-                        KuraPayload outboundPayload = new KuraPayload();
-                        outboundPayload.setTimestamp(new Date());
-                        outboundPayload = addSeqNum(outboundPayload);
-                        if (event.getState() == PinState.HIGH) {
-                            outboundPayload.addMetric("Inputs/c", true);
-                        } else {
-                            outboundPayload.addMetric("Inputs/c", false);
-                        }
-                        CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(outboundPayload);
-                        client.publish("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, encoder.getBytes(),
-                                0, false);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        pibrella.inputD().addListener(new GpioPinListenerDigital() {
-            public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
-                try {
-                    synchronized (lock) {
-                        KuraPayload outboundPayload = new KuraPayload();
-                        outboundPayload.setTimestamp(new Date());
-                        outboundPayload = addSeqNum(outboundPayload);
-                        if (event.getState() == PinState.HIGH) {
-                            outboundPayload.addMetric("Inputs/d", true);
-                        } else {
-                            outboundPayload.addMetric("Inputs/d", false);
-                        }
-                        CloudPayloadEncoder encoder = new CloudPayloadProtoBufEncoderImpl(outboundPayload);
-                        client.publish("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/" + deviceId, encoder.getBytes(),
-                                0, false);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
     private void readConfig() {
@@ -986,7 +748,7 @@ public class MeterMain implements MqttCallback {
             }
         });
         try {
-            slave.bind(bindUrl, 502).get();
+            slave.bind(bindUrl, 10502).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
