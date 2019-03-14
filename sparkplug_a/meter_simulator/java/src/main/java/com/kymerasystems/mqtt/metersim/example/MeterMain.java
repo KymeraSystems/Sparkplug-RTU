@@ -48,7 +48,6 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
-
 /*
  * This is a VERY simple implementation of an MQTT Edge of Network Node (EoN Node) and an associated 
  * Device that follows the Sparkplug specification. This is NOT intended to be production quality code
@@ -69,7 +68,7 @@ public class MeterMain implements MqttCallback {
     // HW/SW versions
     private static final String HW_VERSION = "Raspberry Pi 3 model B";
     private static final String SW_VERSION = "1.1.0";
-    private final boolean enableModbusServer;
+    private boolean enableModbusServer;
     private String[] servers;
 
     // Configuration
@@ -78,13 +77,17 @@ public class MeterMain implements MqttCallback {
     private String bindUrl = "localhost";
     private String groupId = "Sparkplug Devices";
     private String edgeNode = null;
-    private String clientId;
-    private String username = "admin";
-    private String password = "changeme";
+    private String clientId = MqttClient.generateClientId();
+    private String username = "";
+    private String password = "";
     private ExecutorService executor;
     private MqttClient client;
     private String settingsFile = "rtu-config.json";
     public static boolean debug = false;
+    public int meterCount = 5;
+    private double latitude = random.nextDouble() * (5.99995) + 53.875221;
+    private double longitude = random.nextDouble() * (-19.731444) - 110.157104;
+    private boolean updateable = false;
 
     // Some control and parameter points for this demo
     private int configChangeCount = 1;
@@ -93,6 +96,7 @@ public class MeterMain implements MqttCallback {
     ModbusTcpSlave slave = null;
     private int bdSeq = 0;
     private int seq = 0;
+    private boolean useConfig = false;
 
     private Object lock = new Object();
     RTU rtu;
@@ -102,48 +106,121 @@ public class MeterMain implements MqttCallback {
 
     public MeterMain() {
 
-        settings.put("meter id", "unknown");
-        initializeProps();
-        settings.put("meter count", 5);
-        settings.put("broker username", "");
-        settings.put("broker password", "");
-        settings.put("latitude", random.nextDouble() * (5.99995) + 53.875221);
-        settings.put("longitude", random.nextDouble() * (-19.731444) - 110.157104);
-        settings.put("anonymous", true);
-        settings.put("updatable", true);
-        ArrayList<String> tempServerList = new ArrayList<>();
-        tempServerList.add("tcp://127.0.0.1:1883");
-        settings.put("servers", tempServerList);
-        settings.put("debug", debug);
-        settings.put("bindUrl", bindUrl);
-        settings.put("enableModbusServer", false);
-        settings.put("groupId", groupId);
-        settings.put("adapter", adapter);
-
-        if (new File(settingsFile).exists()) {
-            System.out.println("config file exists");
-            readConfig();
+        for (String key : System.getenv().keySet()) {
+            System.out.println(key + ":" + System.getenv(key));
         }
-        settings.put("version", SW_VERSION);
-        writeConfig();
+        if (System.getenv().containsKey("USE_CONFIG")) {
+            this.useConfig = Boolean.parseBoolean(System.getenv("USE_CONFIG"));
+        } else {
+            this.useConfig = true;
+        }
+        if (useConfig) {
+            settings.put("meter id", "unknown");
+            initializeProps();
+            settings.put("meter count", 5);
+            settings.put("broker username", "");
+            settings.put("broker password", "");
+            settings.put("latitude", random.nextDouble() * (5.99995) + 53.875221);
+            settings.put("longitude", random.nextDouble() * (-19.731444) - 110.157104);
+            settings.put("updatable", this.updateable);
+            ArrayList<String> tempServerList = new ArrayList<>();
+            tempServerList.add("tcp://127.0.0.1:1883");
+            settings.put("servers", tempServerList);
+            settings.put("debug", debug);
+            settings.put("bindUrl", bindUrl);
+            settings.put("enableModbusServer", false);
+            settings.put("groupId", groupId);
+            settings.put("adapter", adapter);
 
-        this.edgeNode = ((String) settings.get("meter id"));
-        this.clientId = MqttClient.generateClientId();
-        int meterCount = (int) settings.get("meter count");
-        this.servers = ((ArrayList<String>) settings.get("servers")).toArray(new String[]{});
-        this.username = ((String) settings.get("broker username"));
-        this.password = ((String) settings.get("broker password"));
-        this.debug = ((boolean) settings.get("debug"));
-        this.bindUrl = ((String) settings.get("bindUrl"));
-        this.groupId = (String) settings.get("groupId");
-        this.adapter = (String) settings.getOrDefault("adapter", "");
+            if (new File(settingsFile).exists()) {
+                System.out.println("config file exists");
+                readConfig();
+            }
+            settings.put("version", SW_VERSION);
+            writeConfig();
 
-        this.enableModbusServer = (boolean) settings.get("enableModbusServer");
+            this.edgeNode = ((String) settings.get("meter id"));
+            this.meterCount = (int) settings.get("meter count");
+            this.servers = ((ArrayList<String>) settings.get("servers")).toArray(new String[] {});
+            this.username = ((String) settings.get("broker username"));
+            this.password = ((String) settings.get("broker password"));
+            debug = ((boolean) settings.get("debug"));
+            this.bindUrl = ((String) settings.get("bindUrl"));
+            this.groupId = (String) settings.get("groupId");
+            this.adapter = (String) settings.getOrDefault("adapter", "");
 
+            this.enableModbusServer = (boolean) settings.get("enableModbusServer");
+        }
+
+        PullEnviromentVariables();
         this.rtu = new RTU(this.edgeNode, meterCount);
 
-        if (enableModbusServer) {
+        if (enableModbusServer)
+
+        {
             setupModbusSlave();
+        }
+    }
+
+    private void PullEnviromentVariables() {
+        Map<String, String> envVars = System.getenv();
+
+        for (String k : envVars.keySet()) {
+            switch (k) {
+            case "EDGE_NODE":
+                this.edgeNode = envVars.get(k);
+                System.out.println(k + ":" + this.edgeNode);
+                break;
+            case "CLIENT_ID":
+                this.clientId = envVars.get(k);
+                System.out.println(k + ":" + this.edgeNode);
+                break;
+            case "METER_COUNT":
+                this.meterCount = Integer.parseInt(envVars.get(k));
+                System.out.println(k + ":" + String.valueOf(this.meterCount));
+                break;
+            case "SERVER_LIST":
+                this.servers = envVars.get(k).split(",");
+                System.out.println(k + ":" + this.servers.toString());
+                break;
+            case "USERNAME":
+                this.username = envVars.get(k);
+                System.out.println(k + ":" + this.username);
+                break;
+            case "PASSWORD":
+                this.password = envVars.get(k);
+                System.out.println(k + ":" + this.password);
+                break;
+            case "DEBUG":
+                debug = Boolean.parseBoolean(envVars.get(k));
+                System.out.println(k + ":" + String.valueOf(debug));
+                break;
+            case "BIND_URL":
+                this.bindUrl = envVars.get(k);
+                System.out.println(k + ":" + this.bindUrl);
+                break;
+            case "GROUP_ID":
+                this.groupId = envVars.get(k);
+                System.out.println(k + ":" + this.groupId);
+                break;
+            case "ADAPTER":
+                this.adapter = envVars.get(k);
+                System.out.println(k + ":" + this.adapter);
+                break;
+            case "MODBUS_ENABLE":
+                this.enableModbusServer = Boolean.parseBoolean(envVars.get(k));
+                System.out.println(k + ":" + String.valueOf(this.enableModbusServer));
+                break;
+            case "LATITUDE":
+                this.latitude = Float.parseFloat(envVars.get(k));
+                System.out.println(k + ":" + String.valueOf(this.latitude));
+                break;
+            case "LONGITUDE":
+                this.latitude = Float.parseFloat(envVars.get(k));
+                System.out.println(k + ":" + String.valueOf(this.longitude));
+                break;
+
+            }
         }
     }
 
@@ -206,7 +283,8 @@ public class MeterMain implements MqttCallback {
                 } else {
                     synchronized (lock) {
 
-                        //outboundPayload.addMetric("Up Time ms", System.currentTimeMillis() - upTimeStart);
+                        // outboundPayload.addMetric("Up Time ms", System.currentTimeMillis() -
+                        // upTimeStart);
                         HashMap changeSet = new HashMap<String, Object>();
                         if (debug) {
                             System.out.println("-----------RTU VALUES-----------");
@@ -227,15 +305,18 @@ public class MeterMain implements MqttCallback {
 
                             changeSet.forEach((k, v) -> outboundPayload.addMetric((String) k, v));
 
-                            executor.execute(new Publisher("spAv1.0/" + groupId + "/NDATA/" + edgeNode, outboundPayload));
+                            executor.execute(
+                                    new Publisher("spAv1.0/" + groupId + "/NDATA/" + edgeNode, outboundPayload));
                         }
 
                         if (debug) {
-                            System.out.println("----------------------------------");
-                            System.out.println("Meter 1's data: ");
-                            Meter m1 = rtu.meters.get("meter_1");
-                            for (String key : m1.keySet()) {
-                                System.out.println("- key: " + key + "\t val: " + m1.get(key).getValue());
+                            
+                            for (String m : rtu.meters.keySet()) {
+                                System.out.println("----------------------------------");
+                                Meter m1 = rtu.meters.get(m);
+                                for (String key : m1.keySet()) {
+                                    System.out.println("- key: " + key + "\t val: " + m1.get(key).getValue());
+                                }
                             }
                         }
 
@@ -250,23 +331,26 @@ public class MeterMain implements MqttCallback {
 
                             changeSet.forEach((k, v) -> outboundPayload.addMetric((String) k, v));
 
-                            executor.execute(new Publisher("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/meters", outboundPayload));
+                            executor.execute(new Publisher("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/meters",
+                                    outboundPayload));
                         }
                     }
                 }
                 Thread.sleep(scanRateMs);
             }
-        } catch (Exception e) {
+        } catch (
+
+        Exception e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * Establish an MQTT Session with Sparkplug defined Death Certificate. It may not be
-     * Immediately intuitive that the Death Certificate is created prior to publishing the
-     * Birth Certificate, but the Death Certificate is actually part of the MQTT Session
-     * establishment. For complete details of the actual MQTT wire protocol refer to the
-     * latest OASyS MQTT V3.1.1 standards at:
+     * Establish an MQTT Session with Sparkplug defined Death Certificate. It may
+     * not be Immediately intuitive that the Death Certificate is created prior to
+     * publishing the Birth Certificate, but the Death Certificate is actually part
+     * of the MQTT Session establishment. For complete details of the actual MQTT
+     * wire protocol refer to the latest OASyS MQTT V3.1.1 standards at:
      * http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html
      *
      * @return true = MQTT Session Established
@@ -286,7 +370,7 @@ public class MeterMain implements MqttCallback {
             options.setKeepAliveInterval(30);
             options.setServerURIs(servers);
 
-            if (!(boolean) settings.get("anonymous")) {
+            if (this.username.length() > 0 || this.password.length() > 0) {
                 // MQTT Client Username
                 options.setUserName(username);
                 // MQTT Client Password
@@ -318,7 +402,8 @@ public class MeterMain implements MqttCallback {
             // Using the parameters set above, try to connect to the define MQTT
             // server now.
             //
-            //System.out.println("Trying to establish an MQTT Session to the MQTT Server @ :" + serverUrl);
+            // System.out.println("Trying to establish an MQTT Session to the MQTT Server @
+            // :" + serverUrl);
             client.connect(options);
             System.out.println("MQTT Session Established");
             client.setCallback(this);
@@ -329,7 +414,7 @@ public class MeterMain implements MqttCallback {
             //
             client.subscribe("spAv1.0/" + groupId + "/NCMD/" + edgeNode + "/#", 0);
             client.subscribe("spAv1.0/" + groupId + "/DCMD/" + edgeNode + "/#", 0);
-            if ((boolean) settings.get("updatable")) {
+            if (this.updateable) {
                 client.subscribe("kymera/upgrade", 0);
             }
         } catch (Exception e) {
@@ -340,10 +425,9 @@ public class MeterMain implements MqttCallback {
         return true;
     }
 
-
     /**
-     * Publish the EoN Node Birth Certificate and the Device Birth Certificate
-     * per the Sparkplug Specification
+     * Publish the EoN Node Birth Certificate and the Device Birth Certificate per
+     * the Sparkplug Specification
      */
     public void publishBirth() {
         try {
@@ -402,8 +486,8 @@ public class MeterMain implements MqttCallback {
                 KuraPosition position = new KuraPosition();
                 position.setAltitude(319);
                 position.setHeading(0);
-                position.setLatitude((double) settings.get("latitude"));
-                position.setLongitude((double) settings.get("longitude"));
+                position.setLatitude(this.latitude);
+                position.setLongitude(this.longitude);
                 position.setPrecision(2.0);
                 position.setSatellites(8);
                 position.setSpeed(0);
@@ -435,7 +519,6 @@ public class MeterMain implements MqttCallback {
                 payload = new KuraPayload();
                 payload.setTimestamp(new Date());
                 payload = addSeqNum(payload);
-
 
                 for (Meter m : rtu.meters.values()) {
                     m.updateMeter(payload, true);
@@ -491,12 +574,12 @@ public class MeterMain implements MqttCallback {
     }
 
     /**
-     * Based on our subscriptions to the MQTT Server, the messageArrived() callback is
-     * called on all arriving MQTT messages. Based on the Sparkplug Topic Namespace,
-     * each message is parsed and an appropriate action is taken.
+     * Based on our subscriptions to the MQTT Server, the messageArrived() callback
+     * is called on all arriving MQTT messages. Based on the Sparkplug Topic
+     * Namespace, each message is parsed and an appropriate action is taken.
      */
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        //System.out.println("Message Arrived on topic " + topic);
+        // System.out.println("Message Arrived on topic " + topic);
 
         // Initialize the outbound payload if required.
         KuraPayload outboundPayload = new KuraPayload();
@@ -517,7 +600,7 @@ public class MeterMain implements MqttCallback {
             while (metrics.hasNext()) {
                 synchronized (lock) {
                     Entry<String, Object> entry = metrics.next();
-                    //System.out.println("Metric: " + entry.getKey() + " :: " + entry.getValue());
+                    // System.out.println("Metric: " + entry.getKey() + " :: " + entry.getValue());
 
                     if ("Node Control/Rebirth".equals(entry.getKey())) {
                         if ((boolean) entry.getValue()) {
@@ -550,7 +633,6 @@ public class MeterMain implements MqttCallback {
                             sendPayload = true;
                         }
                     }
-
 
                     if (sendPayload) {
                         executor.execute(new Publisher("spAv1.0/" + groupId + "/NDATA/" + edgeNode, outboundPayload));
@@ -599,7 +681,7 @@ public class MeterMain implements MqttCallback {
         } else if (splitTopic[0].equals("kymera") && splitTopic[1].equals("upgrade")) {
             byte[] bytes = message.getPayload();
             if (bytes.length > 0) {
-                //byte[] bytes = Base64.getDecoder().decode((String) entry.getValue());
+                // byte[] bytes = Base64.getDecoder().decode((String) entry.getValue());
                 FileOutputStream stream = new FileOutputStream("/home/pi/sparkplug-rtu.jar");
                 try {
                     stream.write(bytes);
@@ -646,15 +728,13 @@ public class MeterMain implements MqttCallback {
             ObjectMapper mapper = new ObjectMapper();
 
             // read JSON from a file
-            Map<String, Object> map = mapper.readValue(
-                    new File(settingsFile),
+            Map<String, Object> map = mapper.readValue(new File(settingsFile),
                     new TypeReference<Map<String, Object>>() {
                     });
 
             for (Entry<String, Object> e : map.entrySet()) {
                 settings.put(e.getKey(), e.getValue());
             }
-
 
         } catch (JsonGenerationException e) {
             e.printStackTrace();
@@ -679,26 +759,26 @@ public class MeterMain implements MqttCallback {
         slave = new ModbusTcpSlave(mtsc);
 
         slave.setRequestHandler(new ServiceRequestHandler() {
-            /*            @Override
-                        public void onReadCoils(ServiceRequest<ReadCoilsRequest, ReadCoilsResponse> service) {
-                            System.out.println(String.format("unit: %d coils: %d count: %d", service.getUnitId(), service.getRequest().getAddress(), service.getRequest().getQuantity()));
-                            ReadCoilsRequest request = service.getRequest();
-                            ByteBuf coils = PooledByteBufAllocator.DEFAULT.buffer(1);
-                            coils.writeBoolean(false);
-                            coils.writeBoolean(true);
-                            coils.writeBoolean(false);
-                            coils.writeBoolean(true);
-                            coils.writeBoolean(true);
-                            coils.writeBoolean(true);
-                            coils.writeBoolean(false);
-                            service.sendResponse(new ReadCoilsResponse(coils));
-
-                            ReferenceCountUtil.release(request);
-                        }
-            */
+            /*
+             * @Override public void onReadCoils(ServiceRequest<ReadCoilsRequest,
+             * ReadCoilsResponse> service) {
+             * System.out.println(String.format("unit: %d coils: %d count: %d",
+             * service.getUnitId(), service.getRequest().getAddress(),
+             * service.getRequest().getQuantity())); ReadCoilsRequest request =
+             * service.getRequest(); ByteBuf coils =
+             * PooledByteBufAllocator.DEFAULT.buffer(1); coils.writeBoolean(false);
+             * coils.writeBoolean(true); coils.writeBoolean(false);
+             * coils.writeBoolean(true); coils.writeBoolean(true); coils.writeBoolean(true);
+             * coils.writeBoolean(false); service.sendResponse(new
+             * ReadCoilsResponse(coils));
+             * 
+             * ReferenceCountUtil.release(request); }
+             */
             @Override
-            public void onReadHoldingRegisters(ServiceRequest<ReadHoldingRegistersRequest, ReadHoldingRegistersResponse> service) {
-                System.out.println(String.format("unit: %d registerIndex: %d count: %d", service.getUnitId(), service.getRequest().getAddress(), service.getRequest().getQuantity()));
+            public void onReadHoldingRegisters(
+                    ServiceRequest<ReadHoldingRegistersRequest, ReadHoldingRegistersResponse> service) {
+                System.out.println(String.format("unit: %d registerIndex: %d count: %d", service.getUnitId(),
+                        service.getRequest().getAddress(), service.getRequest().getQuantity()));
                 ReadHoldingRegistersRequest request = service.getRequest();
                 HashMap map = modbusRegisters.get(service.getUnitId());
                 ByteBuf registers = PooledByteBufAllocator.DEFAULT.buffer(request.getQuantity());
@@ -719,15 +799,15 @@ public class MeterMain implements MqttCallback {
                                     registerIndex += 2;
                                 } else if (value instanceof Integer) {
                                     registers.writeInt((Integer) value);
-                                    //System.out.println(String.format("Reference found %d,%d", registerIndex,2));
+                                    // System.out.println(String.format("Reference found %d,%d", registerIndex,2));
                                     registerIndex += 2;
                                 } else if (value instanceof Double) {
                                     registers.writeDouble((Double) value);
-                                    //System.out.println(String.format("Reference found %d,%d", registerIndex,4));
+                                    // System.out.println(String.format("Reference found %d,%d", registerIndex,4));
                                     registerIndex += 4;
                                 } else if (value instanceof Long) {
                                     registers.writeLong((Long) value);
-                                    //System.out.println(String.format("Reference found %d,%d", registerIndex,4));
+                                    // System.out.println(String.format("Reference found %d,%d", registerIndex,4));
                                     registerIndex += 4;
                                 }
 
