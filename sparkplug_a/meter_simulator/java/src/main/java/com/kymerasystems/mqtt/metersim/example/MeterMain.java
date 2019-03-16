@@ -40,7 +40,7 @@ import org.eclipse.kura.core.cloud.CloudPayloadProtoBufEncoderImpl;
 import org.eclipse.kura.message.KuraPayload;
 import org.eclipse.kura.message.KuraPosition;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -59,14 +59,16 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
  * 
  */
 
-public class MeterMain implements MqttCallback {
+public class MeterMain implements MqttCallbackExtended {
 
     public static final Random random = new Random();
 
     private static final HashMap<String, Object> settings = new HashMap();
 
+    private static final String NAMESPACE = "spAv1.0";
+
     // HW/SW versions
-    private static final String HW_VERSION = "Raspberry Pi 3 model B";
+    private static final String HW_VERSION = "Docker";
     private static final String SW_VERSION = "1.1.0";
     private boolean enableModbusServer;
     private String[] servers;
@@ -279,7 +281,6 @@ public class MeterMain implements MqttCallback {
                 //
                 if (client == null || !client.isConnected()) {
                     establishMqttSession();
-                    publishBirth();
                 } else {
                     synchronized (lock) {
 
@@ -306,7 +307,7 @@ public class MeterMain implements MqttCallback {
                             changeSet.forEach((k, v) -> outboundPayload.addMetric((String) k, v));
 
                             executor.execute(
-                                    new Publisher("spAv1.0/" + groupId + "/NDATA/" + edgeNode, outboundPayload));
+                                    new Publisher(NAMESPACE + groupId + "/NDATA/" + edgeNode, outboundPayload));
                         }
 
                         if (debug) {
@@ -331,7 +332,7 @@ public class MeterMain implements MqttCallback {
 
                             changeSet.forEach((k, v) -> outboundPayload.addMetric((String) k, v));
 
-                            executor.execute(new Publisher("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/meters",
+                            executor.execute(new Publisher(NAMESPACE + groupId + "/DDATA/" + edgeNode + "/meters",
                                     outboundPayload));
                         }
                     }
@@ -390,7 +391,7 @@ public class MeterMain implements MqttCallback {
             // Setup the Death Certificate Topic/Payload into the MQTT session
             // parameters
             //
-            options.setWill("spAv1.0/" + groupId + "/NDEATH/" + edgeNode, deathEncoder.getBytes(), 0, false);
+            options.setWill(NAMESPACE + groupId + "/NDEATH/" + edgeNode, deathEncoder.getBytes(), 0, false);
 
             //
             // Create a new Paho MQTT Client
@@ -412,8 +413,8 @@ public class MeterMain implements MqttCallback {
             // for the EoN Node and Device "Command" Topics of 'NCMD' and 'DCMD'
             // defined in Sparkplug
             //
-            client.subscribe("spAv1.0/" + groupId + "/NCMD/" + edgeNode + "/#", 0);
-            client.subscribe("spAv1.0/" + groupId + "/DCMD/" + edgeNode + "/#", 0);
+            client.subscribe(NAMESPACE + groupId + "/NCMD/" + edgeNode + "/#", 0);
+            client.subscribe(NAMESPACE + groupId + "/DCMD/" + edgeNode + "/#", 0);
             if (this.updateable) {
                 client.subscribe("kymera/upgrade", 0);
             }
@@ -508,7 +509,7 @@ public class MeterMain implements MqttCallback {
                     payload.addMetric(t.getKey(), t.getValue().getValue());
                 }
 
-                executor.execute(new Publisher("spAv1.0/" + groupId + "/NBIRTH/" + edgeNode, payload));
+                executor.execute(new Publisher(NAMESPACE + groupId + "/NBIRTH/" + edgeNode, payload));
 
                 //
                 // Create the Device BIRTH Certificate now. The tags defined
@@ -524,7 +525,7 @@ public class MeterMain implements MqttCallback {
                     m.updateMeter(payload, true);
                 }
 
-                executor.execute(new Publisher("spAv1.0/" + groupId + "/DBIRTH/" + edgeNode + "/meters", payload));
+                executor.execute(new Publisher(NAMESPACE + groupId + "/DBIRTH/" + edgeNode + "/meters", payload));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -590,7 +591,7 @@ public class MeterMain implements MqttCallback {
         boolean reboot = false;
         String[] splitTopic = topic.split("/");
         System.out.println(topic);
-        if (splitTopic[0].equals("spAv1.0") && splitTopic[1].equals(groupId) && splitTopic[2].equals("NCMD")
+        if (splitTopic[0].equals(NAMESPACE) && splitTopic[1].equals(groupId) && splitTopic[2].equals("NCMD")
                 && splitTopic[3].equals(edgeNode)) {
 
             CloudPayloadProtoBufDecoderImpl decoder = new CloudPayloadProtoBufDecoderImpl(message.getPayload());
@@ -635,7 +636,7 @@ public class MeterMain implements MqttCallback {
                     }
 
                     if (sendPayload) {
-                        executor.execute(new Publisher("spAv1.0/" + groupId + "/NDATA/" + edgeNode, outboundPayload));
+                        executor.execute(new Publisher(NAMESPACE + groupId + "/NDATA/" + edgeNode, outboundPayload));
                     }
                 }
 
@@ -647,7 +648,7 @@ public class MeterMain implements MqttCallback {
 
                 }
             }
-        } else if (splitTopic[0].equals("spAv1.0") && splitTopic[1].equals(groupId) && splitTopic[2].equals("DCMD")
+        } else if (splitTopic[0].equals(NAMESPACE) && splitTopic[1].equals(groupId) && splitTopic[2].equals("DCMD")
                 && splitTopic[3].equals(edgeNode) && splitTopic[4].equals("meters")) {
             synchronized (lock) {
                 System.out.println("Command received for device: " + splitTopic[4] + " on topic: " + topic);
@@ -675,7 +676,7 @@ public class MeterMain implements MqttCallback {
                 }
 
                 executor.execute(
-                        new Publisher("spAv1.0/" + groupId + "/DDATA/" + edgeNode + "/meters", outboundPayload));
+                        new Publisher(NAMESPACE + groupId + "/DDATA/" + edgeNode + "/meters", outboundPayload));
             }
 
         } else if (splitTopic[0].equals("kymera") && splitTopic[1].equals("upgrade")) {
@@ -834,5 +835,10 @@ public class MeterMain implements MqttCallback {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void connectComplete(boolean reconnect, String serverURI) {
+        publishBirth();
     }
 }
